@@ -3,11 +3,10 @@ package com.laptrinhjavaweb.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class UserDTO{
+@Setter
+public class BuildingTypeDTO{
+	private String code;
 	private Long id;
-	private String userName;
-	private String password;
-
+	private String name;
 }

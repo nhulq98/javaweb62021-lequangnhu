@@ -46,7 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/authentication").permitAll()
-                .antMatchers("/api/demo/**").permitAll() // allow call this api, although not login.(Public)
                 .antMatchers(HttpMethod.POST, "/api/building").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

@@ -1,6 +1,4 @@
-estatespringboot.iml
-.project
-.classpath
-target
+/target/
 .settings
-.idea
+*.classpath
+*.project

@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.laptrinhjavaweb.entity.BuildingEntity;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
+import com.laptrinhjavaweb.dao.impl.BuildingDAO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.condition.BuildingCondition;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
@@ -48,5 +51,12 @@ public class BuildingService implements IBuildingService {
 		BuildingEntity buildingEntity = buildingConverter.convertToEntity(newBuilding);
 		return buildingConverter.convertToDTO(buildingRepository.save(buildingEntity));
 	}
+	
+	@Override
+	public List<BuildingDTO> findByCondition(BuildingCondition buildingCondition) {
+		BuildingDAO buildingDAO = new BuildingDAO();
+		return buildingDAO.findByCondition(buildingCondition);
+	}
+
 	
 }

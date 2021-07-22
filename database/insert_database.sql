@@ -1,4 +1,4 @@
-use springbootapi122020;
+use springbootweb92020;
 
 insert into role(code,name) values('ADMIN','Quản trị hệ thống');
 insert into role(code,name) values('USER','người dùng');

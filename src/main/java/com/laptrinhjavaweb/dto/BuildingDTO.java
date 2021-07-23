@@ -12,6 +12,7 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 	private String street;
 	private String ward;
 	private Long districtID;
+	private String district;
 	private String structure;
 	private Long numberOfBasement;
 	private Long floorArea;

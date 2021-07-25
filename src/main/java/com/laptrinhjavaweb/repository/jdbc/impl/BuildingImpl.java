@@ -1,4 +1,4 @@
-package com.laptrinhjavaweb.dao.impl;
+package com.laptrinhjavaweb.repository.jdbc.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,20 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjavaweb.dao.IBuildingDAO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.condition.BuildingCondition;
+import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-public class BuildingDAO extends BaseDAO implements IBuildingDAO {
-
+public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
+	
 	private Connection connection;
 	private PreparedStatement prStatement;
 	private ResultSet resultSet;
+	private static boolean temp = false; // this temp variable use to check keyword AND.(If it's false ==> not exists)
 
 	@Override
 	public List<BuildingDTO> findAll() {
@@ -61,7 +57,7 @@ public class BuildingDAO extends BaseDAO implements IBuildingDAO {
 		try {
 			this.connection = super.getConnection();
 			this.connection.setAutoCommit(false);
-			this.prStatement = this.connection.prepareStatement(this.buildQuery(condition));
+			this.prStatement = this.connection.prepareStatement(this.buildQuery_V2(condition));
 
 			this.resultSet = this.prStatement.executeQuery();
 			while (this.resultSet.next()) {
@@ -269,6 +265,121 @@ public class BuildingDAO extends BaseDAO implements IBuildingDAO {
 			return new StringBuilder(" WHERE " + string.toString());
 		}else {
 			return new StringBuilder(" AND ").append(string.toString());
+		}
+	}
+
+	@Override
+	public String buildQuery_V2(BuildingCondition condition) {
+		try {
+			String sqlFrom = "SELECT * FROM building BD ";
+			String sqlJoin = "";
+			StringBuilder sqlWhere = new StringBuilder("");
+			if (condition.getDistrictID() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("DTrict.id = " + condition.getDistrictID() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getName() != null) {
+				sqlWhere.append(
+						this.checkAndKeyword(temp, new StringBuilder("BD.name LIKE '%" + condition.getName() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getRentEreaFrom() != null || condition.getRentEreaTo() != null) {
+				sqlJoin += " JOIN rentarea RE ON RE.buildingid = BD.id ";
+				
+				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() != null) {
+					sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("RErea.value BETWEEN "
+							+ condition.getRentEreaFrom() + " " + condition.getRentEreaTo() + " ")));
+					temp = true; // keyword AND exists
+				}
+				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() == null) {
+					sqlWhere.append(this.checkAndKeyword(temp,
+							new StringBuilder("RErea.value >= " + condition.getRentEreaFrom() + " ")));
+					temp = true; // keyword AND exists
+				}
+				if (condition.getRentEreaFrom() == null && condition.getRentEreaTo() != null) {
+					sqlWhere.append(this.checkAndKeyword(temp,
+							new StringBuilder("RErea.value <= " + condition.getRentEreaTo() + " ")));
+					temp = true; // keyword AND exists
+				}
+			}
+			if (condition.getUserID() != null) {
+				sqlJoin += " JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ";
+				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("ASB.staffid = " + condition.getUserID() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getFloorArea() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.floorarea = " + condition.getFloorArea() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getWard() != null) {
+				sqlWhere.append(
+						this.checkAndKeyword(temp, new StringBuilder("BD.ward LIKE '%" + condition.getWard() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getStreet() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.street LIKE '%" + condition.getStreet() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getNumberOfBasement() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.numberOfBasement = " + condition.getNumberOfBasement() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("BD.rentprice BETWEEN "
+						+ condition.getRentPriceFrom() + " AND " + condition.getRentPriceTo() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() == null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.rentprice >= " + condition.getRentPriceFrom() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getRentPriceFrom() == null && condition.getRentPriceTo() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.rentprice <= " + condition.getRentPriceTo() + " ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getDirection() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.direction  LIKE '%" + condition.getDirection() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getLevel() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.Level LIKE '%" + condition.getLevel() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getManagerName() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.managername LIKE '%" + condition.getManagerName() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getManagerPhone() != null) {
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BD.managerphone LIKE '%" + condition.getManagerPhone() + "%' ")));
+				temp = true; // keyword AND exists
+			}
+			if (condition.getListType() != null) {
+				sqlJoin += "JOIN buildingrenttype BRT ON BRT.buildingid = BD.id";
+				
+				sqlWhere.append(this.checkAndKeyword(temp,
+						new StringBuilder("BRT.renttypeid = " + condition.getListType().get(0) + " ")));
+				temp = true; // keyword AND exists
+				if (condition.getListType().size() > 1) {
+					for (int i = 1; i < condition.getListType().size(); i++) {
+						sqlWhere.append(new StringBuilder("OR BRT.renttypeid = " + condition.getListType().get(i) + " "));
+					}
+				}
+			}
+			String result = sqlFrom + sqlJoin + sqlWhere.toString();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

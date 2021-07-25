@@ -4,18 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.laptrinhjavaweb.entity.BuildingEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
-import com.laptrinhjavaweb.dao.impl.BuildingDAO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.condition.BuildingCondition;
+import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
+import com.laptrinhjavaweb.repository.jdbc.impl.BuildingImpl;
 import com.laptrinhjavaweb.service.IBuildingService;
 
 @Service
@@ -54,8 +54,8 @@ public class BuildingService implements IBuildingService {
 	
 	@Override
 	public List<BuildingDTO> findByCondition(BuildingCondition buildingCondition) {
-		BuildingDAO buildingDAO = new BuildingDAO();
-		return buildingDAO.findByCondition(buildingCondition);
+		BuildingImpl buildingimpl = new BuildingImpl();
+		return buildingimpl.findByCondition(buildingCondition);
 	}
 
 	

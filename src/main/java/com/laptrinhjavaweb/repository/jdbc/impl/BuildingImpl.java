@@ -276,11 +276,11 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			String fromSQLClause = "SELECT * FROM building BD ";
 			String joinSQLClause = "";
 			StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND DTrict.id = " + condition.getDistrictID() + " ", condition.getDistrictID()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.name LIKE '%" + condition.getName() + "%' ", condition.getName()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.floorarea = " + condition.getFloorArea() + " ", condition.getFloorArea()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.ward LIKE '%" + condition.getWard() + "%' ", condition.getWard()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.street LIKE '%" + condition.getStreet() + "%' ", condition.getStreet()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.ward LIKE '%" + condition.getWard() + "%' ", condition.getWard()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.districtid = " + condition.getDistrictID() + " ", condition.getDistrictID()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.floorarea = " + condition.getFloorArea() + " ", condition.getFloorArea()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.numberOfBasement = " + condition.getNumberOfBasement() + " ", condition.getNumberOfBasement()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.direction  LIKE '%" + condition.getDirection() + "%' ", condition.getDirection()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.Level LIKE '%" + condition.getLevel() + "%' ", condition.getLevel()));
@@ -293,19 +293,20 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			}
 			if (!this.isNull(condition.getRentEreaFrom()) || !this.isNull(condition.getRentEreaTo())) {
 				joinSQLClause += " JOIN rentarea RE ON RE.buildingid = BD.id ";
-				whereSQLClause.append(this.buildBetweenStatement("RErea.value", condition.getRentEreaFrom(), condition.getRentEreaTo()));
+				whereSQLClause.append(this.buildBetweenStatement("RE.value", condition.getRentEreaFrom(), condition.getRentEreaTo()));
 			}
 			if (condition.getListType() != null) {
-				joinSQLClause += " JOIN buildingrenttype BRT ON BRT.buildingid = BD.id";
+				joinSQLClause += " JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ";
+				joinSQLClause += " JOIN renttype RT ON RT.id = BRT.renttypeid ";
 				
-				whereSQLClause.append(" AND BRT.renttypeid = " + condition.getListType().get(0) + " ");
+				whereSQLClause.append(" AND RT.code = \"" + condition.getListType().get(0) + "\" ");
 				if (condition.getListType().size() > 1) {
 					for (int i = 1; i < condition.getListType().size(); i++) {
-						whereSQLClause.append(" OR BRT.renttypeid = " + condition.getListType().get(i) + " ");
+						whereSQLClause.append(" OR RT.code = \"" + condition.getListType().get(i) + "\" ");
 					}
 				}
 			}
-			String result = fromSQLClause + joinSQLClause + whereSQLClause.toString() + " GROUP BY BD.name ";
+			String result = fromSQLClause + joinSQLClause + whereSQLClause.toString() + " GROUP BY BD.id ";
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -323,7 +324,7 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 
 	@Override
 	public String checkExistenceOfCondition (String sql, Object parameter) {
-		if(parameter != null) {
+		if(parameter != null && !this.isBlank(parameter)) {
 			return sql;
 		}
 		return "";
@@ -341,6 +342,14 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			}
 		}
 		return new StringBuilder("");
+	}
+
+	@Override
+	public boolean isBlank(Object value) {
+		if(value instanceof String && value == "") {
+			return true;
+		}
+		return false;
 	}
 
 }

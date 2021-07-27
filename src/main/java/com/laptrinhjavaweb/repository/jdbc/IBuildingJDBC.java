@@ -14,6 +14,7 @@ public interface IBuildingJDBC {
 	String buildQuery_V2(BuildingCondition condition);
 	StringBuilder checkAndKeyword(boolean temp, StringBuilder string);
 	boolean isNull(Object value);
+	boolean isBlank(Object value);
 	String checkExistenceOfCondition(String sql, Object parameter);
 	StringBuilder buildBetweenStatement(String sqlWhere, Object from, Object to);
 }

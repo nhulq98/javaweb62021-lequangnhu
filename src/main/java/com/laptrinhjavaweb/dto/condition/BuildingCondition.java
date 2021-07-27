@@ -27,6 +27,6 @@ public class BuildingCondition {
 	private String managerName;
 	private String managerPhone;
 	private Long userID;
-	private ArrayList<Long> listType;
+	private ArrayList<String> listType;
 
 }

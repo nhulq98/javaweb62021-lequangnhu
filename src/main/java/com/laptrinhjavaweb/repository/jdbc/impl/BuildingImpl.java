@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,122 +137,122 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 	public String buildQuery(BuildingCondition condition) {
 		try {
 			boolean temp = false;// keyword AND not exists
-			String sqlFrom = "SELECT * FROM building BD ";
-			//StringBuilder sqlFrom = new StringBuilder("SELECT * FROM building BD ");
-			StringBuilder sqlWhere = new StringBuilder("");
+			String sqlFromClause = "SELECT * FROM building BD ";
+			//StringBuilder sqlFromClause = new StringBuilder("SELECT * FROM building BD ");
+			StringBuilder whereSQLClause = new StringBuilder("");
 			if (condition.getDistrictID() != null) {
-				//sqlFrom.append(", district DTrict");// insert table into from
-				sqlFrom += ", district DTrict";
+				//sqlFromClause.append(", district DTrict");// insert table into from
+				sqlFromClause += ", district DTrict";
 
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("BD.districtid = DTrict.id ")));
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("BD.districtid = DTrict.id ")));
 				temp = true; // keyword AND exists
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("DTrict.id = " + condition.getDistrictID() + " ")));
 				
 			}
 			if (condition.getName() != null) {
-				sqlWhere.append(
+				whereSQLClause.append(
 						this.checkAndKeyword(temp, new StringBuilder("BD.name LIKE '%" + condition.getName() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getRentEreaFrom() != null || condition.getRentEreaTo() != null) {
-				//sqlFrom.append(", rentarea RErea");
-				sqlFrom += ", rentarea RErea";
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("RErea.buildingid = BD.id ")));
+				//sqlFromClause.append(", rentarea RErea");
+				sqlFromClause += ", rentarea RErea";
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("RErea.buildingid = BD.id ")));
 				temp = true; // keyword AND exists
 				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() != null) {
-					sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("RErea.value BETWEEN "
+					whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("RErea.value BETWEEN "
 							+ condition.getRentEreaFrom() + " " + condition.getRentEreaTo() + " ")));
 				}
 				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() == null) {
-					sqlWhere.append(this.checkAndKeyword(temp,
+					whereSQLClause.append(this.checkAndKeyword(temp,
 							new StringBuilder("RErea.value >= " + condition.getRentEreaFrom() + " ")));
 				}
 				if (condition.getRentEreaFrom() == null && condition.getRentEreaTo() != null) {
-					sqlWhere.append(this.checkAndKeyword(temp,
+					whereSQLClause.append(this.checkAndKeyword(temp,
 							new StringBuilder("RErea.value <= " + condition.getRentEreaTo() + " ")));
 				}
 			}
 			if (condition.getUserID() != null) {
-				//sqlFrom.append(", user U, assignmentbuilding Abuilding");// insert table into from
-				sqlFrom += ", user U, assignmentbuilding Abuilding";
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("Abuilding.staffid = U.id ")));
+				//sqlFromClause.append(", user U, assignmentbuilding Abuilding");// insert table into from
+				sqlFromClause += ", user U, assignmentbuilding Abuilding";
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("Abuilding.staffid = U.id ")));
 				temp = true; // keyword AND exists
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("Abuilding. Buildingid = BD.id ")));
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("U.id = " + condition.getUserID() + " ")));
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("Abuilding. Buildingid = BD.id ")));
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("U.id = " + condition.getUserID() + " ")));
 			}
 			if (condition.getFloorArea() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.floorarea = " + condition.getFloorArea() + " ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getWard() != null) {
-				sqlWhere.append(
+				whereSQLClause.append(
 						this.checkAndKeyword(temp, new StringBuilder("BD.ward LIKE '%" + condition.getWard() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getStreet() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.street LIKE '%" + condition.getStreet() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getNumberOfBasement() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.numberOfBasement = " + condition.getNumberOfBasement() + " ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("BD.rentprice BETWEEN "
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("BD.rentprice BETWEEN "
 						+ condition.getRentPriceFrom() + " AND " + condition.getRentPriceTo() + " ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() == null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.rentprice >= " + condition.getRentPriceFrom() + " ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getRentPriceFrom() == null && condition.getRentPriceTo() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.rentprice <= " + condition.getRentPriceTo() + " ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getDirection() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.direction  LIKE '%" + condition.getDirection() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getLevel() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.Level LIKE '%" + condition.getLevel() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getManagerName() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.managername LIKE '%" + condition.getManagerName() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getManagerPhone() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("BD.managerphone LIKE '%" + condition.getManagerPhone() + "%' ")));
 				temp = true; // keyword AND exists
 			}
 			if (condition.getListType() != null) {
-				//sqlFrom.append(", renttype RType");// insert table into from
-				sqlFrom += ", renttype RType";
-				//sqlFrom.append(", buildingrenttype BRType");// insert table into from
-				sqlFrom += ", buildingrenttype BRType";
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("RType.id = BRType. Renttypeid ")));
+				//sqlFromClause.append(", renttype RType");// insert table into from
+				sqlFromClause += ", renttype RType";
+				//sqlFromClause.append(", buildingrenttype BRType");// insert table into from
+				sqlFromClause += ", buildingrenttype BRType";
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("RType.id = BRType. Renttypeid ")));
 				temp = true; // keyword AND exists
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("BD.id = BRType. buildingid ")));
-				sqlWhere.append(this.checkAndKeyword(temp,
+				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("BD.id = BRType. buildingid ")));
+				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("RType.id = " + condition.getListType().get(0) + " ")));
 				if (condition.getListType().size() > 1) {
 					for (int i = 1; i < condition.getListType().size(); i++) {
-						sqlWhere.append(new StringBuilder("OR RType.id = " + condition.getListType().get(i) + " "));
+						whereSQLClause.append(new StringBuilder("OR RType.id = " + condition.getListType().get(i) + " "));
 					}
 				}
 			}
-			String result = sqlFrom + sqlWhere.toString();
+			String result = sqlFromClause + whereSQLClause.toString();
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -271,116 +273,76 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 	@Override
 	public String buildQuery_V2(BuildingCondition condition) {
 		try {
-			String sqlFrom = "SELECT * FROM building BD ";
-			String sqlJoin = "";
-			StringBuilder sqlWhere = new StringBuilder("");
-			if (condition.getDistrictID() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("DTrict.id = " + condition.getDistrictID() + " ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getName() != null) {
-				sqlWhere.append(
-						this.checkAndKeyword(temp, new StringBuilder("BD.name LIKE '%" + condition.getName() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getRentEreaFrom() != null || condition.getRentEreaTo() != null) {
-				sqlJoin += " JOIN rentarea RE ON RE.buildingid = BD.id ";
-				
-				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() != null) {
-					sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("RErea.value BETWEEN "
-							+ condition.getRentEreaFrom() + " " + condition.getRentEreaTo() + " ")));
-					temp = true; // keyword AND exists
-				}
-				if (condition.getRentEreaFrom() != null && condition.getRentEreaTo() == null) {
-					sqlWhere.append(this.checkAndKeyword(temp,
-							new StringBuilder("RErea.value >= " + condition.getRentEreaFrom() + " ")));
-					temp = true; // keyword AND exists
-				}
-				if (condition.getRentEreaFrom() == null && condition.getRentEreaTo() != null) {
-					sqlWhere.append(this.checkAndKeyword(temp,
-							new StringBuilder("RErea.value <= " + condition.getRentEreaTo() + " ")));
-					temp = true; // keyword AND exists
-				}
-			}
+			String fromSQLClause = "SELECT * FROM building BD ";
+			String joinSQLClause = "";
+			StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND DTrict.id = " + condition.getDistrictID() + " ", condition.getDistrictID()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.name LIKE '%" + condition.getName() + "%' ", condition.getName()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.floorarea = " + condition.getFloorArea() + " ", condition.getFloorArea()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.ward LIKE '%" + condition.getWard() + "%' ", condition.getWard()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.street LIKE '%" + condition.getStreet() + "%' ", condition.getStreet()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.numberOfBasement = " + condition.getNumberOfBasement() + " ", condition.getNumberOfBasement()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.direction  LIKE '%" + condition.getDirection() + "%' ", condition.getDirection()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.Level LIKE '%" + condition.getLevel() + "%' ", condition.getLevel()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managername LIKE '%" + condition.getManagerName() + "%' ", condition.getManagerName()));
+			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managerphone LIKE '%" + condition.getManagerPhone() + "%' ", condition.getManagerPhone()));
+			
 			if (condition.getUserID() != null) {
-				sqlJoin += " JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ";
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("ASB.staffid = " + condition.getUserID() + " ")));
-				temp = true; // keyword AND exists
+				joinSQLClause += " JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ";
+				whereSQLClause.append(" AND ASB.staffid = " + condition.getUserID() + " ");
 			}
-			if (condition.getFloorArea() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.floorarea = " + condition.getFloorArea() + " ")));
-				temp = true; // keyword AND exists
+			if (!this.isNull(condition.getRentEreaFrom()) || !this.isNull(condition.getRentEreaTo())) {
+				joinSQLClause += " JOIN rentarea RE ON RE.buildingid = BD.id ";
+				whereSQLClause.append(this.buildBetweenStatement("RErea.value", condition.getRentEreaFrom(), condition.getRentEreaTo()));
 			}
-			if (condition.getWard() != null) {
-				sqlWhere.append(
-						this.checkAndKeyword(temp, new StringBuilder("BD.ward LIKE '%" + condition.getWard() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getStreet() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.street LIKE '%" + condition.getStreet() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getNumberOfBasement() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.numberOfBasement = " + condition.getNumberOfBasement() + " ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp, new StringBuilder("BD.rentprice BETWEEN "
-						+ condition.getRentPriceFrom() + " AND " + condition.getRentPriceTo() + " ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getRentPriceFrom() != null && condition.getRentPriceTo() == null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.rentprice >= " + condition.getRentPriceFrom() + " ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getRentPriceFrom() == null && condition.getRentPriceTo() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.rentprice <= " + condition.getRentPriceTo() + " ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getDirection() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.direction  LIKE '%" + condition.getDirection() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getLevel() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.Level LIKE '%" + condition.getLevel() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getManagerName() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.managername LIKE '%" + condition.getManagerName() + "%' ")));
-				temp = true; // keyword AND exists
-			}
-			if (condition.getManagerPhone() != null) {
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BD.managerphone LIKE '%" + condition.getManagerPhone() + "%' ")));
-				temp = true; // keyword AND exists
+			if (condition.getRentPriceFrom() != null || condition.getRentPriceTo() != null) {
+				whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", condition.getRentPriceFrom(), condition.getRentPriceTo()));
 			}
 			if (condition.getListType() != null) {
-				sqlJoin += "JOIN buildingrenttype BRT ON BRT.buildingid = BD.id";
+				joinSQLClause += " JOIN buildingrenttype BRT ON BRT.buildingid = BD.id";
 				
-				sqlWhere.append(this.checkAndKeyword(temp,
-						new StringBuilder("BRT.renttypeid = " + condition.getListType().get(0) + " ")));
-				temp = true; // keyword AND exists
+				whereSQLClause.append(" AND BRT.renttypeid = " + condition.getListType().get(0) + " ");
 				if (condition.getListType().size() > 1) {
 					for (int i = 1; i < condition.getListType().size(); i++) {
-						sqlWhere.append(new StringBuilder("OR BRT.renttypeid = " + condition.getListType().get(i) + " "));
+						whereSQLClause.append(" OR BRT.renttypeid = " + condition.getListType().get(i) + " ");
 					}
 				}
 			}
-			String result = sqlFrom + sqlJoin + sqlWhere.toString();
+			String result = fromSQLClause + joinSQLClause + whereSQLClause.toString() + " GROUP BY BD.name ";
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isNull(Object value) {
+		if(value == null) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String checkExistenceOfCondition (String sql, Object parameter) {
+		if(parameter != null) {
+			return sql;
+		}
+		return "";
+	}
+
+	@Override
+	public StringBuilder buildBetweenStatement(String whereSQLClause, Object from, Object to) {
+		if(!this.isNull(from) || !this.isNull(to)) {
+			if(!this.isNull(from) && !this.isNull(to)) {
+				return new StringBuilder(" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
+			}else if(!this.isNull(from) && this.isNull(to)) {
+				return new StringBuilder(" AND "+ whereSQLClause +" >= " + from + " ");
+			}else {
+			}
+		}
+		return new StringBuilder("");
 	}
 
 }

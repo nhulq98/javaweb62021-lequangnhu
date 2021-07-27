@@ -286,7 +286,7 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.Level LIKE '%" + condition.getLevel() + "%' ", condition.getLevel()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managername LIKE '%" + condition.getManagerName() + "%' ", condition.getManagerName()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managerphone LIKE '%" + condition.getManagerPhone() + "%' ", condition.getManagerPhone()));
-			
+			whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", condition.getRentPriceFrom(), condition.getRentPriceTo()));
 			if (condition.getUserID() != null) {
 				joinSQLClause += " JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ";
 				whereSQLClause.append(" AND ASB.staffid = " + condition.getUserID() + " ");
@@ -294,9 +294,6 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			if (!this.isNull(condition.getRentEreaFrom()) || !this.isNull(condition.getRentEreaTo())) {
 				joinSQLClause += " JOIN rentarea RE ON RE.buildingid = BD.id ";
 				whereSQLClause.append(this.buildBetweenStatement("RErea.value", condition.getRentEreaFrom(), condition.getRentEreaTo()));
-			}
-			if (condition.getRentPriceFrom() != null || condition.getRentPriceTo() != null) {
-				whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", condition.getRentPriceFrom(), condition.getRentPriceTo()));
 			}
 			if (condition.getListType() != null) {
 				joinSQLClause += " JOIN buildingrenttype BRT ON BRT.buildingid = BD.id";
@@ -340,6 +337,7 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 			}else if(!this.isNull(from) && this.isNull(to)) {
 				return new StringBuilder(" AND "+ whereSQLClause +" >= " + from + " ");
 			}else {
+				return new StringBuilder(" AND "+ whereSQLClause +" <= " + to + " ");
 			}
 		}
 		return new StringBuilder("");

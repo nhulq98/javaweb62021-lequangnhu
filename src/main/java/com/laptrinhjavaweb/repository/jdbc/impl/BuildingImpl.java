@@ -274,7 +274,7 @@ public class BuildingImpl extends BaseImpl implements IBuildingJDBC {
 	public String buildQuery_V2(BuildingCondition condition) {
 		try {
 			String fromSQLClause = "SELECT * FROM building BD ";
-			String joinSQLClause = "";
+			String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
 			StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.name LIKE '%" + condition.getName() + "%' ", condition.getName()));
 			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.street LIKE '%" + condition.getStreet() + "%' ", condition.getStreet()));

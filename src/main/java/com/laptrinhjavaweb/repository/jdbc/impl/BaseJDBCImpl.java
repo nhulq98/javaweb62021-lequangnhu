@@ -1,20 +1,11 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 import com.laptrinhjavaweb.repository.jdbc.IBaseJDBC;
 
-public class BaseImpl implements IBaseJDBC{
-	private Connection connection;
-	private static PreparedStatement prStatement;
-	private static ResultSet resultSet;
+public class BaseJDBCImpl implements IBaseJDBC{
 	ResourceBundle dbResourceBundle = ResourceBundle.getBundle("application");
 	private String PASSWORD = dbResourceBundle.getString("password");
 	private String URL = dbResourceBundle.getString("url");

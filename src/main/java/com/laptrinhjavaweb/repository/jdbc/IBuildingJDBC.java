@@ -4,14 +4,14 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.condition.BuildingCondition;
+import com.laptrinhjavaweb.dto.input.BuildingRequest;
 
-public interface IBuildingJDBC {
+public interface IBuildingJDBC{
 	List<BuildingDTO> findAll();
-	List<BuildingDTO> findByCondition(BuildingCondition condition);
+	List<BuildingDTO> findByCondition(BuildingRequest buildingRequest);
 	BuildingDTO convertToBuildingDTO(ResultSet resultSet);
-	String buildQuery(BuildingCondition condition);
-	String buildQuery_V2(BuildingCondition condition);
+	String buildQuery(BuildingRequest buildingRequest);
+	String buildQuery_V2(BuildingRequest buildingRequest);
 	StringBuilder checkAndKeyword(boolean temp, StringBuilder string);
 	boolean isNull(Object value);
 	boolean isBlank(Object value);

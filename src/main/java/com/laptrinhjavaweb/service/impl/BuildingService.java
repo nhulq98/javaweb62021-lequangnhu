@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.condition.BuildingCondition;
 import com.laptrinhjavaweb.dto.input.BuildingRequest;
+import com.laptrinhjavaweb.dto.output.BuildingResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
@@ -54,10 +54,9 @@ public class BuildingService implements IBuildingService {
 	}
 	
 	@Override
-	public List<BuildingDTO> findByCondition(BuildingRequest buildingRequest) {
+	public List<BuildingResponse> findByCondition(BuildingRequest buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
 		return buildingimpl.findByCondition(buildingRequest);
 	}
 
-	
 }

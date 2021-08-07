@@ -1,10 +1,14 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.input.BuildingRequest;
+import com.laptrinhjavaweb.dto.output.BuildingResponse;
 import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
 
 public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
@@ -14,52 +18,19 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	private ResultSet resultSet;
 
 	@Override
-	public List<BuildingDTO> findAll() {
-		String sql = "SELECT * FROM building";
-		List<BuildingDTO> results = new ArrayList<>();
-		try {
-			this.connection = super.getConnection();
-			connection.setAutoCommit(false);
-			prStatement = connection.prepareStatement(sql);
-
-			resultSet = prStatement.executeQuery();
-			while (resultSet.next()) {
-				// get All data from resultset
-				results.add(convertToBuildingDTO(resultSet));
-				return results;
-			}
-			connection.commit();
-			return results;
-
-		} catch (SQLException e) {
-			try {
-				if (connection != null) {
-					connection.rollback();
-				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-
-			return null;
-		} finally {
-			closeAll(connection, prStatement, resultSet);
-		}
-	}
-
-	@Override
-	public List<BuildingDTO> findByCondition(BuildingRequest buildingRequest) {
-		List<BuildingDTO> results = new ArrayList<>();
+	public List<BuildingResponse> findByCondition(BuildingRequest buildingRequest) {
+		List<BuildingResponse> results = new ArrayList<>();
 		try {
 			this.connection = super.getConnection();
 			this.connection.setAutoCommit(false);
-			this.prStatement = this.connection.prepareStatement(this.buildQuery_V2(buildingRequest));
+			this.prStatement = this.connection.prepareStatement(this.buildQueryV2(buildingRequest));
 
 			this.resultSet = this.prStatement.executeQuery();
 			while (this.resultSet.next()) {
 				// get All data from resultset
-				BuildingDTO buildingDTO = new BuildingDTO();
-				buildingDTO = convertToBuildingDTO(this.resultSet);
-				results.add(buildingDTO);
+				BuildingResponse buildingResponse = new BuildingResponse();
+				buildingResponse = convertResultSetToBuildingResponse(this.resultSet);
+				results.add(buildingResponse);
 			}
 			this.connection.commit();
 			return results;
@@ -80,50 +51,138 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		}
 	}
 
+	
 	@Override
-	public BuildingDTO convertToBuildingDTO(ResultSet resultSet) {
+	public String buildQueryV2(BuildingRequest buildingRequest) {
 		try {
-			BuildingDTO buildingDTO = new BuildingDTO();
-			buildingDTO.setId(resultSet.getLong("id"));
-			buildingDTO.setName(resultSet.getString("name"));
-			buildingDTO.setDistrictID(resultSet.getLong("districtid"));
-			buildingDTO.setStreet(resultSet.getString("street"));
-			buildingDTO.setStructure(resultSet.getString("structure"));
-			buildingDTO.setNumberOfBasement(resultSet.getLong("numberofbasement"));
-			buildingDTO.setFloorArea(resultSet.getLong("floorarea"));
-			buildingDTO.setDirection(resultSet.getString("direction"));
-			buildingDTO.setLevel(resultSet.getString("level"));
-			buildingDTO.setRentPrice(resultSet.getLong("rentPrice"));
-			buildingDTO.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
-			buildingDTO.setServiceFee(resultSet.getString("serviceFee"));
-			buildingDTO.setCarFee(resultSet.getString("carFee"));
-			buildingDTO.setMotorbikeFee(resultSet.getString("motorbikeFee"));
-			buildingDTO.setOvertimeFee(resultSet.getString("overtimeFee"));
-			buildingDTO.setWaterFee(resultSet.getString("waterfee"));
-			buildingDTO.setElectricityFee(resultSet.getString("electricityfee"));
-			buildingDTO.setDeposit(resultSet.getString("deposit"));
-			buildingDTO.setPayment(resultSet.getString("payment"));
-			buildingDTO.setRentTime(resultSet.getString("renttime"));
-			buildingDTO.setDecoratorTime(resultSet.getString("decorationtime"));
-			buildingDTO.setBrokerageFee(resultSet.getString("brokeragefee"));
-			buildingDTO.setNote(resultSet.getString("note"));
-			buildingDTO.setLinkofbuilding(resultSet.getString("linkofbuilding"));
-			buildingDTO.setMap(resultSet.getString("map"));
-			buildingDTO.setImage(resultSet.getString("image"));
-			buildingDTO.setManagerPhone(resultSet.getString("managerphone"));
-			buildingDTO.setManagerName(resultSet.getString("managername"));
+			String fromSQLClause = "SELECT * FROM building BD ";
+			String joinSQLClause = this.buildJoinSQLClause(buildingRequest);
+			String whereSQLClause = this.buildWhereSQLClause(buildingRequest);
+			String groupByClause = " GROUP BY BD.id ";
 
-			buildingDTO.setCreatedDate(resultSet.getTimestamp("createddate"));
-			buildingDTO.setModifiedDate(resultSet.getTimestamp("modifieddate"));
-			buildingDTO.setCreatedBy(resultSet.getString("createdby"));
-			buildingDTO.setModifiedBy(resultSet.getString("modifiedby"));
-
-			return buildingDTO;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			return (fromSQLClause + joinSQLClause + whereSQLClause.toString() + groupByClause);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public String buildBetweenStatement(String whereSQLClause, Long from, Long to) {
+		if(!this.isNull(from) || !this.isNull(to)) {
+			if(!this.isNull(from) && !this.isNull(to)) {
+				return (" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
+			}else if(!this.isNull(from) && this.isNull(to)) {
+				return (" AND "+ whereSQLClause +" >= " + from + " ");
+			}else {
+				return (" AND "+ whereSQLClause +" <= " + to + " ");
+			}
+		}
+		return "";
+	}
 
+	@Override
+	public String buildWhereSQLClause(BuildingRequest buildingRequest) {
+		StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");// Use StringBuilder with purpose is saved memory
+		
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.name LIKE '%", "%' ", buildingRequest.getName()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.street LIKE '%", "%' ", buildingRequest.getStreet()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.ward LIKE '%", "%' ", buildingRequest.getWard()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.districtid = ", " ", buildingRequest.getDistrictID()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.floorarea = ", " ", buildingRequest.getFloorArea()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.numberOfBasement = ", " ", buildingRequest.getNumberOfBasement()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.direction  LIKE '%", "%' ", buildingRequest.getDirection()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.Level LIKE '%", "%' ", buildingRequest.getLevel()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managername LIKE '%", "%' ", buildingRequest.getManagerName()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managerphone LIKE '%", "%' ", buildingRequest.getManagerPhone()));
+		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));		
+		whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
+		whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
+		whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getListType()));
+		
+		return whereSQLClause.toString();
+	}
+
+	@Override
+	public String buildJoinSQLClause(BuildingRequest buildingRequest) {
+		String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
+		
+		String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
+		joinSQLClause += this.checkExistenceOfJoinSQLClause(assignmentbuilding, 
+				buildingRequest.getUserID());
+		
+		String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
+		joinSQLClause += this.checkExistenceOfJoinSQLClause(rentarea, 
+				buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo());
+		
+		String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ", 
+				" JOIN renttype RT ON RT.id = BRT.renttypeid "};
+		joinSQLClause += this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType());
+		
+		return joinSQLClause;
+	}
+
+	@Override
+	public String buildConditionForBuildingType(List<String> buildingType) {
+		String conditionForBuildingType = "";
+		if (!this.isNull(buildingType)) {
+			conditionForBuildingType += " AND RT.code = \"" + buildingType.get(0) + "\" ";
+			if (buildingType.size() > 1) {
+				for (int i = 1; i < buildingType.size(); i++) {
+					conditionForBuildingType += " OR RT.code = \"" + buildingType.get(i) + "\" ";
+				}
+			}
+		}
+		return conditionForBuildingType;
+	}
+
+	@Override
+	public String checkExistenceOfConditionV2(String prefix, String suffix, Object parameter) {
+		if(parameter != null && !this.isBlank(parameter)) {
+			return (prefix + parameter + suffix);
+		}
+		return "";
+	}
+	
+	@Override
+	public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) {
+		String joinClauseStr = "";
+		for(Object obj: parameters) {
+			if(obj != null) {
+				for(String str: joinStr) {
+					joinClauseStr += str;
+				}
+				return joinClauseStr;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean isNull(Object value) {
+		if(value == null) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isBlank(Object value) {
+		if(value instanceof String && value == "") {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	@Override
+	public StringBuilder checkAndKeyword(boolean temp, StringBuilder string) {
+		if(temp == false) {
+			return new StringBuilder(" WHERE " + string.toString());
+		}else {
+			return new StringBuilder(" AND ").append(string.toString());
+		}
 	}
 
 	@Override
@@ -255,94 +314,57 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	}
 
 	@Override
-	public StringBuilder checkAndKeyword(boolean temp, StringBuilder string) {
-		if(temp == false) {
-			return new StringBuilder(" WHERE " + string.toString());
-		}else {
-			return new StringBuilder(" AND ").append(string.toString());
-		}
-	}
-
-	@Override
-	public String buildQuery_V2(BuildingRequest buildingRequest) {
-		try {
-			String fromSQLClause = "SELECT * FROM building BD ";
-			String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
-			StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.name LIKE '%" + buildingRequest.getName() + "%' ", buildingRequest.getName()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.street LIKE '%" + buildingRequest.getStreet() + "%' ", buildingRequest.getStreet()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.ward LIKE '%" + buildingRequest.getWard() + "%' ", buildingRequest.getWard()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.districtid = " + buildingRequest.getDistrictID() + " ", buildingRequest.getDistrictID()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.floorarea = " + buildingRequest.getFloorArea() + " ", buildingRequest.getFloorArea()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.numberOfBasement = " + buildingRequest.getNumberOfBasement() + " ", buildingRequest.getNumberOfBasement()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.direction  LIKE '%" + buildingRequest.getDirection() + "%' ", buildingRequest.getDirection()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.Level LIKE '%" + buildingRequest.getLevel() + "%' ", buildingRequest.getLevel()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managername LIKE '%" + buildingRequest.getManagerName() + "%' ", buildingRequest.getManagerName()));
-			whereSQLClause.append(this.checkExistenceOfCondition (" AND BD.managerphone LIKE '%" + buildingRequest.getManagerPhone() + "%' ", buildingRequest.getManagerPhone()));
-			whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
-			if (buildingRequest.getUserID() != null) {
-				joinSQLClause += " JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ";
-				whereSQLClause.append(" AND ASB.staffid = " + buildingRequest.getUserID() + " ");
-			}
-			if (!this.isNull(buildingRequest.getRentEreaFrom()) || !this.isNull(buildingRequest.getRentEreaTo())) {
-				joinSQLClause += " JOIN rentarea RE ON RE.buildingid = BD.id ";
-				whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
-			}
-			if (buildingRequest.getListType() != null) {
-				joinSQLClause += " JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ";
-				joinSQLClause += " JOIN renttype RT ON RT.id = BRT.renttypeid ";
-				
-				whereSQLClause.append(" AND RT.code = \"" + buildingRequest.getListType().get(0) + "\" ");
-				if (buildingRequest.getListType().size() > 1) {
-					for (int i = 1; i < buildingRequest.getListType().size(); i++) {
-						whereSQLClause.append(" OR RT.code = \"" + buildingRequest.getListType().get(i) + "\" ");
-					}
-				}
-			}
-			String result = fromSQLClause + joinSQLClause + whereSQLClause.toString() + " GROUP BY BD.id ";
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public boolean isNull(Object value) {
-		if(value == null) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public String checkExistenceOfCondition (String sql, Object parameter) {
+	public String checkExistenceOfCondition (String conditionStr, Object parameter) {
 		if(parameter != null && !this.isBlank(parameter)) {
-			return sql;
+			return conditionStr;
 		}
 		return "";
 	}
 
+	
 	@Override
-	public StringBuilder buildBetweenStatement(String whereSQLClause, Object from, Object to) {
-		if(!this.isNull(from) || !this.isNull(to)) {
-			if(!this.isNull(from) && !this.isNull(to)) {
-				return new StringBuilder(" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
-			}else if(!this.isNull(from) && this.isNull(to)) {
-				return new StringBuilder(" AND "+ whereSQLClause +" >= " + from + " ");
-			}else {
-				return new StringBuilder(" AND "+ whereSQLClause +" <= " + to + " ");
-			}
-		}
-		return new StringBuilder("");
-	}
+	public BuildingResponse convertResultSetToBuildingResponse(ResultSet resultSet) {
+		try {
+			BuildingResponse buildingResponse = new BuildingResponse();
+			buildingResponse.setId(resultSet.getLong("id"));
+			buildingResponse.setName(resultSet.getString("name"));
+			buildingResponse.setDistrictID(resultSet.getLong("districtid"));
+			buildingResponse.setStreet(resultSet.getString("street"));
+			buildingResponse.setStructure(resultSet.getString("structure"));
+			buildingResponse.setNumberOfBasement(resultSet.getLong("numberofbasement"));
+			buildingResponse.setFloorArea(resultSet.getLong("floorarea"));
+			buildingResponse.setDirection(resultSet.getString("direction"));
+			buildingResponse.setLevel(resultSet.getString("level"));
+			buildingResponse.setRentPrice(resultSet.getLong("rentPrice"));
+			buildingResponse.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
+			buildingResponse.setServiceFee(resultSet.getString("serviceFee"));
+			buildingResponse.setCarFee(resultSet.getString("carFee"));
+			buildingResponse.setMotorbikeFee(resultSet.getString("motorbikeFee"));
+			buildingResponse.setOvertimeFee(resultSet.getString("overtimeFee"));
+			buildingResponse.setWaterFee(resultSet.getString("waterfee"));
+			buildingResponse.setElectricityFee(resultSet.getString("electricityfee"));
+			buildingResponse.setDeposit(resultSet.getString("deposit"));
+			buildingResponse.setPayment(resultSet.getString("payment"));
+			buildingResponse.setRentTime(resultSet.getString("renttime"));
+			buildingResponse.setDecoratorTime(resultSet.getString("decorationtime"));
+			buildingResponse.setBrokerageFee(resultSet.getString("brokeragefee"));
+			buildingResponse.setNote(resultSet.getString("note"));
+			buildingResponse.setLinkofbuilding(resultSet.getString("linkofbuilding"));
+			buildingResponse.setMap(resultSet.getString("map"));
+			buildingResponse.setImage(resultSet.getString("image"));
+			buildingResponse.setManagerPhone(resultSet.getString("managerphone"));
+			buildingResponse.setManagerName(resultSet.getString("managername"));
 
-	@Override
-	public boolean isBlank(Object value) {
-		if(value instanceof String && value == "") {
-			return true;
+			buildingResponse.setCreatedDate(resultSet.getTimestamp("createddate"));
+			buildingResponse.setModifiedDate(resultSet.getTimestamp("modifieddate"));
+			buildingResponse.setCreatedBy(resultSet.getString("createdby"));
+			buildingResponse.setModifiedBy(resultSet.getString("modifiedby"));
+
+			return buildingResponse;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
 		}
-		return false;
 	}
 
 }

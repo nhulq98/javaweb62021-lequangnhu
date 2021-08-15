@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequest;
-import com.laptrinhjavaweb.dto.output.BuildingResponse;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
 import com.laptrinhjavaweb.service.IBuildingService;
 
 @RestController
@@ -30,9 +30,9 @@ public class BuildingAPI {
 //	}
 
 	@GetMapping
-	public @ResponseBody List<BuildingResponse> findByCondition(@RequestParam Map<String, String> requestParam) {
+	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, String> requestParam) {
 		ObjectMapper mapper = new ObjectMapper();
-		BuildingRequest buildingRequest = mapper.convertValue(requestParam, BuildingRequest.class);
+		BuildingRequestDTO buildingRequest = mapper.convertValue(requestParam, BuildingRequestDTO.class);
 		
 		return buildingService.findByCondition(buildingRequest);
 	}

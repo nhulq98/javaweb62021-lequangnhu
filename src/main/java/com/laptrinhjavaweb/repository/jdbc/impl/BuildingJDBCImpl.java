@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjavaweb.dto.input.BuildingRequest;
-import com.laptrinhjavaweb.dto.output.BuildingResponse;
+import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
 
 public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
@@ -18,8 +20,8 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	private ResultSet resultSet;
 
 	@Override
-	public List<BuildingResponse> findByCondition(BuildingRequest buildingRequest) {
-		List<BuildingResponse> results = new ArrayList<>();
+	public List<BuildingEntity> findByCondition(BuildingRequestDTO buildingRequest) {
+		List<BuildingEntity> results = new ArrayList<>();
 		try {
 			this.connection = super.getConnection();
 			this.connection.setAutoCommit(false);
@@ -28,9 +30,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			this.resultSet = this.prStatement.executeQuery();
 			while (this.resultSet.next()) {
 				// get All data from resultset
-				BuildingResponse buildingResponse = new BuildingResponse();
-				buildingResponse = convertResultSetToBuildingResponse(this.resultSet);
-				results.add(buildingResponse);
+				results.add(this.convertResultSetToEntity(resultSet));
 			}
 			this.connection.commit();
 			return results;
@@ -53,7 +53,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 
 	
 	@Override
-	public String buildQueryV2(BuildingRequest buildingRequest) {
+	public String buildQueryV2(BuildingRequestDTO buildingRequest) {
 		try {
 			String fromSQLClause = "SELECT * FROM building BD ";
 			String joinSQLClause = this.buildJoinSQLClause(buildingRequest);
@@ -82,7 +82,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	}
 
 	@Override
-	public String buildWhereSQLClause(BuildingRequest buildingRequest) {
+	public String buildWhereSQLClause(BuildingRequestDTO buildingRequest) {
 		StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");// Use StringBuilder with purpose is saved memory
 		
 		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.name LIKE '%", "%' ", buildingRequest.getName()));
@@ -104,7 +104,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	}
 
 	@Override
-	public String buildJoinSQLClause(BuildingRequest buildingRequest) {
+	public String buildJoinSQLClause(BuildingRequestDTO buildingRequest) {
 		String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
 		
 		String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
@@ -155,7 +155,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 				return joinClauseStr;
 			}
 		}
-		return null;
+		return "";
 	}
 	
 	@Override
@@ -186,7 +186,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	}
 
 	@Override
-	public String buildQuery(BuildingRequest buildingRequest) {
+	public String buildQuery(BuildingRequestDTO buildingRequest) {
 		try {
 			boolean temp = false;// keyword AND not exists
 			String sqlFromClause = "SELECT * FROM building BD ";
@@ -323,9 +323,9 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 
 	
 	@Override
-	public BuildingResponse convertResultSetToBuildingResponse(ResultSet resultSet) {
+	public BuildingResponseDTO convertResultSetToBuildingResponse(ResultSet resultSet) {
 		try {
-			BuildingResponse buildingResponse = new BuildingResponse();
+			BuildingResponseDTO buildingResponse = new BuildingResponseDTO();
 			buildingResponse.setId(resultSet.getLong("id"));
 			buildingResponse.setName(resultSet.getString("name"));
 			buildingResponse.setDistrictID(resultSet.getLong("districtid"));
@@ -361,6 +361,92 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			buildingResponse.setModifiedBy(resultSet.getString("modifiedby"));
 
 			return buildingResponse;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+
+	@Override
+	public BuildingDTO convertResultSetToBuildingDTO(ResultSet resultSet) {
+		try {
+			BuildingDTO buildingDTO = new BuildingDTO();
+			buildingDTO.setId(resultSet.getLong("id"));
+			buildingDTO.setName(resultSet.getString("name"));
+			buildingDTO.setDistrictID(resultSet.getLong("districtid"));
+			buildingDTO.setStreet(resultSet.getString("street"));
+			buildingDTO.setStructure(resultSet.getString("structure"));
+			buildingDTO.setNumberOfBasement(resultSet.getLong("numberofbasement"));
+			buildingDTO.setFloorArea(resultSet.getLong("floorarea"));
+			buildingDTO.setDirection(resultSet.getString("direction"));
+			buildingDTO.setLevel(resultSet.getString("level"));
+			buildingDTO.setRentPrice(resultSet.getLong("rentPrice"));
+			buildingDTO.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
+			buildingDTO.setServiceFee(resultSet.getString("serviceFee"));
+			buildingDTO.setCarFee(resultSet.getString("carFee"));
+			buildingDTO.setMotorbikeFee(resultSet.getString("motorbikeFee"));
+			buildingDTO.setOvertimeFee(resultSet.getString("overtimeFee"));
+			buildingDTO.setWaterFee(resultSet.getString("waterfee"));
+			buildingDTO.setElectricityFee(resultSet.getString("electricityfee"));
+			buildingDTO.setDeposit(resultSet.getString("deposit"));
+			buildingDTO.setPayment(resultSet.getString("payment"));
+			buildingDTO.setRentTime(resultSet.getString("renttime"));
+			buildingDTO.setDecoratorTime(resultSet.getString("decorationtime"));
+			buildingDTO.setBrokerageFee(resultSet.getString("brokeragefee"));
+			buildingDTO.setNote(resultSet.getString("note"));
+			buildingDTO.setLinkofbuilding(resultSet.getString("linkofbuilding"));
+			buildingDTO.setMap(resultSet.getString("map"));
+			buildingDTO.setImage(resultSet.getString("image"));
+			buildingDTO.setManagerPhone(resultSet.getString("managerphone"));
+			buildingDTO.setManagerName(resultSet.getString("managername"));
+
+			buildingDTO.setCreatedDate(resultSet.getTimestamp("createddate"));
+			buildingDTO.setModifiedDate(resultSet.getTimestamp("modifieddate"));
+			buildingDTO.setCreatedBy(resultSet.getString("createdby"));
+			buildingDTO.setModifiedBy(resultSet.getString("modifiedby"));
+
+			return buildingDTO;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+
+	@Override
+	public BuildingEntity convertResultSetToEntity(ResultSet resultSet) {
+		try {
+			BuildingEntity buildingEntity = new BuildingEntity();
+			buildingEntity.setName(resultSet.getString("name"));
+			buildingEntity.setDistrictID(resultSet.getLong("districtid"));
+			buildingEntity.setStreet(resultSet.getString("street"));
+			buildingEntity.setStructure(resultSet.getString("structure"));
+			buildingEntity.setNumberOfBasement(resultSet.getInt("numberofbasement"));
+			buildingEntity.setFloorArea(resultSet.getLong("floorarea"));
+			buildingEntity.setDirection(resultSet.getString("direction"));
+			buildingEntity.setLevel(resultSet.getString("level"));
+			buildingEntity.setRentPrice(resultSet.getLong("rentPrice"));
+			buildingEntity.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
+			buildingEntity.setServiceFee(resultSet.getString("serviceFee"));
+			buildingEntity.setCarFee(resultSet.getString("carFee"));
+			buildingEntity.setMotorbikeFee(resultSet.getString("motorbikeFee"));
+			buildingEntity.setOvertimeFee(resultSet.getString("overtimeFee"));
+			buildingEntity.setWaterFee(resultSet.getString("waterfee"));
+			buildingEntity.setElectricityFee(resultSet.getString("electricityfee"));
+			buildingEntity.setDeposit(resultSet.getString("deposit"));
+			buildingEntity.setPayment(resultSet.getString("payment"));
+			buildingEntity.setRentTime(resultSet.getString("renttime"));
+			buildingEntity.setDecoratorTime(resultSet.getString("decorationtime"));
+			buildingEntity.setBrokerageFee(resultSet.getString("brokeragefee"));
+			buildingEntity.setNote(resultSet.getString("note"));
+			buildingEntity.setLinkofbuilding(resultSet.getString("linkofbuilding"));
+			buildingEntity.setMap(resultSet.getString("map"));
+			buildingEntity.setImage(resultSet.getString("image"));
+			buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
+			buildingEntity.setManagerName(resultSet.getString("managername"));
+
+			return buildingEntity;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;

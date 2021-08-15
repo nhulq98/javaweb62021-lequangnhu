@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequest;
-import com.laptrinhjavaweb.dto.output.BuildingResponse;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
 
 public interface IBuildingService {
 	Map<String, String> getDistricts();
 	Map<String, String> getBuildingTypes();
 	BuildingDTO save(BuildingDTO newBuilding);
-	List<BuildingResponse> findByCondition(BuildingRequest buildingRequest);
+	List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest);
 }

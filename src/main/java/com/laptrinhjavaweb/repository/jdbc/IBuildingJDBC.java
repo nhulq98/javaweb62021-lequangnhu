@@ -4,16 +4,17 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequest;
-import com.laptrinhjavaweb.dto.output.BuildingResponse;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.laptrinhjavaweb.entity.BuildingEntity;
 
 public interface IBuildingJDBC{
-	List<BuildingResponse> findByCondition(BuildingRequest buildingRequest);
-	String buildQueryV2(BuildingRequest buildingRequest);
+	List<BuildingEntity> findByCondition(BuildingRequestDTO buildingRequest);
+	String buildQueryV2(BuildingRequestDTO buildingRequest);
 	
 	//Build Clauses
-	String buildJoinSQLClause(BuildingRequest buildingRequest);
-	String buildWhereSQLClause(BuildingRequest buildingRequest);
+	String buildJoinSQLClause(BuildingRequestDTO buildingRequest);
+	String buildWhereSQLClause(BuildingRequestDTO buildingRequest);
 	String buildConditionForBuildingType(List<String> buildingType);
 	String buildBetweenStatement(String sqlWhere, Long from, Long to);
 	//String buildFromSQLClause(String select, String from);
@@ -26,8 +27,10 @@ public interface IBuildingJDBC{
 	
 	
 	// For first version
-	BuildingResponse convertResultSetToBuildingResponse(ResultSet resultSet);
-	String buildQuery(BuildingRequest buildingRequest);
+	BuildingEntity convertResultSetToEntity(ResultSet resultSet);
+	BuildingResponseDTO convertResultSetToBuildingResponse(ResultSet resultSet);
+	BuildingDTO convertResultSetToBuildingDTO(ResultSet resultSet);
+	String buildQuery(BuildingRequestDTO buildingRequest);
 	String checkExistenceOfCondition(String conditionStr, Object parameter);
 	StringBuilder checkAndKeyword(boolean temp, StringBuilder string);
 }

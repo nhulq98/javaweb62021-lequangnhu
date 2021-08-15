@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
+import com.laptrinhjavaweb.converter.BuildingResponseConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequest;
-import com.laptrinhjavaweb.dto.output.BuildingResponse;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
@@ -54,9 +56,14 @@ public class BuildingService implements IBuildingService {
 	}
 	
 	@Override
-	public List<BuildingResponse> findByCondition(BuildingRequest buildingRequest) {
+	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
-		return buildingimpl.findByCondition(buildingRequest);
+		List<BuildingResponseDTO> result = new ArrayList<>();
+		BuildingResponseConverter converter = new BuildingResponseConverter();
+		for(BuildingEntity buildingEntity: buildingimpl.findByCondition(buildingRequest)){
+			result.add(converter.convertToDTO(buildingEntity));
+		}
+		return result;
 	}
 
 }

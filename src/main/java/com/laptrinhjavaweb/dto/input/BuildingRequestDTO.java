@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BuildingRequest {
+public class BuildingRequestDTO {
 	private String name;
 	private String street;
 	private String ward;

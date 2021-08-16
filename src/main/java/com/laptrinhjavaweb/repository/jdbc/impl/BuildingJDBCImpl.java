@@ -321,53 +321,6 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		return "";
 	}
 
-	
-	@Override
-	public BuildingResponseDTO convertResultSetToBuildingResponse(ResultSet resultSet) {
-		try {
-			BuildingResponseDTO buildingResponse = new BuildingResponseDTO();
-			buildingResponse.setId(resultSet.getLong("id"));
-			buildingResponse.setName(resultSet.getString("name"));
-			buildingResponse.setDistrictID(resultSet.getLong("districtid"));
-			buildingResponse.setStreet(resultSet.getString("street"));
-			buildingResponse.setStructure(resultSet.getString("structure"));
-			buildingResponse.setNumberOfBasement(resultSet.getLong("numberofbasement"));
-			buildingResponse.setFloorArea(resultSet.getLong("floorarea"));
-			buildingResponse.setDirection(resultSet.getString("direction"));
-			buildingResponse.setLevel(resultSet.getString("level"));
-			buildingResponse.setRentPrice(resultSet.getLong("rentPrice"));
-			buildingResponse.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
-			buildingResponse.setServiceFee(resultSet.getString("serviceFee"));
-			buildingResponse.setCarFee(resultSet.getString("carFee"));
-			buildingResponse.setMotorbikeFee(resultSet.getString("motorbikeFee"));
-			buildingResponse.setOvertimeFee(resultSet.getString("overtimeFee"));
-			buildingResponse.setWaterFee(resultSet.getString("waterfee"));
-			buildingResponse.setElectricityFee(resultSet.getString("electricityfee"));
-			buildingResponse.setDeposit(resultSet.getString("deposit"));
-			buildingResponse.setPayment(resultSet.getString("payment"));
-			buildingResponse.setRentTime(resultSet.getString("renttime"));
-			buildingResponse.setDecoratorTime(resultSet.getString("decorationtime"));
-			buildingResponse.setBrokerageFee(resultSet.getString("brokeragefee"));
-			buildingResponse.setNote(resultSet.getString("note"));
-			buildingResponse.setLinkofbuilding(resultSet.getString("linkofbuilding"));
-			buildingResponse.setMap(resultSet.getString("map"));
-			buildingResponse.setImage(resultSet.getString("image"));
-			buildingResponse.setManagerPhone(resultSet.getString("managerphone"));
-			buildingResponse.setManagerName(resultSet.getString("managername"));
-
-			buildingResponse.setCreatedDate(resultSet.getTimestamp("createddate"));
-			buildingResponse.setModifiedDate(resultSet.getTimestamp("modifieddate"));
-			buildingResponse.setCreatedBy(resultSet.getString("createdby"));
-			buildingResponse.setModifiedBy(resultSet.getString("modifiedby"));
-
-			return buildingResponse;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
-
 	@Override
 	public BuildingDTO convertResultSetToBuildingDTO(ResultSet resultSet) {
 		try {
@@ -419,32 +372,11 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		try {
 			BuildingEntity buildingEntity = new BuildingEntity();
 			buildingEntity.setName(resultSet.getString("name"));
-			buildingEntity.setDistrictID(resultSet.getLong("districtid"));
-			buildingEntity.setStreet(resultSet.getString("street"));
-			buildingEntity.setStructure(resultSet.getString("structure"));
+//			buildingEntity.setDistrictID(resultSet.getLong("districtid"));
+//			buildingEntity.setStreet(resultSet.getString("street"));
 			buildingEntity.setNumberOfBasement(resultSet.getInt("numberofbasement"));
-			buildingEntity.setFloorArea(resultSet.getLong("floorarea"));
-			buildingEntity.setDirection(resultSet.getString("direction"));
-			buildingEntity.setLevel(resultSet.getString("level"));
-			buildingEntity.setRentPrice(resultSet.getLong("rentPrice"));
-			buildingEntity.setRentPriceDescription(resultSet.getString("rentPriceDescription"));
-			buildingEntity.setServiceFee(resultSet.getString("serviceFee"));
-			buildingEntity.setCarFee(resultSet.getString("carFee"));
-			buildingEntity.setMotorbikeFee(resultSet.getString("motorbikeFee"));
-			buildingEntity.setOvertimeFee(resultSet.getString("overtimeFee"));
-			buildingEntity.setWaterFee(resultSet.getString("waterfee"));
-			buildingEntity.setElectricityFee(resultSet.getString("electricityfee"));
-			buildingEntity.setDeposit(resultSet.getString("deposit"));
-			buildingEntity.setPayment(resultSet.getString("payment"));
-			buildingEntity.setRentTime(resultSet.getString("renttime"));
-			buildingEntity.setDecoratorTime(resultSet.getString("decorationtime"));
-			buildingEntity.setBrokerageFee(resultSet.getString("brokeragefee"));
-			buildingEntity.setNote(resultSet.getString("note"));
-			buildingEntity.setLinkofbuilding(resultSet.getString("linkofbuilding"));
-			buildingEntity.setMap(resultSet.getString("map"));
-			buildingEntity.setImage(resultSet.getString("image"));
-			buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
-			buildingEntity.setManagerName(resultSet.getString("managername"));
+//			buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
+//			buildingEntity.setManagerName(resultSet.getString("managername"));
 
 			return buildingEntity;
 		} catch (Exception ex) {

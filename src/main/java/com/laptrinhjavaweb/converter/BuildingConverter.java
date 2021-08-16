@@ -22,6 +22,6 @@ public class BuildingConverter {
 	public BuildingEntity convertToEntity(BuildingDTO dto) {
 		BuildingEntity entity = modelMapper.map(dto, BuildingEntity.class);
 		return entity;
-	}
+	} 
 
 }

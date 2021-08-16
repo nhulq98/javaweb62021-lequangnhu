@@ -28,7 +28,6 @@ public interface IBuildingJDBC{
 	
 	// For first version
 	BuildingEntity convertResultSetToEntity(ResultSet resultSet);
-	BuildingResponseDTO convertResultSetToBuildingResponse(ResultSet resultSet);
 	BuildingDTO convertResultSetToBuildingDTO(ResultSet resultSet);
 	String buildQuery(BuildingRequestDTO buildingRequest);
 	String checkExistenceOfCondition(String conditionStr, Object parameter);

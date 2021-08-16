@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
-import com.laptrinhjavaweb.converter.BuildingResponseConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
 import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
@@ -59,9 +58,21 @@ public class BuildingService implements IBuildingService {
 	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
 		List<BuildingResponseDTO> result = new ArrayList<>();
-		BuildingResponseConverter converter = new BuildingResponseConverter();
+		BuildingConverter converter = new BuildingConverter();
+		
+		// call repo 
 		for(BuildingEntity buildingEntity: buildingimpl.findByCondition(buildingRequest)){
-			result.add(converter.convertToDTO(buildingEntity));
+			// convert entity to dto
+			BuildingDTO buildingDTO = converter.convertToDTO(buildingEntity);
+			BuildingResponseDTO ResponseDTO = new BuildingResponseDTO();
+			ResponseDTO.setName(buildingDTO.getName());
+			ResponseDTO.setAddress(buildingDTO.getAddress());
+			ResponseDTO.setManagerName(buildingDTO.getManagerName());
+			ResponseDTO.setManagerPhone(buildingDTO.getName());
+			ResponseDTO.setFloorArea(buildingDTO.getFloorArea());
+			ResponseDTO.setRentPrice(buildingDTO.getRentPrice());
+			ResponseDTO.setServiceFee(buildingDTO.getServiceFee());
+			result.add(ResponseDTO);
 		}
 		return result;
 	}

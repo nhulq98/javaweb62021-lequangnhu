@@ -1,10 +1,5 @@
 package com.laptrinhjavaweb.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 
 	private Long id;
@@ -39,7 +34,257 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 	private String managerPhone;
 	private String address;
 
-//	private String name;
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getWard() {
+		return ward;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public Long getDistrictID() {
+		return districtID;
+	}
+
+	public void setDistrictID(Long districtID) {
+		this.districtID = districtID;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getStructure() {
+		return structure;
+	}
+
+	public void setStructure(String structure) {
+		this.structure = structure;
+	}
+
+	public Long getNumberOfBasement() {
+		return numberOfBasement;
+	}
+
+	public void setNumberOfBasement(Long numberOfBasement) {
+		this.numberOfBasement = numberOfBasement;
+	}
+
+	public Long getFloorArea() {
+		return floorArea;
+	}
+
+	public void setFloorArea(Long floorArea) {
+		this.floorArea = floorArea;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public Long getRentPrice() {
+		return rentPrice;
+	}
+
+	public void setRentPrice(Long rentPrice) {
+		this.rentPrice = rentPrice;
+	}
+
+	public String getRentPriceDescription() {
+		return rentPriceDescription;
+	}
+
+	public void setRentPriceDescription(String rentPriceDescription) {
+		this.rentPriceDescription = rentPriceDescription;
+	}
+
+	public String getServiceFee() {
+		return serviceFee;
+	}
+
+	public void setServiceFee(String serviceFee) {
+		this.serviceFee = serviceFee;
+	}
+
+	public String getCarFee() {
+		return carFee;
+	}
+
+	public void setCarFee(String carFee) {
+		this.carFee = carFee;
+	}
+
+	public String getMotorbikeFee() {
+		return motorbikeFee;
+	}
+
+	public void setMotorbikeFee(String motorbikeFee) {
+		this.motorbikeFee = motorbikeFee;
+	}
+
+	public String getOvertimeFee() {
+		return overtimeFee;
+	}
+
+	public void setOvertimeFee(String overtimeFee) {
+		this.overtimeFee = overtimeFee;
+	}
+
+	public String getWaterFee() {
+		return waterFee;
+	}
+
+	public void setWaterFee(String waterFee) {
+		this.waterFee = waterFee;
+	}
+
+	public String getElectricityFee() {
+		return electricityFee;
+	}
+
+	public void setElectricityFee(String electricityFee) {
+		this.electricityFee = electricityFee;
+	}
+
+	public String getDeposit() {
+		return deposit;
+	}
+
+	public void setDeposit(String deposit) {
+		this.deposit = deposit;
+	}
+
+	public String getPayment() {
+		return payment;
+	}
+
+	public void setPayment(String payment) {
+		this.payment = payment;
+	}
+
+	public String getRentTime() {
+		return rentTime;
+	}
+
+	public void setRentTime(String rentTime) {
+		this.rentTime = rentTime;
+	}
+
+	public String getDecoratorTime() {
+		return decoratorTime;
+	}
+
+	public void setDecoratorTime(String decoratorTime) {
+		this.decoratorTime = decoratorTime;
+	}
+
+	public String getBrokerageFee() {
+		return brokerageFee;
+	}
+
+	public void setBrokerageFee(String brokerageFee) {
+		this.brokerageFee = brokerageFee;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getLinkofbuilding() {
+		return linkofbuilding;
+	}
+
+	public void setLinkofbuilding(String linkofbuilding) {
+		this.linkofbuilding = linkofbuilding;
+	}
+
+	public String getMap() {
+		return map;
+	}
+
+	public void setMap(String map) {
+		this.map = map;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+
+	public String getManagerPhone() {
+		return managerPhone;
+	}
+
+	public void setManagerPhone(String managerPhone) {
+		this.managerPhone = managerPhone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	//	private String name;
 //	private String numberOfBasement;
 //	private String buildingArea;
 //	private String street;

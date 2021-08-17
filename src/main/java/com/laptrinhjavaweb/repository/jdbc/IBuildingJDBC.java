@@ -10,7 +10,7 @@ import com.laptrinhjavaweb.entity.BuildingEntity;
 
 public interface IBuildingJDBC{
 	List<BuildingEntity> findByCondition(BuildingRequestDTO buildingRequest);
-	String buildQueryV2(BuildingRequestDTO buildingRequest);
+	String buildQueryForSearchBuilding(BuildingRequestDTO buildingRequest);
 	
 	//Build Clauses
 	String buildJoinSQLClause(BuildingRequestDTO buildingRequest);

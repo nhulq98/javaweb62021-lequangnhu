@@ -1,14 +1,5 @@
 package com.laptrinhjavaweb.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
@@ -18,14 +9,23 @@ import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.impl.BuildingJDBCImpl;
+import com.laptrinhjavaweb.repository.jdbc.impl.DistrictJDBCImpl;
 import com.laptrinhjavaweb.service.IBuildingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class BuildingService implements IBuildingService {
 
 	@Autowired
 	private BuildingConverter buildingConverter;
-	
+
 	@Autowired
 	private BuildingRepository buildingRepository;
 	
@@ -57,22 +57,37 @@ public class BuildingService implements IBuildingService {
 	@Override
 	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
+		DistrictJDBCImpl districtJDBC = new DistrictJDBCImpl();
 		List<BuildingResponseDTO> result = new ArrayList<>();
-		BuildingConverter converter = new BuildingConverter();
-		
-		// call repo 
-		for(BuildingEntity buildingEntity: buildingimpl.findByCondition(buildingRequest)){
-			// convert entity to dto
-			BuildingDTO buildingDTO = converter.convertToDTO(buildingEntity);
-			BuildingResponseDTO ResponseDTO = new BuildingResponseDTO();
-			ResponseDTO.setName(buildingDTO.getName());
-			ResponseDTO.setAddress(buildingDTO.getAddress());
-			ResponseDTO.setManagerName(buildingDTO.getManagerName());
-			ResponseDTO.setManagerPhone(buildingDTO.getName());
-			ResponseDTO.setFloorArea(buildingDTO.getFloorArea());
-			ResponseDTO.setRentPrice(buildingDTO.getRentPrice());
-			ResponseDTO.setServiceFee(buildingDTO.getServiceFee());
-			result.add(ResponseDTO);
+
+		// call repo
+        List<BuildingEntity> entities = buildingimpl.findByCondition(buildingRequest);
+
+		// convert buildingEntity to BuildingResponseDTO
+		for(BuildingEntity buildingEntity: entities){
+			BuildingResponseDTO responseDTO = new BuildingResponseDTO();
+			responseDTO.setId(buildingEntity.getId());
+			responseDTO.setCreatedDate(buildingEntity.getCreatedDate());
+			responseDTO.setName(buildingEntity.getName());
+			responseDTO.setAddress(buildingEntity.getStreet() +", "+ buildingEntity.getWard() +", "
+					+ districtJDBC.findById(buildingEntity.getDistrictId()).getName());
+			responseDTO.setFloorArea(buildingEntity.getFloorArea());
+			responseDTO.setRentPrice(buildingEntity.getRentPrice());
+			responseDTO.setServiceFee(buildingEntity.getServiceFee());
+			responseDTO.setManagerName(buildingEntity.getManagerName());
+			responseDTO.setManagerPhone(buildingEntity.getManagerPhone());
+
+			result.add(responseDTO);
+		}
+		return result;
+	}
+
+	@Override
+	public List<BuildingDTO> findAll() {
+		List<BuildingDTO> result = new ArrayList<>();
+		List<BuildingEntity> entities = buildingRepository.findAll();
+		for(BuildingEntity entity : entities){
+			result.add(buildingConverter.convertToDTO(entity));
 		}
 		return result;
 	}

@@ -12,4 +12,6 @@ public interface IBuildingService {
 	Map<String, String> getBuildingTypes();
 	BuildingDTO save(BuildingDTO newBuilding);
 	List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest);
+
+	List<BuildingDTO> findAll();
 }

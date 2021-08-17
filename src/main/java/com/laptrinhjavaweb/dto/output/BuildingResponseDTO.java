@@ -11,14 +11,9 @@ public class BuildingResponseDTO extends AbstractDTO<BuildingResponseDTO>{
 	private String managerPhone;
 	private Long floorArea;
 	private Long rentPrice;
-	private String serviceFee;
+	private Integer serviceFee;
 	
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+
 	public Long getId() {
 		return id;
 	}
@@ -31,25 +26,29 @@ public class BuildingResponseDTO extends AbstractDTO<BuildingResponseDTO>{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	public Long getFloorArea() {
 		return floorArea;
 	}
 	public void setFloorArea(Long floorArea) {
 		this.floorArea = floorArea;
 	}
-	
 	public Long getRentPrice() {
 		return rentPrice;
 	}
 	public void setRentPrice(Long rentPrice) {
 		this.rentPrice = rentPrice;
 	}
-	
-	public String getServiceFee() {
+
+	public Integer getServiceFee() {
 		return serviceFee;
 	}
-	public void setServiceFee(String serviceFee) {
+	public void setServiceFee(Integer serviceFee) {
 		this.serviceFee = serviceFee;
 	}
 	public String getManagerName() {

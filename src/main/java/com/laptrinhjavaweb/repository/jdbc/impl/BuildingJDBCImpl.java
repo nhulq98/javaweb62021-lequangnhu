@@ -1,17 +1,16 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
+import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.entity.BuildingEntity;
+import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
-import com.laptrinhjavaweb.entity.BuildingEntity;
-import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
 
 public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	
@@ -25,7 +24,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		try {
 			this.connection = super.getConnection();
 			this.connection.setAutoCommit(false);
-			this.prStatement = this.connection.prepareStatement(this.buildQueryV2(buildingRequest));
+			this.prStatement = this.connection.prepareStatement(this.buildQueryForSearchBuilding(buildingRequest));
 
 			this.resultSet = this.prStatement.executeQuery();
 			while (this.resultSet.next()) {
@@ -50,17 +49,14 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			closeAll(this.connection, this.prStatement, this.resultSet);
 		}
 	}
-
 	
 	@Override
-	public String buildQueryV2(BuildingRequestDTO buildingRequest) {
+	public String buildQueryForSearchBuilding(BuildingRequestDTO buildingRequest) {
 		try {
-			String fromSQLClause = "SELECT * FROM building BD ";
-			String joinSQLClause = this.buildJoinSQLClause(buildingRequest);
-			String whereSQLClause = this.buildWhereSQLClause(buildingRequest);
-			String groupByClause = " GROUP BY BD.id ";
-
-			return (fromSQLClause + joinSQLClause + whereSQLClause.toString() + groupByClause);
+			return new StringBuilder("SELECT * FROM building BD ")
+					.append(this.buildJoinSQLClause(buildingRequest))
+					.append(this.buildWhereSQLClause(buildingRequest))
+					.append(" GROUP BY BD.id ").toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -105,35 +101,30 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 
 	@Override
 	public String buildJoinSQLClause(BuildingRequestDTO buildingRequest) {
-		String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
-		
 		String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
-		joinSQLClause += this.checkExistenceOfJoinSQLClause(assignmentbuilding, 
-				buildingRequest.getUserID());
-		
 		String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
-		joinSQLClause += this.checkExistenceOfJoinSQLClause(rentarea, 
-				buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo());
-		
-		String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ", 
+		String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
 				" JOIN renttype RT ON RT.id = BRT.renttypeid "};
-		joinSQLClause += this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType());
-		
-		return joinSQLClause;
+		StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
+				.append(this.checkExistenceOfJoinSQLClause(assignmentbuilding,buildingRequest.getUserID()))
+				.append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
+				.append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType()));
+
+		return joinSQLClause.toString();
 	}
 
 	@Override
 	public String buildConditionForBuildingType(List<String> buildingType) {
-		String conditionForBuildingType = "";
+		StringBuilder conditionForBuildingType = new StringBuilder("");
 		if (!this.isNull(buildingType)) {
-			conditionForBuildingType += " AND RT.code = \"" + buildingType.get(0) + "\" ";
+			conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
 			if (buildingType.size() > 1) {
 				for (int i = 1; i < buildingType.size(); i++) {
-					conditionForBuildingType += " OR RT.code = \"" + buildingType.get(i) + "\" ";
+					conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
 				}
 			}
 		}
-		return conditionForBuildingType;
+		return conditionForBuildingType.toString();
 	}
 
 	@Override
@@ -145,14 +136,14 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	}
 	
 	@Override
-	public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) {
-		String joinClauseStr = "";
+	public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) { // optimal
+		StringBuilder joinClauseStr = new StringBuilder("");
 		for(Object obj: parameters) {
 			if(obj != null) {
 				for(String str: joinStr) {
-					joinClauseStr += str;
+					joinClauseStr.append(str);
 				}
-				return joinClauseStr;
+				return joinClauseStr.toString();
 			}
 		}
 		return "";
@@ -174,8 +165,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		return false;
 	}
 	
-	
-	
+
 	@Override
 	public StringBuilder checkAndKeyword(boolean temp, StringBuilder string) {
 		if(temp == false) {
@@ -366,17 +356,18 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		}
 	}
 
-
 	@Override
 	public BuildingEntity convertResultSetToEntity(ResultSet resultSet) {
 		try {
 			BuildingEntity buildingEntity = new BuildingEntity();
+			buildingEntity.setId(resultSet.getLong("id"));
 			buildingEntity.setName(resultSet.getString("name"));
-//			buildingEntity.setDistrictID(resultSet.getLong("districtid"));
-//			buildingEntity.setStreet(resultSet.getString("street"));
+			//buildingEntity.setDistrict(resultSet.getObject("districtid", DistrictEntity.class));
+			buildingEntity.setDistrictId(resultSet.getLong("districtid"));
+			buildingEntity.setStreet(resultSet.getString("street"));
 			buildingEntity.setNumberOfBasement(resultSet.getInt("numberofbasement"));
-//			buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
-//			buildingEntity.setManagerName(resultSet.getString("managername"));
+			buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
+			buildingEntity.setManagerName(resultSet.getString("managername"));
 
 			return buildingEntity;
 		} catch (Exception ex) {

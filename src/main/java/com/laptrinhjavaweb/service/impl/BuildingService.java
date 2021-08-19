@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
+import com.laptrinhjavaweb.converter.BuildingResponseConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
 import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
@@ -25,6 +26,9 @@ public class BuildingService implements IBuildingService {
 
 	@Autowired
 	private BuildingConverter buildingConverter;
+
+    @Autowired
+    private BuildingResponseConverter buildingResponseConverter;
 
 	@Autowired
 	private BuildingRepository buildingRepository;
@@ -57,26 +61,12 @@ public class BuildingService implements IBuildingService {
 	@Override
 	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
-		DistrictJDBCImpl districtJDBC = new DistrictJDBCImpl();
 		List<BuildingResponseDTO> result = new ArrayList<>();
-
-		// call repo
         List<BuildingEntity> entities = buildingimpl.findByCondition(buildingRequest);
 
 		// convert buildingEntity to BuildingResponseDTO
 		for(BuildingEntity buildingEntity: entities){
-			BuildingResponseDTO responseDTO = new BuildingResponseDTO();
-			responseDTO.setId(buildingEntity.getId());
-			responseDTO.setCreatedDate(buildingEntity.getCreatedDate());
-			responseDTO.setName(buildingEntity.getName());
-			responseDTO.setAddress(buildingEntity.getStreet() +", "+ buildingEntity.getWard() +", "
-					+ districtJDBC.findById(buildingEntity.getDistrictId()).getName());
-			responseDTO.setFloorArea(buildingEntity.getFloorArea());
-			responseDTO.setRentPrice(buildingEntity.getRentPrice());
-			responseDTO.setServiceFee(buildingEntity.getServiceFee());
-			responseDTO.setManagerName(buildingEntity.getManagerName());
-			responseDTO.setManagerPhone(buildingEntity.getManagerPhone());
-
+			BuildingResponseDTO responseDTO = buildingResponseConverter.convertToDTO(buildingEntity);
 			result.add(responseDTO);
 		}
 		return result;

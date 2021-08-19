@@ -1,8 +1,6 @@
 package com.laptrinhjavaweb.dto.output;
 
-import com.laptrinhjavaweb.dto.AbstractDTO;
-
-public class BuildingResponseDTO extends AbstractDTO<BuildingResponseDTO>{
+public class BuildingResponseDTO{
 
 	private Long id;
 	private String name;
@@ -44,7 +42,6 @@ public class BuildingResponseDTO extends AbstractDTO<BuildingResponseDTO>{
 	public void setRentPrice(Long rentPrice) {
 		this.rentPrice = rentPrice;
 	}
-
 	public Integer getServiceFee() {
 		return serviceFee;
 	}

@@ -1,24 +1,29 @@
 package com.laptrinhjavaweb.dto.input;
 
+import com.laptrinhjavaweb.dto.AbstractDTO;
+
 import java.util.ArrayList;
 
-public class BuildingRequestDTO {
+public class BuildingRequestDTO extends AbstractDTO<BuildingRequestDTO> {
 	private String name;
-	private String street;
-	private String ward;
-	private Long districtID;
 	private Long floorArea;
+	private String ward;
+	private String street;
+	private Long districtID;
 	private Long numberOfBasement;
 	private String direction;
 	private String level;
+	private Long rentAreaFrom;
+	private Long rentAreaTo;
 	private Long rentPriceFrom;
 	private Long rentPriceTo;
-	private Long rentEreaFrom;
-	private Long rentEreaTo;
 	private String managerName;
 	private String managerPhone;
 	private Long userID;
 	private ArrayList<String> listType;
+
+	public BuildingRequestDTO() {
+	}
 
 	public String getName() {
 		return name;
@@ -100,20 +105,20 @@ public class BuildingRequestDTO {
 		this.rentPriceTo = rentPriceTo;
 	}
 
-	public Long getRentEreaFrom() {
-		return rentEreaFrom;
+	public Long getRentAreaFrom() {
+		return rentAreaFrom;
 	}
 
-	public void setRentEreaFrom(Long rentEreaFrom) {
-		this.rentEreaFrom = rentEreaFrom;
+	public void setRentAreaFrom(Long rentAreaFrom) {
+		this.rentAreaFrom = rentAreaFrom;
 	}
 
-	public Long getRentEreaTo() {
-		return rentEreaTo;
+	public Long getRentAreaTo() {
+		return rentAreaTo;
 	}
 
-	public void setRentEreaTo(Long rentEreaTo) {
-		this.rentEreaTo = rentEreaTo;
+	public void setRentAreaTo(Long rentAreaTo) {
+		this.rentAreaTo = rentAreaTo;
 	}
 
 	public String getManagerName() {
@@ -147,4 +152,5 @@ public class BuildingRequestDTO {
 	public void setListType(ArrayList<String> listType) {
 		this.listType = listType;
 	}
+
 }

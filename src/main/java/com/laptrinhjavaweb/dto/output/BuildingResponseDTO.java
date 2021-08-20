@@ -1,5 +1,9 @@
 package com.laptrinhjavaweb.dto.output;
 
+import com.laptrinhjavaweb.dto.UserDTO;
+
+import java.util.List;
+
 public class BuildingResponseDTO{
 
 	private Long id;
@@ -10,8 +14,14 @@ public class BuildingResponseDTO{
 	private Long floorArea;
 	private Long rentPrice;
 	private Integer serviceFee;
-	
+	private List<UserDTO> staffs;
 
+	public List<UserDTO> getStaffs() {
+		return staffs;
+	}
+	public void setStaffs(List<UserDTO> staffs) {
+		this.staffs = staffs;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -42,6 +52,7 @@ public class BuildingResponseDTO{
 	public void setRentPrice(Long rentPrice) {
 		this.rentPrice = rentPrice;
 	}
+
 	public Integer getServiceFee() {
 		return serviceFee;
 	}

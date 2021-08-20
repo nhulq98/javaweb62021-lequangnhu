@@ -20,7 +20,7 @@ public interface BuildingRepositoryCustom {
 
     // Build condition
     String checkExistenceOfConditionV2(String prefix, String suffix, Object parameter);
-    String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters);
+    String checkExistenceOfJoinSQLClause(String[] joinStr, Object... parameters);
     boolean isNull(Object value);
     boolean isBlank(Object value);
 }

@@ -27,8 +27,8 @@ public class BuildingService implements IBuildingService {
 	@Autowired
 	private BuildingConverter buildingConverter;
 
-    @Autowired
-    private BuildingResponseConverter buildingResponseConverter;
+	@Autowired
+	private BuildingResponseConverter buildingResponseConverter;
 
 	@Autowired
 	private BuildingRepository buildingRepository;
@@ -61,7 +61,10 @@ public class BuildingService implements IBuildingService {
 	@Override
 	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
+		DistrictJDBCImpl districtJDBC = new DistrictJDBCImpl();
 		List<BuildingResponseDTO> result = new ArrayList<>();
+
+		// call repo
         List<BuildingEntity> entities = buildingimpl.findByCondition(buildingRequest);
 
 		// convert buildingEntity to BuildingResponseDTO

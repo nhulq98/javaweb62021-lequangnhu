@@ -1,13 +1,14 @@
 package com.laptrinhjavaweb.repository.custom.impl;
 
-import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.DistrictEntity;
 import com.laptrinhjavaweb.repository.custom.DistrictRepositoryCustom;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+@Repository
 public class DistrictRepositoryImpl implements DistrictRepositoryCustom {
 
     @PersistenceContext

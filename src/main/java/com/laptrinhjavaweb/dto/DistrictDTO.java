@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.dto;
 
-public class DistrictDTO extends AbstractDTO<DistrictDTO> {
+public class DistrictDTO extends AbstractDTO<DistrictDTO>{
 
     private String code;
 

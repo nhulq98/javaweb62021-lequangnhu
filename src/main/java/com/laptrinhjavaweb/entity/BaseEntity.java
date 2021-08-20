@@ -7,69 +7,72 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(name = "createddate")
-	@CreatedDate
-	private Date createdDate;
-	
-	@Column(name = "modifieddate")
-	@LastModifiedDate
-	private Date modifiedDate;
-	
-	@Column(name = "createdby")
-	@CreatedBy
-	private String createdBy;
-	
-	@Column(name = "modifiedby")
-	@LastModifiedBy
-	private String modifiedBy;
+public class BaseEntity implements Serializable {
 
-	public Long getId() {
-		return id;
-	}
+    private static final long serialVersionUID = -863164858986274318L;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
+    @Column(name = "createddate")
+    @CreatedDate
+    private Date createdDate;
 
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+    @Column(name = "createdby")
+    @CreatedBy
+    private String createdBy;
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    @Column(name = "modifieddate")
+    @LastModifiedDate
+    private Date modifiedDate;
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    @Column(name = "modifiedby")
+    @LastModifiedBy
+    private String modifiedBy;
 
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
 }

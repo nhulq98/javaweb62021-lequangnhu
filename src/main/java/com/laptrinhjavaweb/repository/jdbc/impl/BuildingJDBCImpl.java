@@ -93,7 +93,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managerphone LIKE '%", "%' ", buildingRequest.getManagerPhone()));
 		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));		
 		whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
-		whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
+		whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentAreaFrom(), buildingRequest.getRentAreaTo()));
 		whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getListType()));
 		
 		return whereSQLClause.toString();
@@ -107,7 +107,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 				" JOIN renttype RT ON RT.id = BRT.renttypeid "};
 		StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
 				.append(this.checkExistenceOfJoinSQLClause(assignmentbuilding,buildingRequest.getUserID()))
-				.append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
+				.append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentAreaFrom(), buildingRequest.getRentAreaTo()))
 				.append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType()));
 
 		return joinSQLClause.toString();
@@ -116,11 +116,15 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	@Override
 	public String buildConditionForBuildingType(List<String> buildingType) {
 		StringBuilder conditionForBuildingType = new StringBuilder("");
-		if (!this.isNull(buildingType)) {
-			conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
+		if (!this.isNull(buildingType) && buildingType.size() > 0) {
+			if(!isBlank(buildingType.get(0))) {
+				conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
+			}
 			if (buildingType.size() > 1) {
 				for (int i = 1; i < buildingType.size(); i++) {
-					conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
+					if(!isBlank(buildingType.get(i))){
+						conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
+					}
 				}
 			}
 		}
@@ -139,7 +143,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) { // optimal
 		StringBuilder joinClauseStr = new StringBuilder("");
 		for(Object obj: parameters) {
-			if(obj != null) {
+			if(obj != null && !isBlank(obj)) {
 				for(String str: joinStr) {
 					joinClauseStr.append(str);
 				}
@@ -197,22 +201,22 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 						this.checkAndKeyword(temp, new StringBuilder("BD.name LIKE '%" + buildingRequest.getName() + "%' ")));
 				temp = true; // keyword AND exists
 			}
-			if (buildingRequest.getRentEreaFrom() != null || buildingRequest.getRentEreaTo() != null) {
+			if (buildingRequest.getRentAreaFrom() != null || buildingRequest.getRentAreaTo() != null) {
 				//sqlFromClause.append(", rentarea RErea");
 				sqlFromClause += ", rentarea RErea";
 				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("RErea.buildingid = BD.id ")));
 				temp = true; // keyword AND exists
-				if (buildingRequest.getRentEreaFrom() != null && buildingRequest.getRentEreaTo() != null) {
+				if (buildingRequest.getRentAreaFrom() != null && buildingRequest.getRentAreaTo() != null) {
 					whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("RErea.value BETWEEN "
-							+ buildingRequest.getRentEreaFrom() + " " + buildingRequest.getRentEreaTo() + " ")));
+							+ buildingRequest.getRentAreaFrom() + " " + buildingRequest.getRentAreaTo() + " ")));
 				}
-				if (buildingRequest.getRentEreaFrom() != null && buildingRequest.getRentEreaTo() == null) {
+				if (buildingRequest.getRentAreaFrom() != null && buildingRequest.getRentAreaTo() == null) {
 					whereSQLClause.append(this.checkAndKeyword(temp,
-							new StringBuilder("RErea.value >= " + buildingRequest.getRentEreaFrom() + " ")));
+							new StringBuilder("RErea.value >= " + buildingRequest.getRentAreaFrom() + " ")));
 				}
-				if (buildingRequest.getRentEreaFrom() == null && buildingRequest.getRentEreaTo() != null) {
+				if (buildingRequest.getRentAreaFrom() == null && buildingRequest.getRentAreaTo() != null) {
 					whereSQLClause.append(this.checkAndKeyword(temp,
-							new StringBuilder("RErea.value <= " + buildingRequest.getRentEreaTo() + " ")));
+							new StringBuilder("RErea.value <= " + buildingRequest.getRentAreaTo() + " ")));
 				}
 			}
 			if (buildingRequest.getUserID() != null) {

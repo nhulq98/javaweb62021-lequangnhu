@@ -76,7 +76,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
         whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managerphone LIKE '%", "%' ", buildingRequest.getManagerPhone()));
         whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));
         whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
-        whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
+        whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentAreaFrom(), buildingRequest.getRentAreaTo()));
         whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getListType()));
 
         return whereSQLClause.toString();
@@ -92,7 +92,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
         String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
         joinSQLClause += this.checkExistenceOfJoinSQLClause(rentarea,
-                buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo());
+                buildingRequest.getRentAreaFrom(), buildingRequest.getRentAreaTo());
 
         String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
                 " JOIN renttype RT ON RT.id = BRT.renttypeid "};

@@ -40,13 +40,13 @@ public class BuildingAPI {
 //		return buildingService.findByCondition(buildingCondition);
 //	}
 
-//	@GetMapping
-//	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, String> requestParam) {
-//		ObjectMapper mapper = new ObjectMapper();
-//		BuildingRequestDTO buildingRequest = mapper.convertValue(requestParam, BuildingRequestDTO.class);
-//
-//		return buildingService.findByCondition(buildingRequest);
-//	}
+	@GetMapping
+	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, String> requestParam) {
+		ObjectMapper mapper = new ObjectMapper();
+		BuildingRequestDTO buildingRequest = mapper.convertValue(requestParam, BuildingRequestDTO.class);
+
+		return buildingService.findByCondition(buildingRequest);
+	}
 
 	@GetMapping("/{buildingid}/staffs")
 	public @ResponseBody List<UserDTO> loadStaff(@PathVariable Long buildingid) {
@@ -61,7 +61,6 @@ public class BuildingAPI {
 					staffAll.get(i).setChecked("checked");
 					break;// exit for outside loop
 				}
-				staffAll.get(i).setChecked("");
 			}
 		}
 

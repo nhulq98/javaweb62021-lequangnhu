@@ -266,11 +266,11 @@
                                                    id="checkbox_${tableList.id}" class="check-box-element"/>
                                         </fieldset>
                                     </display:column>
-                                    <display:column>
-                                        <fieldset>
-                                            <input hidden="hidden" value="${tableList.id}" id="building_${tableList.id}" ${checked}/>
-                                        </fieldset>
-                                    </display:column>
+<%--                                    <display:column>--%>
+<%--                                        <fieldset>--%>
+<%--                                            <input hidden="hidden" value="${tableList.id}" id="building_${tableList.id}" ${checked}/>--%>
+<%--                                        </fieldset>--%>
+<%--                                    </display:column>--%>
 
                                     <display:column headerClass="text-left" property="createdDate" title="ngày"/>
                                     <display:column headerClass="text-left" property="name"
@@ -287,10 +287,10 @@
                                                     title="Phí Dịch Vụ"/>
                                     <display:column headerClass="text-left" title="Phí MG"/>
                                     <display:column headerClass="col-actions" title="Thao tác">
-                                        <button onclick="assingmentBuilding()" type="button"
-                                                class="btn btn-success btn-sm popup" onclick="myFunction()"
+                                        <button onclick="assingmentBuilding(this.value)" type="button"
+                                                class="btn btn-success btn-sm popup"
                                                 data-toggle="tooltip; modal" title="Delevery Buildings!"
-                                                data-target="#myModal" id="btnAssingmentBuilding">
+                                                data-target="#myModal" id="btnAssingmentBuilding" value="${tableList.id}">
                                             <i class="ace-icon fa fa-tasks"></i>
                                         </button>
                                         <button type="button" class="btn btn-info btn-sm"
@@ -364,20 +364,33 @@
                         <h4 class="modal-title">List Employee</h4>
                     </div>
                     <div class="modal-body">
-                        <display:table name="staffbuilding" cellspacing="0" cellpadding="0"
-                                       requestURI="${formUrl}"
-                                       class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
-                                       style="margin: 3em 0 1.5em;">
-                            <display:column title="Chọn nhân viên" class="center select-cell"
-                                            headerClass="center select-cell">
-                                <fieldset>
-                                    <input type="checkbox" name="checkList" value="${tableList.id}"
-                                           id="checkbox_${tableList.id}" class="check-box-element" checked="${checked}"/>
-                                </fieldset>
-                            </display:column>
-                            <display:column headerClass="text-left" value="id" property="fullName"
-                                            title="Tên Nhân Viên"/>
-                        </display:table>
+                        <table class="table table-bordered" id="staffList">
+                            <thead>
+                            <tr>
+                                <th>Chọn nhân viên</th>
+                                <th>Tên nhân viên</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+<%--                        <display:table name="staffbuilding" cellspacing="0" cellpadding="0"--%>
+<%--                                       requestURI="${formUrl}"--%>
+<%--                                       class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"--%>
+<%--                                       style="margin: 3em 0 1.5em;">--%>
+<%--                            <display:column title="Chọn nhân viên" class="center select-cell"--%>
+<%--                                            headerClass="center select-cell">--%>
+<%--                                <fieldset>--%>
+<%--                                    <input type="checkbox" name="checkList" value="${tableList.id}"--%>
+<%--                                           id="checkbox_${tableList.id}" class="check-box-element" checked="${checked}"/>--%>
+<%--                                </fieldset>--%>
+<%--                            </display:column>--%>
+<%--                            --%>
+<%--                            <display:column headerClass="text-left" value="id" property="fullName"--%>
+<%--                                            title="Tên Nhân Viên"/>--%>
+<%--                        </display:table>--%>
                     </div>
                     <div class="modal-footer">
 
@@ -393,38 +406,42 @@
 
     <!--BEGIN Script dialog -->
     <script>
-        function assingmentBuilding() {
+        function assingmentBuilding(id) {
+            myfunction(id);
             openModalAssingmentBuilding();
         }
 
         function openModalAssingmentBuilding() {
-            myfunction();
+
             $('#assingmentBuildingModal').modal();
         }
 
-        function myfunction(){
-            $("#btnAssingmentBuilding").click(function (event) {
-                event.preventDefault();
-                var buildingId = $("#buildingId").val();
-                var dataArray = {};
-                dataArray["id"] = buildingId;
-                showListStaffById(dataArray);
-            });
+        function myfunction(id){
+            var dataArray = {};
+            dataArray["id"] = id;
+            showListStaffById(dataArray, id);
         }
 
-
-        function showListStaffById(dataArray) {
+        function showListStaffById(dataArray, buildingId) {
             $.ajax({
-                url: '${buildingAPI}/1/staffs',
+                url: '${buildingAPI}/'+buildingId+'/staffs',
                 type: 'GET',
                 dataType: "json", // define data type for output data from server
-                data: JSON.stringify(dataArray),
-                contentType: "application/json", // define data type for input data server
+                //data: JSON.stringify(dataArray),
+                //contentType: "text/plain", // define data type for input data server
                 success: function (res) {
+                    var row = '';
+                    $.each(res, function(index, item){
+                       row += '<tr>';
+                        row += '<td class="text-center"> <input type="checkbox" name="checkList" value='+item.id+' id="checkbox_'+item.id +'" class="check-box-element"'+ item.checked + '/></td>';
+                        row += '<td class="text-center">' + item.fullName + '</td>';
+                    });
+                    $('#staffList tbody').html(row);
+                    console.log(res);
                     console.log('success');
                 },
                 error: function (res) {
-                    console.log(res);
+                    console.log("Failed!" + res.toString());
                 }
             });
         }

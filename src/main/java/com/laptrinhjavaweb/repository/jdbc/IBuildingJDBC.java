@@ -15,7 +15,7 @@ public interface IBuildingJDBC{
 	//Build Clauses
 	String buildJoinSQLClause(BuildingRequestDTO buildingRequest);
 	String buildWhereSQLClause(BuildingRequestDTO buildingRequest);
-	String buildConditionForBuildingType(List<String> buildingType);
+	String buildConditionForBuildingType(String[] buildingType);
 	String buildBetweenStatement(String sqlWhere, Long from, Long to);
 	//String buildFromSQLClause(String select, String from);
 	

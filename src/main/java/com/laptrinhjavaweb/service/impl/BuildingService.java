@@ -10,7 +10,6 @@ import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.impl.BuildingJDBCImpl;
-import com.laptrinhjavaweb.repository.jdbc.impl.DistrictJDBCImpl;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +59,7 @@ public class BuildingService implements IBuildingService {
 	
 	@Override
 	public List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest) {
+
 		BuildingJDBCImpl buildingimpl = new BuildingJDBCImpl();
 		List<BuildingResponseDTO> result = new ArrayList<>();
         List<BuildingEntity> entities = buildingimpl.findByCondition(buildingRequest);

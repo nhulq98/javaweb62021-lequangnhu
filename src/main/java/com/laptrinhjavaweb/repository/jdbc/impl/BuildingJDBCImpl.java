@@ -52,6 +52,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	
 	@Override
 	public String buildQueryForSearchBuilding(BuildingRequestDTO buildingRequest) {
+		//SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
 		try {
 			return new StringBuilder("SELECT * FROM building BD ")
 					.append(this.buildJoinSQLClause(buildingRequest))
@@ -94,7 +95,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));		
 		whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
 		whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
-		whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getListType()));
+		whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getBuildingTypeList()));
 		
 		return whereSQLClause.toString();
 	}
@@ -108,19 +109,19 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
 				.append(this.checkExistenceOfJoinSQLClause(assignmentbuilding,buildingRequest.getUserID()))
 				.append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
-				.append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType()));
+				.append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList()));
 
 		return joinSQLClause.toString();
 	}
 
 	@Override
-	public String buildConditionForBuildingType(List<String> buildingType) {
+	public String buildConditionForBuildingType(String[] buildingType) {
 		StringBuilder conditionForBuildingType = new StringBuilder("");
 		if (!this.isNull(buildingType)) {
-			conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
-			if (buildingType.size() > 1) {
-				for (int i = 1; i < buildingType.size(); i++) {
-					conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
+			conditionForBuildingType.append(" AND RT.code = \"" + buildingType[0] + "\" ");
+			if (buildingType.length > 1) {
+				for (int i = 1; i < buildingType.length; i++) {
+					conditionForBuildingType.append(" OR RT.code = \"" + buildingType[i] + "\" ");
 				}
 			}
 		}
@@ -164,7 +165,6 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		}
 		return false;
 	}
-	
 
 	@Override
 	public StringBuilder checkAndKeyword(boolean temp, StringBuilder string) {
@@ -190,7 +190,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 				temp = true; // keyword AND exists
 				whereSQLClause.append(this.checkAndKeyword(temp,
 						new StringBuilder("DTrict.id = " + buildingRequest.getDistrictID() + " ")));
-				
+
 			}
 			if (buildingRequest.getName() != null) {
 				whereSQLClause.append(
@@ -278,7 +278,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 						new StringBuilder("BD.managerphone LIKE '%" + buildingRequest.getManagerPhone() + "%' ")));
 				temp = true; // keyword AND exists
 			}
-			if (buildingRequest.getListType() != null) {
+			if (buildingRequest.getBuildingTypeList() != null) {
 				//sqlFromClause.append(", renttype RType");// insert table into from
 				sqlFromClause += ", renttype RType";
 				//sqlFromClause.append(", buildingrenttype BRType");// insert table into from
@@ -287,10 +287,10 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 				temp = true; // keyword AND exists
 				whereSQLClause.append(this.checkAndKeyword(temp, new StringBuilder("BD.id = BRType. buildingid ")));
 				whereSQLClause.append(this.checkAndKeyword(temp,
-						new StringBuilder("RType.id = " + buildingRequest.getListType().get(0) + " ")));
-				if (buildingRequest.getListType().size() > 1) {
-					for (int i = 1; i < buildingRequest.getListType().size(); i++) {
-						whereSQLClause.append(new StringBuilder("OR RType.id = " + buildingRequest.getListType().get(i) + " "));
+						new StringBuilder("RType.id = " + buildingRequest.getBuildingTypeList()[0] + " ")));
+				if (buildingRequest.getBuildingTypeList().length > 1) {
+					for (int i = 1; i < buildingRequest.getBuildingTypeList().length; i++) {
+						whereSQLClause.append(new StringBuilder("OR RType.id = " + buildingRequest.getBuildingTypeList()[i] + " "));
 					}
 				}
 			}

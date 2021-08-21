@@ -25,11 +25,13 @@ public class BuildingAPI {
 	}
 
 	@GetMapping
-	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, Object> requestParam) {
+	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, Object> requestParam,
+																   @RequestParam(value = "listType", required = false) String[] listType) {
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(requestParam);
+		requestParam.put("buildingTypeList", listType);
 		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		BuildingRequestDTO buildingRequest = mapper.convertValue(requestParam, BuildingRequestDTO.class);
+
 		return buildingService.findByCondition(buildingRequest);
 	}
 }

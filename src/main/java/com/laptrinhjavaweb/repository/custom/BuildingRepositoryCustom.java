@@ -15,7 +15,7 @@ public interface BuildingRepositoryCustom {
     //Build Clauses
     String buildJoinSQLClause(BuildingRequestDTO buildingRequest);
     String buildWhereSQLClause(BuildingRequestDTO buildingRequest);
-    String buildConditionForBuildingType(List<String> buildingType);
+    String buildConditionForBuildingType(String[] buildingType);
     String buildBetweenStatement(String sqlWhere, Long from, Long to);
 
     // Build condition

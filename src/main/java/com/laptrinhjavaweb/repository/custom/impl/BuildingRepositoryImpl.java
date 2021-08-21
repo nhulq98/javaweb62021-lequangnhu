@@ -77,7 +77,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
         whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));
         whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
         whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
-        whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getListType()));
+        whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getBuildingTypeList()));
 
         return whereSQLClause.toString();
     }
@@ -96,19 +96,19 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
         String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
                 " JOIN renttype RT ON RT.id = BRT.renttypeid "};
-        joinSQLClause += this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getListType());
+        joinSQLClause += this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList());
 
         return joinSQLClause;
     }
 
     @Override
-    public String buildConditionForBuildingType(List<String> buildingType) {
+    public String buildConditionForBuildingType(String[] buildingType) {
         String conditionForBuildingType = "";
         if (!this.isNull(buildingType)) {
-            conditionForBuildingType += " AND RT.code = \"" + buildingType.get(0) + "\" ";
-            if (buildingType.size() > 1) {
-                for (int i = 1; i < buildingType.size(); i++) {
-                    conditionForBuildingType += " OR RT.code = \"" + buildingType.get(i) + "\" ";
+            conditionForBuildingType += " AND RT.code = \"" + buildingType[0] + "\" ";
+            if (buildingType.length > 1) {
+                for (int i = 1; i < buildingType.length; i++) {
+                    conditionForBuildingType += " OR RT.code = \"" + buildingType[i] + "\" ";
                 }
             }
         }

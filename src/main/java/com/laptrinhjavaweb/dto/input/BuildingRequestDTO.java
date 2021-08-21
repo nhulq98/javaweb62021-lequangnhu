@@ -1,7 +1,5 @@
 package com.laptrinhjavaweb.dto.input;
 
-import java.util.ArrayList;
-
 public class BuildingRequestDTO {
 	private String name;
 	private String street;
@@ -18,7 +16,8 @@ public class BuildingRequestDTO {
 	private String managerName;
 	private String managerPhone;
 	private Long userID;
-	private ArrayList<String> listType;
+	private String[] buildingTypeList;
+	private String listType;
 
 	public String getName() {
 		return name;
@@ -140,11 +139,19 @@ public class BuildingRequestDTO {
 		this.userID = userID;
 	}
 
-	public ArrayList<String> getListType() {
+	public String[] getBuildingTypeList() {
+		return buildingTypeList;
+	}
+
+	public void setBuildingTypeList(String[] buildingTypeList) {
+		this.buildingTypeList = buildingTypeList;
+	}
+
+	public String getListType() {
 		return listType;
 	}
 
-	public void setListType(ArrayList<String> listType) {
+	public void setListType(String listType) {
 		this.listType = listType;
 	}
 }

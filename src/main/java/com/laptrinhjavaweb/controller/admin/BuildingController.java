@@ -45,7 +45,7 @@ public class BuildingController {
     private MessageUtils messageUtil;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView getNews(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
+    public ModelAndView getAll(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/list");
 
         List<BuildingDTO> result = new ArrayList<>();
@@ -97,7 +97,7 @@ public class BuildingController {
     }
 
     @RequestMapping(value = "/admin/building-edit", method = RequestMethod.GET)
-    public ModelAndView addUser(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
+    public ModelAndView createNew(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
 
         RentTypeService rentTypeService = new RentTypeService();

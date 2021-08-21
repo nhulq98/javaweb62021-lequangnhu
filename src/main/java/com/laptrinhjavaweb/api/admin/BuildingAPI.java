@@ -31,14 +31,9 @@ public class BuildingAPI {
 	private IDistrictService districtService;
 	
 	@PostMapping
-	public BuildingDTO createBuilding(@RequestBody BuildingDTO newBuilding) {
+	public BuildingDTO create(@RequestBody BuildingDTO newBuilding) {
 		return buildingService.save(newBuilding);
 	}
-
-//	@GetMapping
-//	public @ResponseBody List<BuildingDTO> findByCondition(@RequestBody BuildingCondition buildingCondition) {
-//		return buildingService.findByCondition(buildingCondition);
-//	}
 
 	@GetMapping
 	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, String> requestParam) {
@@ -67,4 +62,9 @@ public class BuildingAPI {
 		return staffAll;
 	}
 
+	@GetMapping("/{buildingid}")
+	public @ResponseBody BuildingDTO getOne(@RequestParam Long buildingid){
+
+		return null;
+	}
 }

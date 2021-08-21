@@ -1,22 +1,25 @@
 package com.laptrinhjavaweb.dto.input;
 
+import java.util.List;
+
 public class BuildingRequestDTO {
 	private String name;
 	private String street;
 	private String ward;
+	private String districtCode;
 	private Long districtID;
-	private Long floorArea;
-	private Long numberOfBasement;
+	private Integer floorArea;
+	private Integer numberOfBasement;
 	private String direction;
 	private String level;
-	private Long rentPriceFrom;
-	private Long rentPriceTo;
-	private Long rentEreaFrom;
-	private Long rentEreaTo;
+	private Integer rentPriceFrom;
+	private Integer rentPriceTo;
+	private Integer rentEreaFrom;
+	private Integer rentEreaTo;
 	private String managerName;
 	private String managerPhone;
 	private Long userID;
-	private String[] buildingTypeList;
+	private List<String> buildingTypeList;
 	private String listType;
 
 	public String getName() {
@@ -51,19 +54,19 @@ public class BuildingRequestDTO {
 		this.districtID = districtID;
 	}
 
-	public Long getFloorArea() {
+	public Integer getFloorArea() {
 		return floorArea;
 	}
 
-	public void setFloorArea(Long floorArea) {
+	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
 
-	public Long getNumberOfBasement() {
+	public Integer getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(Long numberOfBasement) {
+	public void setNumberOfBasement(Integer numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
@@ -83,35 +86,35 @@ public class BuildingRequestDTO {
 		this.level = level;
 	}
 
-	public Long getRentPriceFrom() {
+	public Integer getRentPriceFrom() {
 		return rentPriceFrom;
 	}
 
-	public void setRentPriceFrom(Long rentPriceFrom) {
+	public void setRentPriceFrom(Integer rentPriceFrom) {
 		this.rentPriceFrom = rentPriceFrom;
 	}
 
-	public Long getRentPriceTo() {
+	public Integer getRentPriceTo() {
 		return rentPriceTo;
 	}
 
-	public void setRentPriceTo(Long rentPriceTo) {
+	public void setRentPriceTo(Integer rentPriceTo) {
 		this.rentPriceTo = rentPriceTo;
 	}
 
-	public Long getRentEreaFrom() {
+	public Integer getRentEreaFrom() {
 		return rentEreaFrom;
 	}
 
-	public void setRentEreaFrom(Long rentEreaFrom) {
+	public void setRentEreaFrom(Integer rentEreaFrom) {
 		this.rentEreaFrom = rentEreaFrom;
 	}
 
-	public Long getRentEreaTo() {
+	public Integer getRentEreaTo() {
 		return rentEreaTo;
 	}
 
-	public void setRentEreaTo(Long rentEreaTo) {
+	public void setRentEreaTo(Integer rentEreaTo) {
 		this.rentEreaTo = rentEreaTo;
 	}
 
@@ -139,11 +142,11 @@ public class BuildingRequestDTO {
 		this.userID = userID;
 	}
 
-	public String[] getBuildingTypeList() {
+	public List<String> getBuildingTypeList() {
 		return buildingTypeList;
 	}
 
-	public void setBuildingTypeList(String[] buildingTypeList) {
+	public void setBuildingTypeList(List<String> buildingTypeList) {
 		this.buildingTypeList = buildingTypeList;
 	}
 
@@ -153,5 +156,13 @@ public class BuildingRequestDTO {
 
 	public void setListType(String listType) {
 		this.listType = listType;
+	}
+
+	public String getDistrictCode() {
+		return districtCode;
+	}
+
+	public void setDistrictCode(String districtCode) {
+		this.districtCode = districtCode;
 	}
 }

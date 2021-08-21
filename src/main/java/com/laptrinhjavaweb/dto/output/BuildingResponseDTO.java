@@ -7,8 +7,8 @@ public class BuildingResponseDTO{
 	private String address;
 	private String managerName;
 	private String managerPhone;
-	private Long floorArea;
-	private Long rentPrice;
+	private Integer floorArea;
+	private Integer rentPrice;
 	private Integer serviceFee;
 	
 
@@ -30,16 +30,16 @@ public class BuildingResponseDTO{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public Long getFloorArea() {
+	public Integer getFloorArea() {
 		return floorArea;
 	}
-	public void setFloorArea(Long floorArea) {
+	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
-	public Long getRentPrice() {
+	public Integer getRentPrice() {
 		return rentPrice;
 	}
-	public void setRentPrice(Long rentPrice) {
+	public void setRentPrice(Integer rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 	public Integer getServiceFee() {

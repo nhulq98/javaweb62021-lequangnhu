@@ -9,11 +9,11 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 	private Long districtID;
 	private String district;
 	private String structure;
-	private Long numberOfBasement;
-	private Long floorArea;
+	private Integer numberOfBasement;
+	private Integer floorArea;
 	private String direction;
 	private String level;
-	private Long rentPrice;
+	private Integer rentPrice;
 	private String rentPriceDescription;
 	private String serviceFee;
 	private String carFee;
@@ -92,19 +92,19 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 		this.structure = structure;
 	}
 
-	public Long getNumberOfBasement() {
+	public Integer getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(Long numberOfBasement) {
+	public void setNumberOfBasement(Integer numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
-	public Long getFloorArea() {
+	public Integer getFloorArea() {
 		return floorArea;
 	}
 
-	public void setFloorArea(Long floorArea) {
+	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
 
@@ -124,11 +124,11 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 		this.level = level;
 	}
 
-	public Long getRentPrice() {
+	public Integer getRentPrice() {
 		return rentPrice;
 	}
 
-	public void setRentPrice(Long rentPrice) {
+	public void setRentPrice(Integer rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 

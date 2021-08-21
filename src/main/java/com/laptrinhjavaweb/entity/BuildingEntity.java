@@ -32,10 +32,10 @@ public class BuildingEntity extends BaseEntity {
 //	private List<RentEreaEntity> rentEreas = new ArrayList<>();
 
     @Column(name = "floorarea")
-    private Long floorArea;
+    private Integer floorArea;
 
     @Column(name = "rentprice")
-	private Long rentPrice;
+	private Integer rentPrice;
 
     @Column(name = "managername")
 	private String managerName;
@@ -54,19 +54,19 @@ public class BuildingEntity extends BaseEntity {
 		this.serviceFee = serviceFee;
 	}
 
-	public Long getFloorArea() {
+	public Integer getFloorArea() {
 		return floorArea;
 	}
 
-	public void setFloorArea(Long floorArea) {
+	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
 
-	public Long getRentPrice() {
+	public Integer getRentPrice() {
 		return rentPrice;
 	}
 
-	public void setRentPrice(Long rentPrice) {
+	public void setRentPrice(Integer rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 

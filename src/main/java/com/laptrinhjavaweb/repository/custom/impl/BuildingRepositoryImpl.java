@@ -47,7 +47,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     }
 
     @Override
-    public String buildBetweenStatement(String whereSQLClause, Long from, Long to) {
+    public String buildBetweenStatement(String whereSQLClause, Integer from, Integer to) {
         if(!this.isNull(from) || !this.isNull(to)) {
             if(!this.isNull(from) && !this.isNull(to)) {
                 return (" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
@@ -102,13 +102,13 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     }
 
     @Override
-    public String buildConditionForBuildingType(String[] buildingType) {
+    public String buildConditionForBuildingType(List<String> buildingType) {
         String conditionForBuildingType = "";
         if (!this.isNull(buildingType)) {
-            conditionForBuildingType += " AND RT.code = \"" + buildingType[0] + "\" ";
-            if (buildingType.length > 1) {
-                for (int i = 1; i < buildingType.length; i++) {
-                    conditionForBuildingType += " OR RT.code = \"" + buildingType[i] + "\" ";
+            conditionForBuildingType += " AND RT.code = \"" + buildingType.get(0) + "\" ";
+            if (buildingType.size() > 1) {
+                for (int i = 1; i < buildingType.size(); i++) {
+                    conditionForBuildingType += " OR RT.code = \"" + buildingType.get(i) + "\" ";
                 }
             }
         }

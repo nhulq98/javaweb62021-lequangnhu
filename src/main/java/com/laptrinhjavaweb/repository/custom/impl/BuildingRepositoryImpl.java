@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.repository.custom.impl;
 
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
 import org.springframework.stereotype.Repository;

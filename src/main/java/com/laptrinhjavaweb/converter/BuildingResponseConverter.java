@@ -1,7 +1,7 @@
 package com.laptrinhjavaweb.converter;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.laptrinhjavaweb.dto.response.BuildingResponseDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.impl.DistrictJDBCImpl;
 import org.modelmapper.ModelMapper;

@@ -1,7 +1,7 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
 
@@ -49,7 +49,12 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			closeAll(this.connection, this.prStatement, this.resultSet);
 		}
 	}
-	
+
+	/**
+	 * buildQueryForSearchBuilding to concat all clauses to complete sql final
+	 * @return sql final
+	 * @param buildingRequest the building from search form
+	 */
 	@Override
 	public String buildQueryForSearchBuilding(BuildingRequestDTO buildingRequest) {
 		//SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
@@ -130,7 +135,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 
 	@Override
 	public String checkExistenceOfConditionV2(String prefix, String suffix, Object parameter) {
-		if(parameter != null && !this.isBlank(parameter)) {
+		if(parameter != null && !this.isBlank(parameter) && !parameter.equals("\"" + null +"\"")) {
 			return (prefix + parameter + suffix);
 		}
 		return "";

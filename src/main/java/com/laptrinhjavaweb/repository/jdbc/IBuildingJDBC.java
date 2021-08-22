@@ -1,7 +1,7 @@
 package com.laptrinhjavaweb.repository.jdbc;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 
 import java.sql.ResultSet;

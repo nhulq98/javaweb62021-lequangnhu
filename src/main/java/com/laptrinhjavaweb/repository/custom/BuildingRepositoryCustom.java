@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.repository.custom;
 
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 
 import java.util.List;

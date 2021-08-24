@@ -1,4 +1,4 @@
-package com.laptrinhjavaweb.exceptioncustom;
+package com.laptrinhjavaweb.exception;
 
 public class NotFoundException extends RuntimeException {
 

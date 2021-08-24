@@ -1,4 +1,4 @@
-package com.laptrinhjavaweb.exceptioncustom;
+package com.laptrinhjavaweb.exception;
 
 public class DivideByZeroException extends RuntimeException {
     /**

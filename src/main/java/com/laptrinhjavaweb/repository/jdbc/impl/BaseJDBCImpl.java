@@ -1,9 +1,12 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
-import java.sql.*;
-import java.util.ResourceBundle;
-
+import com.laptrinhjavaweb.mapper.IRowMapper;
 import com.laptrinhjavaweb.repository.jdbc.IBaseJDBC;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class BaseJDBCImpl implements IBaseJDBC{
 	ResourceBundle dbResourceBundle = ResourceBundle.getBundle("application");
@@ -12,15 +15,17 @@ public class BaseJDBCImpl implements IBaseJDBC{
 	private String USER = dbResourceBundle.getString("userName");
 	private String DRIVER_NAME = dbResourceBundle.getString("driverName");
 
+	private Connection connection;
+	private PreparedStatement prStatement;
+	private ResultSet resultSet;
+
 	@Override
 	public Connection getConnection() {
 		try {
 			// Load the Connector driver
 			Class.forName(DRIVER_NAME);
 			return DriverManager.getConnection(this.URL, this.USER, this.PASSWORD);
-		} catch (SQLException e) {
-			return null;
-		} catch (ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			return null;
 		}
 
@@ -68,6 +73,96 @@ public class BaseJDBCImpl implements IBaseJDBC{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public <T> List<T> query(String sql, IRowMapper<T> objectMapper, Object... parameters) {
+		List<T> results = new ArrayList<>();
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			prStatement = connection.prepareStatement(sql);
+
+			// set parameters
+			if(parameters.length != 0){
+				setParameters(prStatement, parameters);
+			}
+			resultSet = prStatement.executeQuery();
+			while (resultSet.next()) {
+				//get All data from resultset
+				results.add(objectMapper.mapRow(resultSet));
+			}
+			connection.commit();
+			return results;
+
+		} catch (SQLException e) {
+			try {
+				if(connection != null){
+					connection.rollback();
+				}
+			}catch (SQLException e1){
+				e1.printStackTrace();
+			}
+
+			return new ArrayList<>();
+		} finally {
+
+			closeAll(connection, prStatement, resultSet);
+			//connectionPool.releaseConnection(connection);
+		}
+	}
+
+	@Override
+	public long insert(String sql, Object... parameters) {
+		Long id = null;
+		try{
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			prStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			// set parameter
+			setParameters(prStatement, parameters);
+
+			prStatement.executeUpdate();
+			ResultSet resultSet = prStatement.getGeneratedKeys();
+			if(resultSet.next()){
+				id = resultSet.getLong(1);
+			}
+			connection.commit();
+			return id;
+		}catch (SQLException e){
+			try {
+				connection.rollback();// return and database not change
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			return 0;
+		}finally {
+			closeAll(connection, prStatement, resultSet);
+		}
+	}
+
+	//generic function for update and delete in database
+	@Override
+	public void update(String sql, Object... parameters) {
+		try{
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			prStatement = connection.prepareStatement(sql);
+			// set parameter
+			setParameters(prStatement, parameters);
+
+			prStatement.executeUpdate();
+
+			connection.commit();
+		}catch (SQLException e){
+			try {
+				connection.rollback();// return and database not affected
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}finally {
+			closeAll(connection, prStatement, resultSet);
 		}
 	}
 }

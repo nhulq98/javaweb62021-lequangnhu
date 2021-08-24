@@ -13,13 +13,13 @@ public class BuildingConverter {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public BuildingDTO convertToDTO(BuildingEntity entity) {
+	public BuildingDTO convertEntityToDTO(BuildingEntity entity) {
 		BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
 		dto.setAddress(dto.getStreet() +", "+ dto.getWard() +", "+dto.getDistrict());
 		return dto;
 	}
 	
-	public BuildingEntity convertToEntity(BuildingDTO dto) {
+	public BuildingEntity convertDTOToEntity(BuildingDTO dto) {
 		BuildingEntity entity = modelMapper.map(dto, BuildingEntity.class);
 		return entity;
 	}

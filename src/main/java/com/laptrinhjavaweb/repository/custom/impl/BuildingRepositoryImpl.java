@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.repository.custom.impl;
 
-import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
 import org.springframework.stereotype.Repository;
@@ -17,32 +17,29 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     private EntityManager entityManager;
 
     @Override
-    public List<BuildingEntity> findAll() {
-        String sql = "select * from building";
+    public List<BuildingEntity> findByCondition(BuildingRequest buildingRequestDTO) {
+        String sql = this.buildQueryForSearchBuilding(buildingRequestDTO);
         Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
         return query.getResultList();
     }
 
+    /**
+     * buildQueryForSearchBuilding to concat all clauses to complete sql final
+     * @return sql final
+     * @param buildingRequest the building from search form
+     */
     @Override
-    public List<BuildingEntity> findByCondition(BuildingRequestDTO buildingRequestDTO) {
-        String sql = this.buildQueryV2(buildingRequestDTO);
-        Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
-        return query.getResultList();
-    }
-
-
-    @Override
-    public String buildQueryV2(BuildingRequestDTO buildingRequest) {
+    public String buildQueryForSearchBuilding(BuildingRequest buildingRequest) {
+        //SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
         try {
-            String fromSQLClause = "SELECT * FROM building BD ";
-            String joinSQLClause = this.buildJoinSQLClause(buildingRequest);
-            String whereSQLClause = this.buildWhereSQLClause(buildingRequest);
-            String groupByClause = " GROUP BY BD.id ";
-
-            return (fromSQLClause + joinSQLClause + whereSQLClause.toString() + groupByClause);
+            return new StringBuilder("SELECT BD.id, BD.name, BD.street, BD.ward, BD.districtid, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee ")
+                    .append(" FROM building BD ")
+                    .append(this.buildJoinSQLClause(buildingRequest))
+                    .append(this.buildWhereSQLClause(buildingRequest))
+                    .append(" GROUP BY BD.id ").toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -61,77 +58,73 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     }
 
     @Override
-    public String buildWhereSQLClause(BuildingRequestDTO buildingRequest) {
+    public String buildWhereSQLClause(BuildingRequest buildingRequest) {
         StringBuilder whereSQLClause = new StringBuilder(" WHERE 1=1 ");// Use StringBuilder with purpose is saved memory
 
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.name LIKE '%", "%' ", buildingRequest.getName()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.street LIKE '%", "%' ", buildingRequest.getStreet()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.ward LIKE '%", "%' ", buildingRequest.getWard()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.districtid = ", " ", buildingRequest.getDistrictID()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.floorarea = ", " ", buildingRequest.getFloorArea()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.numberOfBasement = ", " ", buildingRequest.getNumberOfBasement()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.direction  LIKE '%", "%' ", buildingRequest.getDirection()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.Level LIKE '%", "%' ", buildingRequest.getLevel()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managername LIKE '%", "%' ", buildingRequest.getManagerName()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND BD.managerphone LIKE '%", "%' ", buildingRequest.getManagerPhone()));
-        whereSQLClause.append(this.checkExistenceOfConditionV2 (" AND ASB.staffid = ", " ", buildingRequest.getUserID()));
-        whereSQLClause.append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()));
-        whereSQLClause.append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
-        whereSQLClause.append(this.buildConditionForBuildingType(buildingRequest.getBuildingTypeList()));
+        whereSQLClause
+                .append(this.buildConditionForBuildingType(buildingRequest.getBuildingTypeList()))
+                .append(this.checkExistenceOfCondition (" AND BD.name LIKE '%", "%' ", buildingRequest.getName()))
+                .append(this.checkExistenceOfCondition (" AND BD.street LIKE '%", "%' ", buildingRequest.getStreet()))
+                .append(this.checkExistenceOfCondition (" AND BD.ward LIKE '%", "%' ", buildingRequest.getWard()))
+                .append(this.checkExistenceOfCondition (" AND DT.code = ", " ", "\"" + buildingRequest.getDistrictCode() + "\""))
+                .append(this.checkExistenceOfCondition (" AND BD.floorarea = ", " ", buildingRequest.getFloorArea()))
+                .append(this.checkExistenceOfCondition (" AND BD.numberOfBasement = ", " ", buildingRequest.getNumberOfBasement()))
+                .append(this.checkExistenceOfCondition (" AND BD.direction  LIKE '%", "%' ", buildingRequest.getDirection()))
+                .append(this.checkExistenceOfCondition (" AND BD.Level LIKE '%", "%' ", buildingRequest.getLevel()))
+                .append(this.checkExistenceOfCondition (" AND BD.managername LIKE '%", "%' ", buildingRequest.getManagerName()))
+                .append(this.checkExistenceOfCondition (" AND BD.managerphone LIKE '%", "%' ", buildingRequest.getManagerPhone()))
+                .append(this.checkExistenceOfCondition (" AND ASB.staffid = ", " ", buildingRequest.getUserID()))
+                .append(this.buildBetweenStatement("BD.rentprice", buildingRequest.getRentPriceFrom(), buildingRequest.getRentPriceTo()))
+                .append(this.buildBetweenStatement("RE.value", buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()));
 
         return whereSQLClause.toString();
     }
 
     @Override
-    public String buildJoinSQLClause(BuildingRequestDTO buildingRequest) {
-        String joinSQLClause = " JOIN district DT on DT.id = BD.districtid ";
-
+    public String buildJoinSQLClause(BuildingRequest buildingRequest) {
         String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
-        joinSQLClause += this.checkExistenceOfJoinSQLClause(assignmentbuilding,
-                buildingRequest.getUserID());
-
         String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
-        joinSQLClause += this.checkExistenceOfJoinSQLClause(rentarea,
-                buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo());
-
         String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
                 " JOIN renttype RT ON RT.id = BRT.renttypeid "};
-        joinSQLClause += this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList());
+        StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
+                .append(this.checkExistenceOfJoinSQLClause(assignmentbuilding,buildingRequest.getUserID()))
+                .append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
+                .append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList()));
 
-        return joinSQLClause;
+        return joinSQLClause.toString();
     }
 
     @Override
     public String buildConditionForBuildingType(List<String> buildingType) {
-        String conditionForBuildingType = "";
+        StringBuilder conditionForBuildingType = new StringBuilder("");
         if (!this.isNull(buildingType)) {
-            conditionForBuildingType += " AND RT.code = \"" + buildingType.get(0) + "\" ";
+            conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
             if (buildingType.size() > 1) {
                 for (int i = 1; i < buildingType.size(); i++) {
-                    conditionForBuildingType += " OR RT.code = \"" + buildingType.get(i) + "\" ";
+                    conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
                 }
             }
         }
-        return conditionForBuildingType;
+        return conditionForBuildingType.toString();
     }
 
     @Override
-    public String checkExistenceOfConditionV2(String prefix, String suffix, Object parameter) {
-        if(parameter != null && !this.isBlank(parameter)) {
+    public String checkExistenceOfCondition(String prefix, String suffix, Object parameter) {
+        if(parameter != null && !this.isBlank(parameter) && !parameter.equals("\"" + null +"\"")) {
             return (prefix + parameter + suffix);
         }
         return "";
     }
 
     @Override
-    public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) {
-        String joinClauseStr = "";
+    public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) { // optimal
+        StringBuilder joinClauseStr = new StringBuilder("");
         for(Object obj: parameters) {
-            if(obj != null) {
+            if(!isNull(obj)&& !isBlank(obj)) {
                 for(String str: joinStr) {
-                    joinClauseStr += str;
+                    joinClauseStr.append(str);
                 }
-                return joinClauseStr;
+                return joinClauseStr.toString();
             }
         }
         return "";

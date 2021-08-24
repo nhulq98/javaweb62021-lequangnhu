@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.dto.request;
 
 import java.util.List;
 
-public class BuildingRequestDTO {
+public class BuildingRequest {
 	private String name;
 	private String street;
 	private String ward;

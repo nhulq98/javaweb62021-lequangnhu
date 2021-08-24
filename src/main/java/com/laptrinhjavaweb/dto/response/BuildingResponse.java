@@ -1,8 +1,6 @@
 package com.laptrinhjavaweb.dto.response;
 
-public class BuildingResponseDTO{
-
-	private Long id;
+public class BuildingResponse extends BaseResponse{
 	private String name;
 	private String address;
 	private String managerName;
@@ -10,14 +8,7 @@ public class BuildingResponseDTO{
 	private Integer floorArea;
 	private Integer rentPrice;
 	private Integer serviceFee;
-	
 
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}

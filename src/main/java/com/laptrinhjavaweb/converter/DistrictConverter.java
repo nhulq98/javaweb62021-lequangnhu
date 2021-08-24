@@ -12,12 +12,12 @@ public class DistrictConverter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public DistrictDTO convertToDTO(DistrictEntity entity) {
+    public DistrictDTO convertEntityToDTO(DistrictEntity entity) {
         DistrictDTO dto = modelMapper.map(entity, DistrictDTO.class);
         return dto;
     }
 
-    public DistrictEntity convertToEntity(DistrictDTO dto) {
+    public DistrictEntity convertDTOToEntity(DistrictDTO dto) {
         DistrictEntity entity = modelMapper.map(dto, DistrictEntity.class);
         return entity;
     }

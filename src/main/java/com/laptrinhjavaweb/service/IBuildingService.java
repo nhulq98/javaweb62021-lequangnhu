@@ -5,17 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.request.BuildingRequestDTO;
-import com.laptrinhjavaweb.dto.response.BuildingResponseDTO;
-import com.laptrinhjavaweb.exceptioncustom.DivideByZeroException;
+import com.laptrinhjavaweb.dto.request.BuildingRequest;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.exception.DivideByZeroException;
 
 public interface IBuildingService {
-	Map<String, String> getDistricts();
-	Map<String, String> getBuildingTypes();
-	BuildingDTO save(BuildingDTO newBuilding);
-	List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest);
+	//get Data
+	List<BuildingDTO> findAll();
+	List<BuildingResponse> findByCondition(BuildingRequest buildingRequest);
 	BuildingDTO getOne(Long id) throws DivideByZeroException, SQLException;
 
-	List<BuildingDTO> findAll();
-
+	//Change Data
+	BuildingDTO save(BuildingDTO newBuilding);
 }

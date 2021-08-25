@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.service;
 
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 
 import java.util.List;
 
@@ -13,9 +14,11 @@ public interface IAssignmentBuildingService {
     List<StaffBuildingResponse> getStaffsAssignment(Long buildingId);
 
     //Change Data
+    void saveAssignmentStaffs(Long buildingId, List<Long> ids);
     void updateAssignment(StaffBuildingRequest request);
     void deleteAssignmentStaffs(Long buildingId, List<Long> ids);
-    void saveAssignmentStaffs(Long buildingId, List<Long> ids);
+
+
 
 
 }

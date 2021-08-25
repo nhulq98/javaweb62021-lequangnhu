@@ -50,7 +50,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     public List<StaffBuildingResponse> getStaffsOfBuildingById(Long buildingId) {
         // call db and get data
         List<StaffBuildingResponse> result = new ArrayList<>();
-        List<UserEntity> entities = assignmentBuildingJDBC.findStaffById(buildingId);
+        List<UserEntity> entities = assignmentBuildingJDBC.findStaffsByBuildingId(buildingId);
         for(UserEntity userEntity: entities){
             StaffBuildingResponse staffBuildingResponse = staffBuildingResponseConverter.convertEntityToResponse(userEntity);
 //            staffBuildingResponse.setChecked("checked");
@@ -121,7 +121,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Transactional
     public void deleteAssignmentStaffs(Long buildingId, List<Long> ids) {
         for(Long id: ids){
-            assignmentBuildingJDBC.deleteStaffById(buildingId, id);
+            assignmentBuildingJDBC.deleteStaffOfBuildingById(buildingId, id);
         }
     }
 
@@ -129,7 +129,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Transactional
     public void saveAssignmentStaffs(Long buildingId, List<Long> ids) {
         for(Long id: ids){
-            assignmentBuildingJDBC.insertStaffById(buildingId, id);
+            assignmentBuildingJDBC.insertStaffOfBuildingById(buildingId, id);
         }
     }
 

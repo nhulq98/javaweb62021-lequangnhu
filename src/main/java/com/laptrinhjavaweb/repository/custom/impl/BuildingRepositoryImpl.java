@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
-    @PersistenceContext
+    @PersistenceContext// giúp khởi tạo đối tượng EntityManager
     private EntityManager entityManager;
 
     @Override
@@ -23,6 +23,27 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
         return query.getResultList();
     }
 
+    @Override
+    public List<BuildingEntity> findAll() {
+        //native SQL
+        String sqlNative = "SELECT * FROM building";
+        Query query = entityManager.createNativeQuery(sqlNative, BuildingEntity.class);
+
+        //cách viết của JPQL
+//        String sqlJPQL = "FROM BuildingEntity"; //FROM + Class Entity
+//        Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public BuildingEntity findOne(Long id) {
+        //cách viết của JPQL: ta phải sử dụng các tên của java (tên class, tên biến)
+        String sqlJPQL = " FROM BuildingEntity WHERE id = " + id; //FROM + Class Entity  WHERE variable of Class Entity
+        Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
+        return (BuildingEntity) query.getSingleResult();
+    }
+
     /**
      * buildQueryForSearchBuilding to concat all clauses to complete sql final
      * @return sql final
@@ -30,7 +51,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
      */
     @Override
     public String buildQueryForSearchBuilding(BuildingRequest buildingRequest) {
-        //SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
         try {
             return new StringBuilder("SELECT BD.id, BD.name, BD.street, BD.ward, BD.districtid, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee ")
                     .append(" FROM building BD ")

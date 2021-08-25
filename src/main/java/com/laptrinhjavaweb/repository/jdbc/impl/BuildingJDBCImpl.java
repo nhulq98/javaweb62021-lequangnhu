@@ -78,7 +78,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			conditionForBuildingType.append(checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
 			if (buildingType.size() > 1) {
 				for (int i = 1; i < buildingType.size(); i++) {
-					conditionForBuildingType.append(checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(i)));
+					conditionForBuildingType.append(checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
 				}
 			}
 		}

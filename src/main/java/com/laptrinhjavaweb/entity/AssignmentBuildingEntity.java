@@ -1,7 +1,11 @@
 package com.laptrinhjavaweb.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "assignmentbuilding")
 public class AssignmentBuildingEntity extends BaseEntity {
 
     @Column(name = "staffid")

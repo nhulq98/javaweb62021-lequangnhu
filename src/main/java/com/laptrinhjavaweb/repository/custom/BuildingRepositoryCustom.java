@@ -9,6 +9,10 @@ public interface BuildingRepositoryCustom {
     // Get data
     List<BuildingEntity> findByCondition(BuildingRequest buildingRequest);
 
+    //JPA-demo
+    List<BuildingEntity> findAll();
+    BuildingEntity findOne(Long id);
+
     // Logic
     String buildQueryForSearchBuilding(BuildingRequest buildingRequest);
     String buildJoinSQLClause(BuildingRequest buildingRequest);

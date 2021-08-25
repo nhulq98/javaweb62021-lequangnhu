@@ -114,7 +114,7 @@ public class BaseJDBCImpl implements IBaseJDBC{
 	}
 
 	@Override
-	public long insert(String sql, Object... parameters) {
+	public Long insert(String sql, Object... parameters) {
 		Long id = null;
 		try{
 			connection = getConnection();
@@ -136,7 +136,7 @@ public class BaseJDBCImpl implements IBaseJDBC{
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
-			return 0;
+			return 0L;
 		}finally {
 			closeAll(connection, prStatement, resultSet);
 		}

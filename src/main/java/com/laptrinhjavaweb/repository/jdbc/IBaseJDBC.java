@@ -13,7 +13,7 @@ public interface IBaseJDBC {
 	<T> List<T> query(String sql, IRowMapper<T> objectMapper, Object... parameters);
 
 	// Change Data
-	long insert(String sql, Object ... parameters);
+	Long insert(String sql, Object ... parameters);
 	void update(String sql, Object ... parameters);
 
 

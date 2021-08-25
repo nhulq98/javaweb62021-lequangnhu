@@ -18,7 +18,7 @@ public class AssignmentBuildingJDBCImpl extends BaseJDBCImpl implements IAssignm
     }
 
     @Override
-    public List<UserEntity> findStaffById(Long buildingId) {
+    public List<UserEntity> findStaffsByBuildingId(Long buildingId) {
         StringBuilder sql = new StringBuilder("SELECT US.id, US.fullname ")
                 .append(" FROM assignmentbuilding ASB ")
                 .append(" JOIN user US on US.id = ASB.staffid ")
@@ -28,15 +28,15 @@ public class AssignmentBuildingJDBCImpl extends BaseJDBCImpl implements IAssignm
     }
 
     @Override
-    public void deleteStaffById(Long buildingId, Long staffId) {
+    public void deleteStaffOfBuildingById(Long buildingId, Long staffId) {
         String sql = "DELETE FROM assignmentbuilding WHERE buildingid=? AND staffid = ? ";
         this.update(sql, buildingId, staffId);
     }
 
     @Override
-    public void insertStaffById(Long buildingId, Long staffId) {
+    public Long insertStaffOfBuildingById(Long buildingId, Long staffId) {
         String sql = "INSERT INTO assignmentbuilding(buildingid, staffid)" +
                 "VALUES (?, ?);";
-        this.insert(sql, buildingId, staffId);
+        return this.insert(sql, buildingId, staffId);
     }
 }

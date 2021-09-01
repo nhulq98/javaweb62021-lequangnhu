@@ -20,6 +20,4 @@ public interface IBuildingJDBC{
 	String buildBetweenStatement(String sqlWhere, Integer from, Integer to);
 	String checkExistenceOfCondition(String prefix, String suffix, Object parameter);
 	String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters);
-	boolean isNull(Object value);
-	boolean isBlank(Object value);
 }

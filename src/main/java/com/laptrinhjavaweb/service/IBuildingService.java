@@ -10,11 +10,24 @@ import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.exception.DivideByZeroException;
 
 public interface IBuildingService {
+	//JDBC
 	//get Data
-	List<BuildingDTO> findAll();
+/*	List<BuildingDTO> findAll();
 	List<BuildingResponse> findByCondition(BuildingRequest buildingRequest);
 	BuildingDTO getOne(Long id) throws DivideByZeroException, SQLException;
 
 	//Change Data
+	BuildingDTO save(BuildingDTO newBuilding);*/
+
+	//JPA
+	//get Data
+	List<BuildingDTO> findAll();
+	List<BuildingResponse> findByCondition(BuildingRequest buildingRequest);
+	BuildingDTO getOne(Long id);
+
+	//Change Data
 	BuildingDTO save(BuildingDTO newBuilding);
+//==============================================
+	Map<String, String> getDistricts();
+	Map<String, String> getBuildingTypes();
 }

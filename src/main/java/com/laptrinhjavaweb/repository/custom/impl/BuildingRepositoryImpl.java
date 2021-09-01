@@ -3,11 +3,13 @@ package com.laptrinhjavaweb.repository.custom.impl;
 import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
+import com.laptrinhjavaweb.utils.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -18,31 +20,39 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
     @Override
     public List<BuildingEntity> findByCondition(BuildingRequest buildingRequestDTO) {
-        String sql = this.buildQueryForSearchBuilding(buildingRequestDTO);
-        Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
-        return query.getResultList();
+        try {
+            String sql = this.buildQueryForSearchBuilding(buildingRequestDTO);
+            Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
+            return query.getResultList();
+        }catch (RuntimeException e){
+            return new ArrayList<BuildingEntity>();
+        }
     }
 
-    @Override
-    public List<BuildingEntity> findAll() {
-        //native SQL
-        String sqlNative = "SELECT * FROM building";
-        Query query = entityManager.createNativeQuery(sqlNative, BuildingEntity.class);
-
-        //cách viết của JPQL
-//        String sqlJPQL = "FROM BuildingEntity"; //FROM + Class Entity
-//        Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
-
-        return query.getResultList();
-    }
-
-    @Override
-    public BuildingEntity findOne(Long id) {
-        //cách viết của JPQL: ta phải sử dụng các tên của java (tên class, tên biến)
-        String sqlJPQL = " FROM BuildingEntity WHERE id = " + id; //FROM + Class Entity  WHERE variable of Class Entity
-        Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
-        return (BuildingEntity) query.getSingleResult();
-    }
+//    @Override
+//    public List<BuildingEntity> findAll() {
+//        //native SQL
+//        String sqlNative = "SELECT * FROM building";
+//        Query query = entityManager.createNativeQuery(sqlNative, BuildingEntity.class);
+//
+//        //cách viết của JPQL
+////        String sqlJPQL = "FROM BuildingEntity"; //FROM + Class Entity
+////        Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
+//
+//        return query.getResultList();
+//    }
+//
+//    @Override
+//    public BuildingEntity findOne(Long id) {
+//        try {
+//            //cách viết của JPQL: ta phải sử dụng các tên của java (tên class, tên biến)
+//            String sqlJPQL = " FROM BuildingEntity WHERE id = " + id; //FROM + Class Entity  WHERE variable of Class Entity
+//            Query query = entityManager.createQuery(sqlJPQL, BuildingEntity.class);
+//            return (BuildingEntity) query.getSingleResult();
+//        }catch (RuntimeException e){
+//            return new BuildingEntity();
+//        }
+//    }
 
     /**
      * buildQueryForSearchBuilding to concat all clauses to complete sql final
@@ -51,8 +61,9 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
      */
     @Override
     public String buildQueryForSearchBuilding(BuildingRequest buildingRequest) {
+        //SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
         try {
-            return new StringBuilder("SELECT BD.id, BD.name, BD.street, BD.ward, BD.districtid, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee ")
+            return new StringBuilder("SELECT BD.*")
                     .append(" FROM building BD ")
                     .append(this.buildJoinSQLClause(buildingRequest))
                     .append(this.buildWhereSQLClause(buildingRequest))
@@ -65,10 +76,10 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
     @Override
     public String buildBetweenStatement(String whereSQLClause, Integer from, Integer to) {
-        if(!this.isNull(from) || !this.isNull(to)) {
-            if(!this.isNull(from) && !this.isNull(to)) {
+        if(!StringUtils.isNull(from) || !StringUtils.isNull(to)) {
+            if(!StringUtils.isNull(from) && !StringUtils.isNull(to)) {
                 return (" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
-            }else if(!this.isNull(from) && this.isNull(to)) {
+            }else if(!StringUtils.isNull(from) && StringUtils.isNull(to)) {
                 return (" AND "+ whereSQLClause +" >= " + from + " ");
             }else {
                 return (" AND "+ whereSQLClause +" <= " + to + " ");
@@ -100,28 +111,20 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
         return whereSQLClause.toString();
     }
 
-    @Override
-    public String buildJoinSQLClause(BuildingRequest buildingRequest) {
-        String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
-        String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
-        String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
-                " JOIN renttype RT ON RT.id = BRT.renttypeid "};
-        StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
-                .append(this.checkExistenceOfJoinSQLClause(assignmentbuilding,buildingRequest.getUserID()))
-                .append(this.checkExistenceOfJoinSQLClause(rentarea,buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
-                .append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList()));
-
-        return joinSQLClause.toString();
+    public void appendString(StringBuilder stringResult, String str){
+        stringResult.append(str);
     }
 
     @Override
     public String buildConditionForBuildingType(List<String> buildingType) {
         StringBuilder conditionForBuildingType = new StringBuilder("");
-        if (!this.isNull(buildingType)) {
-            conditionForBuildingType.append(" AND RT.code = \"" + buildingType.get(0) + "\" ");
+        if (!StringUtils.isNull(buildingType)) {
+            appendString(conditionForBuildingType, checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
+            //conditionForBuildingType.append(checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
             if (buildingType.size() > 1) {
                 for (int i = 1; i < buildingType.size(); i++) {
-                    conditionForBuildingType.append(" OR RT.code = \"" + buildingType.get(i) + "\" ");
+                    //conditionForBuildingType.append(checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
+                    appendString(conditionForBuildingType, checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
                 }
             }
         }
@@ -129,40 +132,49 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
     }
 
     @Override
+    public String buildJoinSQLClause(BuildingRequest buildingRequest) {
+        String[] assignmentbuilding = {" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id "};
+        String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
+        String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
+                " JOIN renttype RT ON RT.id = BRT.renttypeid "};
+
+        StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
+                .append(this.checkExistenceOfJoinSQLClause(assignmentbuilding, buildingRequest.getUserID()))
+                .append(this.checkExistenceOfJoinSQLClause(rentarea, buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
+                .append(this.checkExistenceOfJoinSQLClause(buildingrenttype, buildingRequest.getBuildingTypeList()));
+
+        return joinSQLClause.toString();
+    }
+
+    @Override
     public String checkExistenceOfCondition(String prefix, String suffix, Object parameter) {
-        if(parameter != null && !this.isBlank(parameter) && !parameter.equals("\"" + null +"\"")) {
+        if(!StringUtils.isNullOrEmpty(parameter) && !parameter.equals("\"" + null +"\"")) {
             return (prefix + parameter + suffix);
         }
         return "";
     }
 
+    /**
+     * checkExistenceOfJoinSQLClause to check existence of this join
+     * @return JoinSQLClause
+     * @param joinStr, parameters
+     */
     @Override
     public String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters) { // optimal
         StringBuilder joinClauseStr = new StringBuilder("");
+        boolean temp = false;
         for(Object obj: parameters) {
-            if(!isNull(obj)&& !isBlank(obj)) {
-                for(String str: joinStr) {
-                    joinClauseStr.append(str);
-                }
-                return joinClauseStr.toString();
+            if(!StringUtils.isNullOrEmpty(obj)) {
+                temp = true;
+                break;
             }
         }
+        if(temp){
+            for(String str: joinStr) {
+                joinClauseStr.append(str);
+            }
+            return joinClauseStr.toString();
+        }
         return "";
-    }
-
-    @Override
-    public boolean isNull(Object value) {
-        if(value == null) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isBlank(Object value) {
-        if(value instanceof String && value == "") {
-            return true;
-        }
-        return false;
     }
 }

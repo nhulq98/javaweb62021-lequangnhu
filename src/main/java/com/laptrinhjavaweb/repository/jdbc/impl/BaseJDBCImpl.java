@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.repository.jdbc.impl;
 
 import com.laptrinhjavaweb.mapper.IRowMapper;
 import com.laptrinhjavaweb.repository.jdbc.IBaseJDBC;
+import org.apache.commons.lang.StringUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,30 +10,28 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class BaseJDBCImpl implements IBaseJDBC{
-	ResourceBundle dbResourceBundle = ResourceBundle.getBundle("application");
-	private String PASSWORD = dbResourceBundle.getString("password");
-	private String URL = dbResourceBundle.getString("url");
-	private String USER = dbResourceBundle.getString("userName");
-	private String DRIVER_NAME = dbResourceBundle.getString("driverName");
+	private static ResourceBundle dbResourceBundle = ResourceBundle.getBundle("application");
+	private static String PASSWORD = dbResourceBundle.getString("password");
+	private static String URL = dbResourceBundle.getString("url");
+	private static String USER = dbResourceBundle.getString("userName");
+	private static String DRIVER_NAME = dbResourceBundle.getString("driverName");
 
-	private Connection connection;
+	private static Connection connection = getConnection();
 	private PreparedStatement prStatement;
 	private ResultSet resultSet;
 
-	@Override
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		try {
 			// Load the Connector driver
 			Class.forName(DRIVER_NAME);
-			return DriverManager.getConnection(this.URL, this.USER, this.PASSWORD);
+			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException | ClassNotFoundException e) {
 			return null;
 		}
 
 	}
 
-	@Override
-	public void closeAll(Connection connection, PreparedStatement prStatement, ResultSet resultSet) {
+	public static void closeAll(Connection connection, PreparedStatement prStatement, ResultSet resultSet) {
 		try {
 			if (connection != null) {
 				connection.close();
@@ -49,8 +48,7 @@ public class BaseJDBCImpl implements IBaseJDBC{
 		}
 	}
 
-	@Override
-	public void setParameters(PreparedStatement prStatement, Object... parameters) {
+	public static void setParameters(PreparedStatement prStatement, Object... parameters) {
 		try {
 			for (int i = 0; i < parameters.length; i++) {
 				// way 1:
@@ -76,11 +74,10 @@ public class BaseJDBCImpl implements IBaseJDBC{
 		}
 	}
 
-	@Override
+	//@Override
 	public <T> List<T> query(String sql, IRowMapper<T> objectMapper, Object... parameters) {
 		List<T> results = new ArrayList<>();
 		try {
-			connection = getConnection();
 			connection.setAutoCommit(false);
 			prStatement = connection.prepareStatement(sql);
 
@@ -117,7 +114,6 @@ public class BaseJDBCImpl implements IBaseJDBC{
 	public Long insert(String sql, Object... parameters) {
 		Long id = null;
 		try{
-			connection = getConnection();
 			connection.setAutoCommit(false);
 			prStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			// set parameter
@@ -146,7 +142,6 @@ public class BaseJDBCImpl implements IBaseJDBC{
 	@Override
 	public void update(String sql, Object... parameters) {
 		try{
-			connection = getConnection();
 			connection.setAutoCommit(false);
 			prStatement = connection.prepareStatement(sql);
 			// set parameter

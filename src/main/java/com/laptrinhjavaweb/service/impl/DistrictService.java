@@ -2,10 +2,12 @@ package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.service.IDistrictService;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class DistrictService implements IDistrictService {
 
     @Override

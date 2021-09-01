@@ -16,7 +16,7 @@ public class RoleEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String code;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)// khai báo mappedBy phải trùng tên với biến của ben RoleEntity
     private List<UserEntity> users = new ArrayList<>();
 
     public String getName() {

@@ -10,8 +10,8 @@ public interface BuildingRepositoryCustom {
     List<BuildingEntity> findByCondition(BuildingRequest buildingRequest);
 
     //JPA-demo
-    List<BuildingEntity> findAll();
-    BuildingEntity findOne(Long id);
+//    List<BuildingEntity> findAll();
+//    BuildingEntity findOne(Long id);
 
     // Logic
     String buildQueryForSearchBuilding(BuildingRequest buildingRequest);
@@ -21,6 +21,4 @@ public interface BuildingRepositoryCustom {
     String buildBetweenStatement(String sqlWhere, Integer from, Integer to);
     String checkExistenceOfCondition(String prefix, String suffix, Object parameter);
     String checkExistenceOfJoinSQLClause(String[] joinStr, Object...parameters);
-    boolean isNull(Object value);
-    boolean isBlank(Object value);
 }

@@ -2,15 +2,14 @@ package com.laptrinhjavaweb.dto;
 
 public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 
-	private Long id;
 	private String name;
 	private String street;
 	private String ward;
 	private Long districtID;
-	private String district;
 	private String structure;
 	private Integer numberOfBasement;
 	private Integer floorArea;
+	private String rentAreas;
 	private String direction;
 	private String level;
 	private Integer rentPrice;
@@ -34,14 +33,12 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 	private String managerPhone;
 	private String address;
 
-	@Override
-	public Long getId() {
-		return id;
+	public String getRentAreas() {
+		return rentAreas;
 	}
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
+	public void setRentAreas(String rentAreas) {
+		this.rentAreas = rentAreas;
 	}
 
 	public String getName() {
@@ -74,14 +71,6 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 
 	public void setDistrictID(Long districtID) {
 		this.districtID = districtID;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
 	}
 
 	public String getStructure() {

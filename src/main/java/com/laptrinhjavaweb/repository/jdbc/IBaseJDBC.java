@@ -17,9 +17,7 @@ public interface IBaseJDBC {
 	void update(String sql, Object ... parameters);
 
 
-
-	// For communication Database
-	Connection getConnection();
-	void closeAll(Connection connection, PreparedStatement prStatement, ResultSet resultSet);
-	void setParameters(PreparedStatement prStatement, Object... parameters);
+//	Connection getConnection();
+//	void closeAll(Connection connection, PreparedStatement prStatement, ResultSet resultSet);
+//	void setParameters(PreparedStatement prStatement, Object... parameters);
 }

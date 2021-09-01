@@ -7,6 +7,8 @@ import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
+import com.laptrinhjavaweb.repository.jdbc.impl.BuildingJDBCImpl;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +29,40 @@ public class BuildingAPI {
 	@Autowired
 	private IAssignmentBuildingService assignmentBuildingService;
 
-	//scope for get data
+
+	//SCOPE FOR GET DATA
+
+    @PostMapping("/{id}")
+    public ResponseEntity<BuildingDTO> getOne(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(buildingService.getOne(id));
+    }
+
+//    @GetMapping
+//    public @ResponseBody
+//    ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
+//                                                           @RequestParam(value = "listType", required = false) List<String> listType) {
+//        ObjectMapper mapper = new ObjectMapper();
+//        requestParam.put("buildingTypeList", listType);
+//        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);// avoid error when listType value is single
+//        BuildingRequest buildingRequest = mapper.convertValue(requestParam, BuildingRequest.class);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(buildingRequest));
+//    }
+
     @GetMapping
     public @ResponseBody
-    ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
-                                                           @RequestParam(value = "listType", required = false) List<String> listType) {
-        ObjectMapper mapper = new ObjectMapper();
-        requestParam.put("buildingTypeList", listType);
-        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);// avoid error when listType value is single
-        BuildingRequest buildingRequest = mapper.convertValue(requestParam, BuildingRequest.class);
-
-        return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(buildingRequest));
+    ResponseEntity<List<BuildingDTO>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(buildingService.findAll());
     }
 
-    @GetMapping("/{buildingid}/staffs")
-    public @ResponseBody ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long buildingid) {
-        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(buildingid));
+    @GetMapping("/{id}/staffs")
+    public @ResponseBody ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
     }
 
-    //scope for change data
+
+    //SCOPE FOR CHANGE DATA
+
     @PostMapping
 	public ResponseEntity<BuildingDTO> createBuilding(@RequestBody BuildingDTO newBuilding) {
 

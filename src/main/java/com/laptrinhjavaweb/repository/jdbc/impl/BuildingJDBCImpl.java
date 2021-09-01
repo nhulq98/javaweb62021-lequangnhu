@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.mapper.BuildingMapper;
 import com.laptrinhjavaweb.repository.jdbc.IBuildingJDBC;
+import com.laptrinhjavaweb.utils.StringUtils;
 
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 	
 	@Override
 	public String buildBetweenStatement(String whereSQLClause, Integer from, Integer to) {
-		if(!this.isNull(from) || !this.isNull(to)) {
-			if(!this.isNull(from) && !this.isNull(to)) {
+		if(!StringUtils.isNull(from) || !StringUtils.isNull(to)) {
+			if(!StringUtils.isNull(from) && !StringUtils.isNull(to)) {
 				return (" AND "+ whereSQLClause +" BETWEEN " + from + " AND " + to + " ");
-			}else if(!this.isNull(from) && this.isNull(to)) {
+			}else if(!StringUtils.isNull(from) && StringUtils.isNull(to)) {
 				return (" AND "+ whereSQLClause +" >= " + from + " ");
 			}else {
 				return (" AND "+ whereSQLClause +" <= " + to + " ");
@@ -71,14 +72,20 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		return whereSQLClause.toString();
 	}
 
+	public void appendString(StringBuilder stringResult, String str){
+		stringResult.append(str);
+	}
+
 	@Override
 	public String buildConditionForBuildingType(List<String> buildingType) {
 		StringBuilder conditionForBuildingType = new StringBuilder("");
-		if (!this.isNull(buildingType)) {
-			conditionForBuildingType.append(checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
+		if (!StringUtils.isNull(buildingType)) {
+			appendString(conditionForBuildingType, checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
+			//conditionForBuildingType.append(checkExistenceOfCondition(" AND RT.code = \"", "\" ", buildingType.get(0)));
 			if (buildingType.size() > 1) {
 				for (int i = 1; i < buildingType.size(); i++) {
-					conditionForBuildingType.append(checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
+					//conditionForBuildingType.append(checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
+					appendString(conditionForBuildingType, checkExistenceOfCondition(" OR RT.code = \"", "\" ", buildingType.get(i)));
 				}
 			}
 		}
@@ -91,6 +98,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		String[] rentarea = {" JOIN rentarea RE ON RE.buildingid = BD.id "};
 		String[] buildingrenttype = {" JOIN buildingrenttype BRT ON BRT.buildingid = BD.id ",
 				" JOIN renttype RT ON RT.id = BRT.renttypeid "};
+
 		StringBuilder joinSQLClause = new StringBuilder(" JOIN district DT on DT.id = BD.districtid ")
 				.append(this.checkExistenceOfJoinSQLClause(assignmentbuilding, buildingRequest.getUserID()))
 				.append(this.checkExistenceOfJoinSQLClause(rentarea, buildingRequest.getRentEreaFrom(), buildingRequest.getRentEreaTo()))
@@ -101,7 +109,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 
 	@Override
 	public String checkExistenceOfCondition(String prefix, String suffix, Object parameter) {
-		if(parameter != null && !this.isBlank(parameter) && !parameter.equals("\"" + null +"\"")) {
+		if(!StringUtils.isNullOrEmpty(parameter) && !parameter.equals("\"" + null +"\"")) {
 			return (prefix + parameter + suffix);
 		}
 		return "";
@@ -117,7 +125,7 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 		StringBuilder joinClauseStr = new StringBuilder("");
 		boolean temp = false;
 		for(Object obj: parameters) {
-			if(!isNull(obj) && !isBlank(obj)) {
+			if(!StringUtils.isNullOrEmpty(obj)) {
 				temp = true;
 				break;
 			}
@@ -129,21 +137,5 @@ public class BuildingJDBCImpl extends BaseJDBCImpl implements IBuildingJDBC {
 			return joinClauseStr.toString();
 		}
 		return "";
-	}
-	
-	@Override
-	public boolean isNull(Object value) {
-		if(value == null) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isBlank(Object value) {
-		if(value instanceof String && value == "") {
-			return true;
-		}
-		return false;
 	}
 }

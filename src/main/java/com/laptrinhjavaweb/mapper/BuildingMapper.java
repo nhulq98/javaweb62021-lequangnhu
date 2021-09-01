@@ -14,12 +14,12 @@ public class BuildingMapper extends AbstractDTO implements IRowMapper<BuildingEn
             BuildingEntity buildingEntity = new BuildingEntity();
             buildingEntity.setId(resultSet.getLong("id"));
             buildingEntity.setName(resultSet.getString("name"));
-            buildingEntity.setDistrictId(resultSet.getLong("districtid"));
+            //buildingEntity.setDistrictId(resultSet.getLong("districtid"));
             buildingEntity.setStreet(resultSet.getString("street"));
             buildingEntity.setWard(resultSet.getString("ward"));
             buildingEntity.setManagerPhone(resultSet.getString("managerphone"));
             buildingEntity.setManagerName(resultSet.getString("managername"));
-            buildingEntity.setServiceFee(resultSet.getInt("servicefee"));
+            buildingEntity.setServiceFee(resultSet.getString("servicefee"));
             buildingEntity.setFloorArea(resultSet.getInt("floorarea"));
 
             return buildingEntity;

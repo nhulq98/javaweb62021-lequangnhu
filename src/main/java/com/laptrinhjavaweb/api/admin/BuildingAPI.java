@@ -1,70 +1,112 @@
 package com.laptrinhjavaweb.api.admin;
 
-import java.util.ArrayList;
+import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.service.IAssignmentBuildingService;
+import com.laptrinhjavaweb.service.IBuildingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
-import com.laptrinhjavaweb.constant.SystemConstant;
-import com.laptrinhjavaweb.dto.UserDTO;
-import com.laptrinhjavaweb.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
-import com.laptrinhjavaweb.service.IBuildingService;
-import com.laptrinhjavaweb.service.IDistrictService;
-
 @RestController
 @RequestMapping("/api/building")
+//@Comp
 public class BuildingAPI {
 
-	@Autowired
-	private IBuildingService buildingService;
+    @Autowired // là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    private IBuildingService buildingService;
 
-	@Autowired
-	private IUserService userService;
-	
-	@Autowired
-	private IDistrictService districtService;
-	
-	@PostMapping
-	public BuildingDTO create(@RequestBody BuildingDTO newBuilding) {
-		return buildingService.save(newBuilding);
-	}
+    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    private IAssignmentBuildingService assignmentBuildingService;
 
-	@GetMapping
-	public @ResponseBody List<BuildingResponseDTO> findByCondition(@RequestParam Map<String, String> requestParam) {
-		ObjectMapper mapper = new ObjectMapper();
-		BuildingRequestDTO buildingRequest = mapper.convertValue(requestParam, BuildingRequestDTO.class);
+    //SCOPE FOR GET DATA
 
-		return buildingService.findByCondition(buildingRequest);
-	}
+    @PostMapping("/{id}")
+    public ResponseEntity<BuildingDTO> getOne(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(buildingService.getOne(id));
 
-	@GetMapping("/{buildingid}/staffs")
-	public @ResponseBody List<UserDTO> loadStaff(@PathVariable Long buildingid) {
+    }
 
-		List<UserDTO> staffsAssignmentBuilding = new ArrayList<>();
-		List<UserDTO> staffAll = userService.getStaffs();
-		staffsAssignmentBuilding = userService.getStaffsManagementBuildingById(buildingid);
+    @GetMapping
+    public @ResponseBody
+    ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
+                                                           @RequestParam(value = "listType", required = false) List<String> listType) {
+        try {
+            requestParam.put("buildingTypes", listType);
+            return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-		for(UserDTO userDTO: staffsAssignmentBuilding){
-			for(int i = 0; i < staffAll.size(); i++){
-				if(userDTO.getId() == staffAll.get(i).getId()){
-					staffAll.get(i).setChecked("checked");
-					break;// exit for outside loop
-				}
-			}
-		}
+    /**
+     * Get ALl staffs available and staffs is managing building with buildingId from request param.
+     * If staffs is managing building ==> set value "status"="checked" for those staffs
+     *
+     * @param id
+     * @return Staff List
+     */
+    @GetMapping("/{id}/staffs")
+    public @ResponseBody
+    ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-		return staffAll;
-	}
+    //SCOPE FOR CHANGE DATA
 
-	@GetMapping("/{buildingid}")
-	public @ResponseBody BuildingDTO getOne(@RequestParam Long buildingid){
+    @PostMapping
+    public ResponseEntity<BuildingDTO> createBuilding(@RequestBody BuildingDTO newBuilding) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(buildingService.save(newBuilding));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
-		return null;
-	}
+    @DeleteMapping("/{id}")
+    public @ResponseBody
+    ResponseEntity<List<StaffBuildingResponse>> deleteBuilding(@PathVariable Long id) {
+        try {
+            buildingService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public @ResponseBody
+    ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@PathVariable Long id) {
+        try {
+            //buildingService.(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/assignmentbuilding")
+    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffBuildingRequest request) {
+        try {
+            assignmentBuildingService.updateAssignment(request);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

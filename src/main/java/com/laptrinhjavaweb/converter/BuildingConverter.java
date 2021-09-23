@@ -1,49 +1,65 @@
 package com.laptrinhjavaweb.converter;
 
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.laptrinhjavaweb.builder.BuildingSearch;
+import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.entity.BuildingEntity;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.laptrinhjavaweb.entity.RentAreaEntity;
+import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
 
-import com.laptrinhjavaweb.dto.BuildingDTO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Component
-public class BuildingConverter {
-	
-	@Autowired
-	private ModelMapper modelMapper;
-	
-	public BuildingDTO convertToDTO(BuildingEntity entity) {
-		modelMapper.getConfiguration()
-				.setMatchingStrategy(MatchingStrategies.STANDARD)
-				.setSkipNullEnabled(true);
-		BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
-		dto.setAddress(dto.getStreet() +", "+ dto.getWard() +", "+dto.getDistrict());
-		return dto;
-	}
+//@Qualifier("BuildingConverter") ==> the same with component("BuildingConverter")
+public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEntity> {
 
-	public BuildingRequestDTO convertToRequestDTO(BuildingDTO buildingDTO) {
-		modelMapper.getConfiguration()
-				.setMatchingStrategy(MatchingStrategies.STANDARD)
-				.setSkipNullEnabled(true);
-		BuildingRequestDTO requestDTO = modelMapper.map(buildingDTO, BuildingRequestDTO.class);
-		return requestDTO;
-	}
+    @Override
+    public BuildingDTO convertEntityToDTO(BuildingEntity entity) {
+        BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
 
-	public BuildingDTO convertResponseToDTO(BuildingResponseDTO responseDTO) {
-		modelMapper.getConfiguration()
-				.setMatchingStrategy(MatchingStrategies.STANDARD)
-				.setSkipNullEnabled(true);
-		BuildingDTO dto = modelMapper.map(responseDTO, BuildingDTO.class);
-		return dto;
-	}
-	
-	public BuildingEntity convertToEntity(BuildingDTO dto) {
-		BuildingEntity entity = modelMapper.map(dto, BuildingEntity.class);
-		return entity;
-	}
+        dto.setAddress(entity.getStreet() + ", " + entity.getWard() + ", " + DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue());
 
+        // convert List<RentAreaEntity> to rentAreaStrs with format: 200,300,400...
+        List<RentAreaEntity> rentAreas = entity.getRentAreas();
+        List<String> rentAreaStrs = new ArrayList<>();
+        for (RentAreaEntity item : rentAreas) {
+            rentAreaStrs.add(String.valueOf(item.getValue()));
+        }
+        dto.setRentAreas(String.join(", ", rentAreaStrs));
+
+        return dto;
+    }
+
+    @Override
+    public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) {
+        BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
+
+        // convert rentAreaStrs to List<RentAreaEntity>
+        String[] rentAreaStrs = buildingDTO.getRentAreas().split(",");
+        List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
+        for (String item : rentAreaStrs) {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            rentAreaEntity.setValue(Integer.parseInt(item));
+            rentAreaEntities.add(rentAreaEntity);
+        }
+        entity.setRentAreas(rentAreaEntities);
+
+        return entity;
+    }
+
+    public BuildingSearch convertMapToBuider(Map<String, Object> map) {
+        ObjectMapper mapper = new ObjectMapper();
+        BuildingSearch.Builder result = mapper.convertValue(map, BuildingSearch.Builder.class);
+        return new BuildingSearch(result);
+    }
+
+    public Map<String, Object> convertRequestToMap(BuildingRequest request) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> result = mapper.convertValue(request, Map.class);
+        return result;
+    }
 }

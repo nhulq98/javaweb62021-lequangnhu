@@ -26,20 +26,20 @@ public class RoleService implements IRoleService {
 		List<RoleEntity> roleEntities = roleRepository.findAll();
 		List<RoleDTO> list = new ArrayList<>();
 		roleEntities.forEach(item -> {
-			RoleDTO roleDTO = roleConverter.convertToDto(item);
-			list.add(roleDTO);
-		});
+            RoleDTO roleDTO = roleConverter.convertEntityToDTO(item);
+            list.add(roleDTO);
+        });
 		return list;
 	}
 
 	@Override
 	public Map<String, String> getRoles() {
-		Map<String,String> roleTerm = new HashMap<>();
-		List<RoleEntity> roleEntity = roleRepository.findAll();
-		roleEntity.forEach(entity ->{
-			RoleDTO roleDTO = roleConverter.convertToDto(entity);
-			roleTerm.put(roleDTO.getCode(), roleDTO.getName());
-		});
-		return roleTerm;
-	}
+        Map<String, String> roleTerm = new HashMap<>();
+        List<RoleEntity> roleEntity = roleRepository.findAll();
+        roleEntity.forEach(entity -> {
+            RoleDTO roleDTO = roleConverter.convertEntityToDTO(entity);
+            roleTerm.put(roleDTO.getCode(), roleDTO.getName());
+        });
+        return roleTerm;
+    }
 }

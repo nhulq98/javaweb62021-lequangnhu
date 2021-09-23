@@ -4,6 +4,8 @@
 <%@include file="/common/taglib.jsp" %>
 <c:url var="formUrl" value="/admin/building-list"/>
 <c:url var="buildingAPI" value="/api/building"/>
+<c:url var="buildingEdit" value="/admin/building-edit"/>
+<c:url var="updateAssignmentAPI" value="/api/building/assignmentbuilding"/>
 <%--<c:url var="formAjax" value="/api/user"/>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -18,6 +20,7 @@
         .btn-size {
             width: 78px !important;
         }
+
         select#staffStr
     </style>
 </head>
@@ -74,7 +77,8 @@
                                         </a>
                                     </div>
                                 </div>
-                                <form:form commandName="model" action="${formUrl}" id="listForm" method="GET">
+                                <form:form commandName="buildingSearchForm" action="${formUrl}" id="listForm"
+                                           method="GET">
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div class="form-horizontal">
@@ -98,11 +102,13 @@
                                             <div class="col-sm-4" id="profile" style="top: 25px; left: 10px;">
                                                 <div class="form-group">
                                                     <div class="col-sm-9 no-padding-left">
-                                                        <form:select path="districtID">
+                                                        <form:select path="district">
                                                             <form:option value="" label="--- Chọn Quận ---"/>
-                                                            <form:options items="${district}" itemValue="id"
-                                                                          itemLabel="name"/>
+                                                            <form:options items="${district}" var="mapItem"
+                                                                          itemValue="code"
+                                                                          itemLabel="value"/>
                                                         </form:select>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -189,8 +195,9 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <div class="col-sm-9" style="padding-top: 25px; padding-left: 19px;">
-                                                        <form:select path="userID">
+                                                    <div class="col-sm-9"
+                                                         style="padding-top: 25px; padding-left: 19px;">
+                                                        <form:select path="staffId">
                                                             <form:option value="" label="--- Chọn nhân viên ---"/>
                                                             <form:options items="${staff}" itemValue="id"
                                                                           itemLabel="fullName"/>
@@ -200,8 +207,8 @@
                                             </div>
 
                                             <div class="col-sm-12 pull-right">
-                                                <form:checkboxes path="listType" items="${renttype}"
-                                                                 itemValue="code" itemLabel="name"/>
+                                                <form:checkboxes path="rentTypes" items="${renttype}"
+                                                                 itemValue="code" itemLabel="value"/>
                                             </div>
 
                                             <div class="form-group">
@@ -230,18 +237,10 @@
                                         <%--title='<spring:message code="label.user.add"/>'--%>
                                            title="Thêm Tòa Nhà"
                                            href='<c:url value="/admin/building-edit"/>'>
-															<span>
-																<i class="fa fa-plus-circle bigger-110 purple"></i>
-															</span>
+                                            <span>
+                                                <i class="fa fa-plus-circle bigger-110 purple"></i>
+                                            </span>
                                         </a>
-                                        <button id="btnDelete" type="button" disabled
-                                                class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-                                                data-toggle="tooltip"
-                                                title="Xóa bài viết" onclick="warningBeforeDelete()">
-															<span>
-																<i class="fa fa-trash-o bigger-110 pink"></i>
-															</span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -250,27 +249,19 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="table-responsive">
-                                <display:table name="model.listResult" cellspacing="0" cellpadding="0"
-                                               requestURI="${formUrl}" partialList="true" sort="external"
-                                               size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
-                                               id="tableList" pagesize="${model.maxPageItems}"
-                                               export="false"
+                                <display:table name="buildingResult"
+                                               requestURI="${formUrl}" id="item"
                                                class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
                                                style="margin: 3em 0 1.5em;">
                                     <display:column title="<fieldset class='form-group'>
 												        <input type='checkbox' id='checkAll' class='check-box-element'>
 												        </fieldset>" class="center select-cell"
                                                     headerClass="center select-cell">
-                                        <fieldset>
-                                            <input type="checkbox" name="checkList" value="${tableList.id}"
-                                                   id="checkbox_${tableList.id}" class="check-box-element"/>
-                                        </fieldset>
+                                        <%--                                        <fieldset>--%>
+                                        <%--                                            <input type="checkbox" name="checkList" value="${item.id}"--%>
+                                        <%--                                                   id="checkbox_${item.id}" class="check-box-element"/>--%>
+                                        <%--                                        </fieldset>--%>
                                     </display:column>
-<%--                                    <display:column>--%>
-<%--                                        <fieldset>--%>
-<%--                                            <input hidden="hidden" value="${tableList.id}" id="building_${tableList.id}" ${checked}/>--%>
-<%--                                        </fieldset>--%>
-<%--                                    </display:column>--%>
 
                                     <display:column headerClass="text-left" property="createdDate" title="ngày"/>
                                     <display:column headerClass="text-left" property="name"
@@ -287,59 +278,32 @@
                                                     title="Phí Dịch Vụ"/>
                                     <display:column headerClass="text-left" title="Phí MG"/>
                                     <display:column headerClass="col-actions" title="Thao tác">
-                                        <button onclick="assingmentBuilding(this.value)" type="button"
-                                                class="btn btn-success btn-sm popup"
+                                        <button onclick="assignmentBuilding(this.value)" value="${item.id}"
+                                                type="button" class="btn btn-success btn-sm popup"
                                                 data-toggle="tooltip; modal" title="Delevery Buildings!"
-                                                data-target="#myModal" id="btnAssingmentBuilding" value="${tableList.id}">
+                                                data-target="#myModal" id="btnAssingmentBuilding">
                                             <i class="ace-icon fa fa-tasks"></i>
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm"
-                                                data-toggle="tooltip"
-                                                title="Edit Buildings!"><i
-                                                class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </button>
-                                        <button id="btnDelete" type="button" disabled
+                                        <input type="hidden" id="buildingIdCurrent" value="${item.id}"/>
+                                        <a class="btn btn-info btn-sm" data-toggle="tooltip" title="Cập nhật tòa nhà"
+                                           href='<c:url value="${buildingEdit}-${item.id}"/>'>
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </a>
+                                        <%--                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"--%>
+                                        <%--                                                class="btn btn-info btn-sm"--%>
+                                        <%--                                                data-toggle="tooltip"--%>
+                                        <%--                                                title="Edit Buildings!">--%>
+                                        <%--                                            <i class="ace-icon fa fa-pencil bigger-110"></i>--%>
+                                        <%--                                        </button>--%>
+                                        <button onclick="deleteBuilding(this.value)" value="${item.id}"
+                                                id="btnDelete" type="button"
                                                 class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
                                                 data-toggle="tooltip"
-                                                title="Xóa Tòa Nhà" onclick="warningBeforeDelete()">
-															<span>
-																<i class="fa fa-trash-o bigger-110 pink"></i>
-															</span>
+                                                title="Xóa Tòa Nhà">
+                                                <span>
+                                                    <i class="fa fa-trash-o bigger-110 pink"></i>
+                                                </span>
                                         </button>
-                                        <%--                                            <button type="button" class="btn btn-default btn-sm"--%>
-                                        <%--                                                    data-toggle="tooltip"--%>
-                                        <%--                                                    title="Delete Buildings!"><img width="12"--%>
-                                        <%--                                                                                   src="edit_80px.png"/>--%>
-                                        </button>
-                                        <%--                                            <c:if test="${tableList.roleCode != 'ADMIN'}">--%>
-                                        <%--                                                &lt;%&ndash;                                                <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"&ndash;%&gt;--%>
-                                        <%--                                                &lt;%&ndash;                                                   title="Cập nhật người dùng"&ndash;%&gt;--%>
-                                        <%--                                                &lt;%&ndash;                                                   href='<c:url value="/admin/user-edit-${tableList.id}"/>'>&ndash;%&gt;--%>
-                                        <%--                                                &lt;%&ndash;                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&ndash;%&gt;--%>
-                                        <%--                                                &lt;%&ndash;                                                </a>&ndash;%&gt;--%>
-
-                                        <%--                                                <td>--%>
-                                        <%--                                                    <button onclick="assingmentBuilding()" type="button"--%>
-                                        <%--                                                            class="btn btn-success btn-sm popup" onclick="myFunction()"--%>
-                                        <%--                                                            data-toggle="tooltip; modal" title="Delevery Buildings!"--%>
-                                        <%--                                                            data-target="#myModal">--%>
-                                        <%--                                                        <i class="ace-icon fa fa-tasks"></i>--%>
-                                        <%--                                                    </button>--%>
-                                        <%--                                                    <button type="button" class="btn btn-info btn-sm"--%>
-                                        <%--                                                            data-toggle="tooltip"--%>
-                                        <%--                                                            title="Delevery Buildings!"><i--%>
-                                        <%--                                                            class="ace-icon fa fa-pencil bigger-120"></i></button>--%>
-                                        <%--                                                    <button type="button" class="btn btn-default btn-sm"--%>
-                                        <%--                                                            data-toggle="tooltip"--%>
-                                        <%--                                                            title="Delete Buildings!"><img width="12"--%>
-                                        <%--                                                                                           src="edit_80px.png"/>--%>
-                                        <%--                                                    </button>--%>
-
-                                        <%--                                                </td>--%>
-                                        <%--                                            </c:if>--%>
-                                        <%--                                            <c:if test="${tableList.roleCode == 'ADMIN'}">--%>
-                                        <%--                                                <p>Không đươc thao tác</p>--%>
-                                        <%--                                            </c:if>--%>
                                     </display:column>
                                 </display:table>
                             </div>
@@ -376,25 +340,12 @@
                             </tbody>
                         </table>
 
-<%--                        <display:table name="staffbuilding" cellspacing="0" cellpadding="0"--%>
-<%--                                       requestURI="${formUrl}"--%>
-<%--                                       class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"--%>
-<%--                                       style="margin: 3em 0 1.5em;">--%>
-<%--                            <display:column title="Chọn nhân viên" class="center select-cell"--%>
-<%--                                            headerClass="center select-cell">--%>
-<%--                                <fieldset>--%>
-<%--                                    <input type="checkbox" name="checkList" value="${tableList.id}"--%>
-<%--                                           id="checkbox_${tableList.id}" class="check-box-element" checked="${checked}"/>--%>
-<%--                                </fieldset>--%>
-<%--                            </display:column>--%>
-<%--                            --%>
-<%--                            <display:column headerClass="text-left" value="id" property="fullName"--%>
-<%--                                            title="Tên Nhân Viên"/>--%>
-<%--                        </display:table>--%>
                     </div>
                     <div class="modal-footer">
 
-                        <button type="button"  class="btn btn-default" data-dismiss="modal">Assingment Building</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                onclick="assignmentForStaffs()">Assingment Building
+                        </button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -404,68 +355,107 @@
     </div>
 </div>
 
-    <!--BEGIN Script dialog -->
-    <script>
-        function assingmentBuilding(id) {
-            myfunction(id);
-            openModalAssingmentBuilding();
-        }
+<!--BEGIN Script dialog -->
+<script>
+    // functions for assignment building
+    function assignmentBuilding(id) {
+        showListStaffById(id);
+        $('#buildingIdCurrent').val(id); // set value for update staff function
+        openModalAssingmentBuilding();
+    }
 
-        function openModalAssingmentBuilding() {
+    function openModalAssingmentBuilding() {
 
-            $('#assingmentBuildingModal').modal();
-        }
+        $('#assingmentBuildingModal').modal();
+    }
 
-        function myfunction(id){
-            var dataArray = {};
-            dataArray["id"] = id;
-            showListStaffById(dataArray, id);
-        }
+    function showListStaffById(buildingId) {
+        $.ajax({
+            url: '${buildingAPI}/' + buildingId + '/staffs',
+            type: 'GET',
+            dataType: "json", // define data type for output data from server
+            //data: JSON.stringify(dataArray),
+            //contentType: "text/plain", // define data type for input data server
+            success: function (res) {
+                var row = '';
+                $.each(res, function (index, item) {
+                    row += '<tr>';
+                    row += '<td class="text-center"> <input type="checkbox" name="checkList" value=' + item.id + ' id="checkbox_' + item.id + '" class="check-box-element"' + item.checked + '/></td>';
+                    row += '<td class="text-center">' + item.fullName + '</td>';
+                });
+                $('#staffList tbody').html(row);
+                console.log(res);
+                console.log('success');
+            },
+            error: function (res) {
+                console.log("Failed!" + res.toString());
+            }
+        });
+    }
 
-        function showListStaffById(dataArray, buildingId) {
+    function assignmentForStaffs() {
+        var idArray = $('.check-box-element:checkbox:checked').map(function () {
+            return this.value;
+        }).get();
+        var object = {};
+        object.buildingId = $('#buildingIdCurrent').val();//get value
+        object.staffIds = idArray;
+        updateStaff(object);
+    }
+
+    function updateStaff(object) {
+        $.ajax({
+            url: '${updateAssignmentAPI}',
+            type: 'POST',
+            //dataType: "json", // define data type for output data from server
+            data: JSON.stringify(object),
+            contentType: "application/json", // define data type for input data server
+            success: function (res) {
+                console.log('success');
+            },
+            error: function (res) {
+                console.log("Failed!" + res.toString());
+            }
+        });
+    }
+
+    //==============================================================
+
+
+    //==================functions for building ===========================
+    function deleteBuilding(buildingId) {
+        showAlertBeforeDelete(function () {
             $.ajax({
-                url: '${buildingAPI}/'+buildingId+'/staffs',
-                type: 'GET',
-                dataType: "json", // define data type for output data from server
-                //data: JSON.stringify(dataArray),
-                //contentType: "text/plain", // define data type for input data server
+                url: '${buildingAPI}/' + buildingId,
+                type: 'DELETE',
                 success: function (res) {
-                    var row = '';
-                    $.each(res, function(index, item){
-                       row += '<tr>';
-                        row += '<td class="text-center"> <input type="checkbox" name="checkList" value='+item.id+' id="checkbox_'+item.id +'" class="check-box-element"'+ item.checked + '/></td>';
-                        row += '<td class="text-center">' + item.fullName + '</td>';
-                    });
-                    $('#staffList tbody').html(row);
-                    console.log(res);
                     console.log('success');
                 },
                 error: function (res) {
                     console.log("Failed!" + res.toString());
                 }
             });
-        }
-    </script>
-    <!--END Script dialog -->
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var someJsVar = "<c:out value='${addOrEditNews}'/>";
-            $('#btnSearch').click(function () {
-                $('#listForm').submit();
-            });
         });
+    }
 
-        function warningBeforeDelete() {
-            showAlertBeforeDelete(function () {
-                event.preventDefault();
-                var dataArray = $('tbody input[type=checkbox]:checked').map(function () {
-                    return $(this).val();
-                }).get();
-                deleteUser(dataArray);
-            });
-        }
-    </script>
+    function editBuilding(id) {
+        //var object = {"id": id};
+        $.ajax({
+            url: '${buildingEdit}-' + id,
+            type: 'GET',
+            //data: JSON.stringify(object),
+            //contentType: "application/json", // define data type for input data server
+            success: function (res) {
+                console.log('success');
+            },
+            error: function (res) {
+                console.log('failed');
+                console.log(res);
+            }
+        });
+    }
+</script>
+<!--END Script dialog -->
 </body>
 
 </html>

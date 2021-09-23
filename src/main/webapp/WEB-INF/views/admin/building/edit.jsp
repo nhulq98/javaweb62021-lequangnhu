@@ -63,7 +63,7 @@
                         <div class="col-sm-12 form-group">
                             <label>Ward</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="text" class="form-control" path="ward"/>
                             </div>
                         </div>
 
@@ -71,10 +71,10 @@
                             <label>Distrit</label>
                             <div class="col-sm-10 pull-right">
                                 <div class="dropdown">
-                                    <form:select path="districtID">
+                                    <form:select path="district">
                                         <form:option value="" label="--- Chọn Quận ---"/>
-                                        <form:options items="${district}" itemValue="id"
-                                                      itemLabel="name"/>
+                                        <form:options items="${district}" itemValue="code"
+                                                      itemLabel="value"/>
                                     </form:select>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                         <div class="col-sm-12 form-group">
                             <label>Rent price</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="number" class="form-control" path="rentPrice"/>
                             </div>
                         </div>
 
@@ -126,132 +126,128 @@
                             <label> Describe Rent price</label>
                             <div class="col-sm-10 pull-right">
                                     <%--              <form:input type="text" class="form-control" path="rentAreaDescription"/>--%>
-                                <input type="text" class="form-control">
+                                <form:input type="text" class="form-control" path="rentPriceDescription"/>
                             </div>
                         </div>
 
-                        <div class="col-sm-12 form-group">
-                            <label>Describe Area</label>
-                            <div class="col-sm-10 pull-right">
-                                    <%--                            <form:input type="text" class="form-control" path="rentAreaDescription"/>--%>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-
+                        <%--                        <div class="col-sm-12 form-group">--%>
+                        <%--                            <label>Describe Area</label>--%>
+                        <%--                            <div class="col-sm-10 pull-right">--%>
+                        <%--                                        <form:input type="text" class="form-control" path="rentPriceDescription"/>--%>
+                        <%--                            </div>--%>
+                        <%--                        </div>--%>
 
                         <div class="col-sm-12 form-group">
                             <label>Service charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="serviceFee"/>
                             </div>
                         </div>
 
                         <div class=" col-sm-12 form-group">
                             <label>Car charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="carFee"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Motorbike charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="motorbikeFee"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Overtime charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="overtimeFee"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Water charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="waterFee"/>
                             </div>
                         </div>
-
 
                         <div class="col-sm-12 form-group">
                             <label>Electricity charge</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="electricityFee"/>
                             </div>
                         </div>
-
 
                         <div class="col-sm-12 form-group">
                             <label>Deposits</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="deposit"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Payment</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="number" class="form-control">
+                                <form:input type="number" class="form-control" path="payment"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Rent time</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="number" class="form-control" path="rentTime"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Decorator time</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="number" class="form-control" path="decoratorTime"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Brokeragefee</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="number" class="form-control" path="brokerageFee"/>
                             </div>
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <label>Note</label>
                             <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
+                                <form:input type="number" class="form-control" path="note"/>
                             </div>
                         </div>
 
-                        <div class="col-sm-12 form-group">
-                            <label>Link of building</label>
-                            <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
+                        <%--                        <div class="col-sm-12 form-group">--%>
+                        <%--                            <label>Link of building</label>--%>
+                        <%--                            <div class="col-sm-10 pull-right">--%>
+                        <%--                                <input type="text" class="form-control">--%>
+                        <%--                            </div>--%>
+                        <%--                        </div>--%>
 
-                        <div class="col-sm-12 form-group">
-                            <label>Map</label>
-                            <div class="col-sm-10 pull-right">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
+                        <%--                        <div class="col-sm-12 form-group">--%>
+                        <%--                            <label>Map</label>--%>
+                        <%--                            <div class="col-sm-10 pull-right">--%>
+                        <%--                                <input type="text" class="form-control">--%>
+                        <%--                            </div>--%>
+                        <%--                        </div>--%>
 
-                        <div class="col-sm-12 form-group">
-                            <label>Image</label>
-                            <div class="col-sm-10 pull-right">
-                                <input type="image" class="form-control">
-                            </div>
-                        </div>
+                        <%--                        <div class="col-sm-12 form-group">--%>
+                        <%--                            <label>Image</label>--%>
+                        <%--                            <div class="col-sm-10 pull-right">--%>
+                        <%--                                <input type="image" class="form-control">--%>
+                        <%--                            </div>--%>
+                        <%--                        </div>--%>
 
                         <div class="col-sm-12 form-group">
                             <label>Building Types</label>
                             <form>
                                 <div class="col-sm-10 pull-right">
-                                    <form:checkboxes path="listType" items="${renttype}"
-                                                     itemValue="code" itemLabel="name"/>
+                                    <form:checkboxes path="rentTypes" items="${renttype}"
+                                                     itemValue="code" itemLabel="value"/>
                                 </div>
                             </form>
                         </div>
@@ -295,12 +291,6 @@
         }
     });
 
-    $('#btnResetPassword').click(function (event) {
-        event.preventDefault();
-        $('#loading_image').show();
-        resetPassword($('#userId').val());
-    });
-
     function addBuilding(data) {
         $.ajax({
             url: '${buildingAPI}',
@@ -309,7 +299,7 @@
             data: JSON.stringify(data),
             contentType: "application/json", // define data type for input data server
             success: function (res) {
-               console.log('success');
+                console.log('success');
             },
             error: function (res) {
                 console.log('failed');

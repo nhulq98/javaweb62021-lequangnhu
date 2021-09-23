@@ -40,25 +40,19 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return url;
     }
 
-    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
     public RedirectStrategy getRedirectStrategy() {
         return redirectStrategy;
     }
 
+    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+        this.redirectStrategy = redirectStrategy;
+    }
+
     private boolean isAdmin(List<String> roles) {
-        if (roles.contains(SystemConstant.ADMIN_ROLE)) {
-            return true;
-        }
-        return false;
+        return roles.contains(SystemConstant.ROLE_MANAGER);
     }
 
     private boolean isUser(List<String> roles) {
-        if (roles.contains(SystemConstant.USER_ROLE)) {
-            return true;
-        }
-        return false;
+        return roles.contains(SystemConstant.ROLE_STAFF);
     }
 }

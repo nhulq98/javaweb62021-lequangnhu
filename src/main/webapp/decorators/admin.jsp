@@ -64,24 +64,24 @@
 	<script src="assets/js/jquery-ui.min.js"></script>
 
 	<script type="text/javascript">
-        function showAlertBeforeDelete(callback) {
-            swal({
-                title: "Xác nhận xóa",
-                text: "Bạn có chắc chắn xóa những dòng đã chọn",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Xác nhận",
-                cancelButtonText: "Hủy bỏ",
-                confirmButtonClass: "btn btn-success",
-                cancelButtonClass: "btn btn-danger"
-            }).then(function (res) {
-                if(res.value){
-                    callback();
-                }else if(res.dismiss == 'cancel'){
-                    console.log('cancel');
-                }
-            });
-        }
+		function showAlertBeforeDelete(callback) {
+			swal({
+				title: "Xác nhận xóa",
+				text: "Bạn có chắc chắn xóa những dòng đã chọn",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Xác nhận",
+				cancelButtonText: "Hủy bỏ",
+				confirmButtonClass: "btn btn-success",
+				cancelButtonClass: "btn btn-danger"
+			}).then(function (res) {
+				if (res.value) {
+					callback();
+				} else if (res.dismiss == 'cancel') {
+					console.log('cancel');
+				}
+			});
+		}
 	</script>
 </body>
 </html>

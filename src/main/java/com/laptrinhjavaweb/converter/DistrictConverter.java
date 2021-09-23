@@ -1,30 +1,17 @@
 package com.laptrinhjavaweb.converter;
 
-import com.laptrinhjavaweb.dto.DistrictDTO;
-import com.laptrinhjavaweb.entity.DistrictEntity;
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.laptrinhjavaweb.dto.response.DistrictResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class DistrictConverter {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    public DistrictDTO convertToDTO(DistrictEntity entity) {
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STANDARD)
-                .setSkipNullEnabled(true);
-        DistrictDTO dto = modelMapper.map(entity, DistrictDTO.class);
-        return dto;
+    public DistrictResponse convertMapToResponse(Map<String, Object> map) {
+        ObjectMapper mapper = new ObjectMapper();
+        DistrictResponse result = mapper.convertValue(map, DistrictResponse.class);
+        return result;
     }
-
-    public DistrictEntity convertToEntity(DistrictDTO dto) {
-        DistrictEntity entity = modelMapper.map(dto, DistrictEntity.class);
-        return entity;
-    }
-
 }

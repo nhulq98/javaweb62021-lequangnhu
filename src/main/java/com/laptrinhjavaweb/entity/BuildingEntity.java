@@ -1,145 +1,111 @@
 package com.laptrinhjavaweb.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "building")
 public class BuildingEntity extends BaseEntity {
 
     @Column(name = "name")
     private String name;
-    
-    @Column(name = "numberofbasement")
-    private Integer numberOfBasement;
-	
+
     @Column(name = "street")
     private String street;
 
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
+    //==============================relationship==============================
     @Column(name = "ward")
-	private String ward;
+    private String ward;
+    //@OneToMany //đọc là: @ 1 entity(this class) To many entity(below variable)
+    @OneToMany(mappedBy = "building")
+// @OneToMany thì dùng mappedby = tên đối tượng khai báo bên bảng mà ta liên kết. Ở đây là rentarea
+    private List<RentAreaEntity> rentAreas = new ArrayList<>();// khai báo đối tượng quan hệ
 
-	@Column(name = "districtid")
-	private Long districtId;
+    //========================================================================
 
-//	@ManyToOne
-//	@JoinColumn(name = "districtid", nullable = false)// thông qua khóa ngoại districtid
-//	private DistrictEntity district;
+    @Column(name = "structure")
+    private String structure;
 
-	// @OneToMany đọc là: @ 1 entity(this class) To many entity(below variable)
-//	@OneToMany(mappedBy = "building")// Quan hệ 1-n với đối tượng ở dưới (RentErea) (1 building có nhiều rentErea)
-//	private List<RentEreaEntity> rentEreas = new ArrayList<>();
+    @Column(name = "numberofbasement")
+    private Integer numberOfBasement;
 
     @Column(name = "floorarea")
-    private Long floorArea;
+    private Integer floorArea;
+
+    @Column(name = "direction")
+    private Integer direction;
+
+    @Column(name = "level")
+    private String level;
 
     @Column(name = "rentprice")
-	private Long rentPrice;
+    private Integer rentPrice;
+
+    @Column(name = "rentpricedescription")
+    private String rentPriceDescription;
+
+    @Column(name = "servicefee")
+    private String serviceFee;
+
+    @Column(name = "carfee")
+    private String carFee;
+
+    @Column(name = "motofee")
+    private String motoFee;
+
+    @Column(name = "overtimefee")
+    private String overtimeFee;
+
+    @Column(name = "waterfee")
+    private String waterFee;
+
+    @Column(name = "electricityfee")
+    private String electricityFee;
+
+    @Column(name = "deposit")
+    private String deposit;
+
+    @Column(name = "payment")
+    private String payment;
+
+    @Column(name = "renttime")
+    private String rentTime;
+
+    @Column(name = "decorationtime")
+    private String decorationTime;
+
+    @Column(name = "brokeragefee")
+    private String brokerageFee;
+
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "linkofbuilding")
+    private String linkOfBuilding;
+
+    @Column(name = "map")
+    private String map;
+
+    @Column(name = "avatar")
+    private String avatar;
 
     @Column(name = "managername")
-	private String managerName;
+    private String managerName;
 
     @Column(name = "managerphone")
-	private String managerPhone;
+    private String managerPhone;
 
-	@Column(name = "servicefee")
-	private Integer serviceFee;
+    @Column(name = "type")
+    private String rentType;
 
-	public Integer getServiceFee() {
-		return serviceFee;
-	}
-
-	public void setServiceFee(Integer serviceFee) {
-		this.serviceFee = serviceFee;
-	}
-
-	public Long getFloorArea() {
-		return floorArea;
-	}
-
-	public void setFloorArea(Long floorArea) {
-		this.floorArea = floorArea;
-	}
-
-	public Long getRentPrice() {
-		return rentPrice;
-	}
-
-	public void setRentPrice(Long rentPrice) {
-		this.rentPrice = rentPrice;
-	}
-
-	public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getNumberOfBasement() {
-        return numberOfBasement;
-    }
-
-    public void setNumberOfBasement(Integer numberOfBasement) {
-        this.numberOfBasement = numberOfBasement;
-    }
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getManagerName() {
-		return managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
-
-	public String getManagerPhone() {
-		return managerPhone;
-	}
-
-	public void setManagerPhone(String managerPhone) {
-		this.managerPhone = managerPhone;
-	}
-
-//	public DistrictEntity getDistrict() {
-//		return district;
-//	}
-//
-//	public void setDistrict(DistrictEntity district) {
-//		this.district = district;
-//	}
-
-//	public List<RentEreaEntity> getRentEreas() {
-//		return rentEreas;
-//	}
-//
-//	public void setRentEreas(List<RentEreaEntity> rentEreas) {
-//		this.rentEreas = rentEreas;
-//	}
-
-
-	public Long getDistrictId() {
-		return districtId;
-	}
-
-	public void setDistrictId(Long districtId) {
-		this.districtId = districtId;
-	}
+    @Column(name = "district")
+    private String district;
 }

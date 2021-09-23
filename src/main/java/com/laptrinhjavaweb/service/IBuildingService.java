@@ -1,19 +1,26 @@
 package com.laptrinhjavaweb.service;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.DistrictResponse;
+import com.laptrinhjavaweb.dto.response.TypesResponse;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IBuildingService {
-	Map<String, String> getDistricts();
-	Map<String, String> getBuildingTypes();
-	BuildingDTO save(BuildingDTO newBuilding);
-	List<BuildingResponseDTO> findByCondition(BuildingRequestDTO buildingRequest);
+    //get Data
+    List<DistrictResponse> getDistricts();
 
-	List<BuildingDTO> findAll();
+    List<TypesResponse> getBuildingTypes();
 
-//	List<BuildingDTO> getBuildings();
+    List<BuildingResponse> findByCondition(Map<String, Object> requestParam);
+
+    BuildingDTO getOne(Long id);
+
+    //Change Data
+    BuildingDTO save(BuildingDTO newBuilding);
+
+    void deleteById(Long id);
+    //==============================================
 }

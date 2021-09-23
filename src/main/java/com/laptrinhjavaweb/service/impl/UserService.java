@@ -9,7 +9,6 @@ import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.MyException;
 import com.laptrinhjavaweb.repository.RoleRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
-import com.laptrinhjavaweb.repository.jdbc.impl.UserJDBCImpl;
 import com.laptrinhjavaweb.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserDTO findOneByUserNameAndStatus(String name, int status) {
-        return userConverter.convertToDto(userRepository.findOneByUserNameAndStatus(name, status));
+        return userConverter.convertEntityToDTO(userRepository.findOneByUserNameAndStatus(name, status));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class UserService implements IUserService {
         List<UserEntity> newsEntities = users.getContent();
         List<UserDTO> result = new ArrayList<>();
         for (UserEntity userEntity : newsEntities) {
-            UserDTO userDTO = userConverter.convertToDto(userEntity);
+            UserDTO userDTO = userConverter.convertEntityToDTO(userEntity);
             userDTO.setRoleCode(userEntity.getRoles().get(0).getCode());
             result.add(userDTO);
         }
@@ -76,7 +75,7 @@ public class UserService implements IUserService {
     @Override
     public UserDTO findOneByUserName(String userName) {
         UserEntity userEntity = userRepository.findOneByUserName(userName);
-        UserDTO userDTO = userConverter.convertToDto(userEntity);
+        UserDTO userDTO = userConverter.convertEntityToDTO(userEntity);
         return userDTO;
     }
 
@@ -84,7 +83,7 @@ public class UserService implements IUserService {
     public UserDTO findUserById(long id) {
         UserEntity entity = userRepository.findOne(id);
         List<RoleEntity> roles = entity.getRoles();
-        UserDTO dto = userConverter.convertToDto(entity);
+        UserDTO dto = userConverter.convertEntityToDTO(entity);
         roles.forEach(item -> {
             dto.setRoleCode(item.getCode());
         });
@@ -95,11 +94,11 @@ public class UserService implements IUserService {
     @Transactional
     public UserDTO insert(UserDTO newUser) {
         RoleEntity role = roleRepository.findOneByCode(newUser.getRoleCode());
-        UserEntity userEntity = userConverter.convertToEntity(newUser);
+        UserEntity userEntity = userConverter.convertDTOToEntity(newUser);
         userEntity.setRoles(Stream.of(role).collect(Collectors.toList()));
         userEntity.setStatus(1);
         userEntity.setPassword(passwordEncoder.encode(SystemConstant.PASSWORD_DEFAULT));
-        return userConverter.convertToDto(userRepository.save(userEntity));
+        return userConverter.convertEntityToDTO(userRepository.save(userEntity));
     }
 
     @Override
@@ -107,12 +106,12 @@ public class UserService implements IUserService {
     public UserDTO update(Long id, UserDTO updateUser) {
         RoleEntity role = roleRepository.findOneByCode(updateUser.getRoleCode());
         UserEntity oldUser = userRepository.findOne(id);
-        UserEntity userEntity = userConverter.convertToEntity(updateUser);
+        UserEntity userEntity = userConverter.convertDTOToEntity(updateUser);
         userEntity.setUserName(oldUser.getUserName());
         userEntity.setStatus(oldUser.getStatus());
         userEntity.setRoles(Stream.of(role).collect(Collectors.toList()));
         userEntity.setPassword(oldUser.getPassword());
-        return userConverter.convertToDto(userRepository.save(userEntity));
+        return userConverter.convertEntityToDTO(userRepository.save(userEntity));
     }
 
     @Override
@@ -133,7 +132,7 @@ public class UserService implements IUserService {
     public UserDTO resetPassword(long id) {
         UserEntity userEntity = userRepository.findOne(id);
         userEntity.setPassword(passwordEncoder.encode(SystemConstant.PASSWORD_DEFAULT));
-        return userConverter.convertToDto(userRepository.save(userEntity));
+        return userConverter.convertEntityToDTO(userRepository.save(userEntity));
     }
 
     @Override
@@ -141,7 +140,7 @@ public class UserService implements IUserService {
     public UserDTO updateProfileOfUser(String username, UserDTO updateUser) {
         UserEntity oldUser = userRepository.findOneByUserName(username);
         oldUser.setFullName(updateUser.getFullName());
-        return userConverter.convertToDto(userRepository.save(oldUser));
+        return userConverter.convertEntityToDTO(userRepository.save(oldUser));
     }
 
     @Override
@@ -152,38 +151,5 @@ public class UserService implements IUserService {
             userEntity.setStatus(0);
             userRepository.save(userEntity);
         }
-    }
-
-    @Override
-    public List<UserDTO> getStaffs() {
-        List<UserDTO> result = new ArrayList<>();
-        UserJDBCImpl userJDBC = new UserJDBCImpl();
-        List<UserEntity> entities = userJDBC.getStaffs();
-        for(UserEntity userEntity: entities){
-            UserDTO userDTO = userConverter.convertToDto(userEntity);
-            result.add(userDTO);
-        }
-//        List<UserEntity> entities = userRepository.getStaffs();
-//        for(UserEntity entity: entities){
-//            UserDTO dto = userConverter.convertToDto(entity);
-//            result.add(dto);
-//        }
-
-        return result;
-    }
-
-    @Override
-    public List<UserDTO> getStaffsManagementBuildingById(Long id) {
-        // call db and get data
-        List<UserDTO> result = new ArrayList<>();
-        UserJDBCImpl userJDBC = new UserJDBCImpl();
-        List<UserEntity> entities = userJDBC.findStaffsManagementBuildingById(id);
-        for(UserEntity userEntity: entities){
-            UserDTO userDTO = userConverter.convertToDto(userEntity);
-            userDTO.setChecked("checked");
-            result.add(userDTO);
-        }
-        //convert entity to dto
-        return result;
     }
 }

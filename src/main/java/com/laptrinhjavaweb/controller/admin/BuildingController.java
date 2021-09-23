@@ -1,30 +1,24 @@
 package com.laptrinhjavaweb.controller.admin;
 
+import com.laptrinhjavaweb.api.admin.BuildingAPI;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.DistrictDTO;
-import com.laptrinhjavaweb.dto.RentTypeDTO;
-import com.laptrinhjavaweb.dto.UserDTO;
-import com.laptrinhjavaweb.dto.output.BuildingResponseDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequest;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.service.IBuildingService;
-import com.laptrinhjavaweb.service.IDistrictService;
-import com.laptrinhjavaweb.service.IRentTypeService;
-import com.laptrinhjavaweb.service.IUserService;
-import com.laptrinhjavaweb.service.impl.RentTypeService;
+import com.laptrinhjavaweb.service.impl.AssignmentBuildingService;
 import com.laptrinhjavaweb.utils.MessageUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller(value = "buildingsControllerOfAdmin")
 public class BuildingController {
@@ -33,10 +27,7 @@ public class BuildingController {
     private IBuildingService buildingService;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IDistrictService districtService;
+    private AssignmentBuildingService assignmentBuildingService;
 
     @Autowired
     private BuildingConverter buildingConverter;
@@ -45,76 +36,41 @@ public class BuildingController {
     private MessageUtils messageUtil;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView getAll(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
+    public ModelAndView getAll(@ModelAttribute(SystemConstant.BUILDING_SEARCH_FORM_MODEL) BuildingRequest buildingSearchModel) {
         ModelAndView mav = new ModelAndView("admin/building/list");
+        List<BuildingResponse> result = buildingService.findByCondition(buildingConverter.convertRequestToMap(buildingSearchModel));
+        BuildingAPI buildingAPI = new BuildingAPI();
 
-        List<BuildingDTO> result = new ArrayList<>();
-        List<BuildingResponseDTO> buildingResponseDTOS = buildingService.findByCondition(buildingConverter.convertToRequestDTO(model));
-        for (BuildingResponseDTO responseDTO : buildingResponseDTOS) {
-            result.add(buildingConverter.convertResponseToDTO(responseDTO));
-        }
-        RentTypeService rentTypeService = new RentTypeService();
 
-        // set result to MODEL
-        mav.addObject(SystemConstant.MODEL, model);
-        mav.addObject(SystemConstant.DISTRICT, districtService.findAll());
-        mav.addObject(SystemConstant.STAFF, userService.getStaffs());
-        mav.addObject(SystemConstant.RENT_TYPE, rentTypeService.getRentTypes());
-        model.setListResult(result);// list building result
+        //add model to view
+        mav.addObject(SystemConstant.BUILDING_SEARCH_FORM_MODEL, buildingSearchModel);
+        mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
+        mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
+        mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
 
-//        if (model.getId() != null) {// load page
-//            List<BuildingDTO> result = new ArrayList<>();
-//            List<BuildingResponseDTO> buildingResponseDTOS = buildingService.findByCondition(buildingConverter.convertToRequestDTO(model));
-//            for (BuildingResponseDTO responseDTO : buildingResponseDTOS) {
-//                result.add(buildingConverter.convertResponseToDTO(responseDTO));
-//            }
-//            RentTypeService rentTypeService = new RentTypeService();
-//
-//            // set result to MODEL
-//            mav.addObject(SystemConstant.MODEL, model);
-//            mav.addObject(SystemConstant.DISTRICT, districtService.findAll());
-//            mav.addObject(SystemConstant.STAFF, userService.getStaffs());
-//            mav.addObject(SystemConstant.RENT_TYPE, rentTypeService.getRentTypes());
-//            model.setListResult(result);// list building result
-//        }else{ // load all staff manager building
-//            List<UserDTO> staffsAssignmentBuilding = new ArrayList<>();
-//            List<UserDTO> staffAll = userService.getStaffs();
-//            staffsAssignmentBuilding = userService.getStaffsManagementBuildingById(model.getId());
-//
-//            for(UserDTO userDTO: staffsAssignmentBuilding){
-//                for(int i = 0; i < staffAll.size(); i++){
-//                    if(userDTO.getId() == staffAll.get(i).getId()){
-//                        staffAll.get(i).setChecked("checked");
-//                        break;// exit for outside loop
-//                    }
-//                    staffAll.get(i).setChecked("");
-//                }
-//            }
-//            mav.addObject(SystemConstant.STAFF_BUILDING, staffAll);
-//        }
-
+        //result for search function
+        mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
         return mav;
     }
 
     @RequestMapping(value = "/admin/building-edit", method = RequestMethod.GET)
-    public ModelAndView createNew(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
+    public ModelAndView create(@ModelAttribute(SystemConstant.MODEL) BuildingDTO model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
 
-        RentTypeService rentTypeService = new RentTypeService();
-
-        mav.addObject(SystemConstant.DISTRICT, districtService.findAll());
-        mav.addObject(SystemConstant.MODEL, model);
-        mav.addObject(SystemConstant.RENT_TYPE, rentTypeService.getRentTypes());
+        mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
+        mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
 
         return mav;
     }
 
-    private void initMessageResponse(ModelAndView mav, HttpServletRequest request) {
-        String message = request.getParameter("message");
-        if (message != null && StringUtils.isNotEmpty(message)) {
-            Map<String, String> messageMap = messageUtil.getMessage(message);
-            mav.addObject(SystemConstant.ALERT, messageMap.get(SystemConstant.ALERT));
-            mav.addObject(SystemConstant.MESSAGE_RESPONSE, messageMap.get(SystemConstant.MESSAGE_RESPONSE));
-        }
+    @RequestMapping(value = "/admin/building-edit-{id}", method = RequestMethod.GET)
+    public ModelAndView update(@PathVariable Long id) {
+        ModelAndView mav = new ModelAndView("admin/building/edit");
+        System.out.println("=========ID: " + id + "===============");
+        // get building by Id and return for front-end
+        mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
+        mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
+        mav.addObject(SystemConstant.MODEL, buildingService.getOne(id));
+        return mav;
     }
 }

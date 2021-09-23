@@ -1,26 +1,38 @@
 package com.laptrinhjavaweb.repository.custom;
 
-import com.laptrinhjavaweb.dto.input.BuildingRequestDTO;
+import com.laptrinhjavaweb.builder.BuildingSearch;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BuildingRepositoryCustom {
-    List<BuildingEntity> findAll();
+    // Get data
+    List<BuildingEntity> findByCondition(Map<String, Object> requestParam);
 
-    List<BuildingEntity> findByCondition(BuildingRequestDTO buildingRequestDTO);
+    // Logic
 
-    String buildQueryV2(BuildingRequestDTO buildingRequest);
+    /**
+     * buildQueryForSearchBuilding to concat all clauses to complete sql final
+     *
+     * @param buildingSearch the building from search form
+     * @return sql String final
+     */
+    StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch);
 
-    //Build Clauses
-    String buildJoinSQLClause(BuildingRequestDTO buildingRequest);
-    String buildWhereSQLClause(BuildingRequestDTO buildingRequest);
-    String buildConditionForBuildingType(List<String> buildingType);
-    String buildBetweenStatement(String sqlWhere, Long from, Long to);
+    void buildJoinSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
 
-    // Build condition
-    String checkExistenceOfConditionV2(String prefix, String suffix, Object parameter);
-    String checkExistenceOfJoinSQLClause(String[] joinStr, Object... parameters);
-    boolean isNull(Object value);
-    boolean isBlank(Object value);
+    void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
+
+    StringBuilder createConditionForStringByLike(String fieldName, String value);
+
+    StringBuilder createConditionForNumber(String fieldName, Number value);
+
+    void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql);
+
+    void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql);
+
+    StringBuilder buildBuildingSearchPart1(BuildingSearch buildingSearch);
+
+    StringBuilder buildBuildingSearchPart2(BuildingSearch buildingSearch);
 }

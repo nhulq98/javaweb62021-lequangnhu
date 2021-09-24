@@ -448,7 +448,7 @@ select
 								window.location.href = "<c:url value='/admin/building-list?message=delete_success'/>";
 							},
 							error : function(res) {
-								window.location.href = "<c:url value='/admin/building-list?message=delete_faile'/>";
+								window.location.href = "<c:url value='/admin/building-list?message=delete_failed'/>";
 								console.log("Failed!" + res.toString());
 							}
 						});

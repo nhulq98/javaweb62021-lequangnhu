@@ -43,10 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
                 http.csrf().disable().authorizeRequests()
-                        .antMatchers("/admin/**").hasAnyRole("MANAGER", "STAFF")
+                //authorization for building manage
+                //staff only edit and search building. any else deny all
                         .antMatchers("/api/building/assignmentbuilding").hasRole("MANAGER")
-                        .antMatchers("/api/building/**").hasRole("MANAGER")
-                        .antMatchers("/login", "/resource/**", "/trang-chu", "/api/**").permitAll()
+                        .antMatchers("/api/building/**").hasRole("MANAGER")//delete function
                         .and()
                 .formLogin().loginPage("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll()
                 .loginProcessingUrl("/j_spring_security_check")

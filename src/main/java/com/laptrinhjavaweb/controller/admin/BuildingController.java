@@ -41,7 +41,6 @@ public class BuildingController {
         List<BuildingResponse> result = buildingService.findByCondition(buildingConverter.convertRequestToMap(buildingSearchModel));
         BuildingAPI buildingAPI = new BuildingAPI();
 
-
         //add model to view
         mav.addObject(SystemConstant.BUILDING_SEARCH_FORM_MODEL, buildingSearchModel);
         mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());

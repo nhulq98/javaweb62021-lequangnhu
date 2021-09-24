@@ -391,7 +391,6 @@
                 console.log("Failed!" + res.toString());
             }
         });
-    }
 
     function assignmentForStaffs() {
         var idArray = $('.check-box-element:checkbox:checked').map(function () {
@@ -430,30 +429,32 @@
                 type: 'DELETE',
                 success: function (res) {
                     console.log('success');
+                    window.location.href = "<c:url value='/admin/building-list?message=delete_success'/>";
                 },
                 error: function (res) {
+                    window.location.href = "<c:url value='/admin/building-list?message=delete_faile'/>";
                     console.log("Failed!" + res.toString());
                 }
             });
         });
     }
 
-    function editBuilding(id) {
-        //var object = {"id": id};
-        $.ajax({
-            url: '${buildingEdit}-' + id,
-            type: 'GET',
-            //data: JSON.stringify(object),
-            //contentType: "application/json", // define data type for input data server
-            success: function (res) {
-                console.log('success');
-            },
-            error: function (res) {
-                console.log('failed');
-                console.log(res);
-            }
-        });
-    }
+    <%--function editBuilding(id) {--%>
+    <%--    //var object = {"id": id};--%>
+    <%--    $.ajax({--%>
+    <%--        url: '${buildingEdit}-' + id,--%>
+    <%--        type: 'GET',--%>
+    <%--        //data: JSON.stringify(object),--%>
+    <%--        //contentType: "application/json", // define data type for input data server--%>
+    <%--        success: function (res) {--%>
+    <%--            console.log('success');--%>
+    <%--        },--%>
+    <%--        error: function (res) {--%>
+    <%--            console.log('failed');--%>
+    <%--            console.log(res);--%>
+    <%--        }--%>
+    <%--    });--%>
+    <%--}--%>
 </script>
 <!--END Script dialog -->
 </body>

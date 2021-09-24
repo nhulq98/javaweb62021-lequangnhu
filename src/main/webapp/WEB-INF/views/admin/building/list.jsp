@@ -286,7 +286,7 @@
                                         </button>
                                         <input type="hidden" id="buildingIdCurrent" value="${item.id}"/>
                                         <a class="btn btn-info btn-sm" data-toggle="tooltip" title="Cập nhật tòa nhà"
-                                           href='<c:url value="${buildingEdit}-${item.id}"/>'>
+                                           href='<c:url value="/admin/building-edit-${item.id}"/>'>
                                             <i class="fa fa-pencil-square-o"></i>
                                         </a>
                                         <%--                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"--%>

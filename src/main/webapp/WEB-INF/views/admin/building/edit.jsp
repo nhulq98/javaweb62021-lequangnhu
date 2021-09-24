@@ -300,9 +300,11 @@
             contentType: "application/json", // define data type for input data server
             success: function (res) {
                 console.log('success');
+                window.location.href = "<c:url value='/admin/building-list?message=add_success'/>";
             },
             error: function (res) {
                 console.log('failed');
+                window.location.href = "<c:url value='/admin/building-list?message=add_failed'/>";
                 console.log(res);
             }
         });

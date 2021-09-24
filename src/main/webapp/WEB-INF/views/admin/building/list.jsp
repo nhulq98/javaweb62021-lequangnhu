@@ -391,6 +391,7 @@
                 console.log("Failed!" + res.toString());
             }
         });
+    }
 
     function assignmentForStaffs() {
         var idArray = $('.check-box-element:checkbox:checked').map(function () {

@@ -3,7 +3,6 @@ package com.laptrinhjavaweb.api.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
-import com.laptrinhjavaweb.dto.response.BuildingTypesResponse;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.IBuildingService;
@@ -107,18 +106,6 @@ public class BuildingAPI {
         try {
             assignmentBuildingService.updateAssignment(request);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/buildingtype/{id}")
-    public @ResponseBody
-    ResponseEntity<List<BuildingTypesResponse>> getTypesOfBuilding(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().build();
-            //return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
         } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -25,105 +25,119 @@ import java.util.stream.Collectors;
 @Service // nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất cho nó (singleton)
 public class BuildingService implements IBuildingService {
 
-	@Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
-	private BuildingRepository buildingRepository;
+    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    private BuildingRepository buildingRepository;
 
-	@Autowired
-	private RentAreaRepository rentAreaRepository;
+    @Autowired
+    private RentAreaRepository rentAreaRepository;
 
-	@Autowired
-	IRentAreaService IRentAreaService;
+    @Autowired
+    IRentAreaService IRentAreaService;
 
 
-	@Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
-	private BuildingConverter buildingConverter;
+    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    private BuildingConverter buildingConverter;
 
-	@Override
-	public List<DistrictResponse> getDistricts() {
-		List<DistrictResponse> listDistrict = new ArrayList<>();
-		for (DistrictsEnum item : DistrictsEnum.values()) {
-			DistrictResponse districtResponse = new DistrictResponse();
-			districtResponse.setCode(item.toString());
-			districtResponse.setValue(item.getDistrictValue());
+    @Override
+    public List<DistrictResponse> getDistricts() {
+        List<DistrictResponse> listDistrict = new ArrayList<>();
+        for (DistrictsEnum item : DistrictsEnum.values()) {
+            DistrictResponse districtResponse = new DistrictResponse();
+            districtResponse.setCode(item.toString());
+            districtResponse.setValue(item.getDistrictValue());
 
-			listDistrict.add(districtResponse);
-		}
-		return listDistrict;
-	}
+            listDistrict.add(districtResponse);
+        }
+        return listDistrict;
+    }
 
-	@Override
-	public List<TypesResponse> getBuildingTypes() {
-		List<TypesResponse> listTypes = new ArrayList<>();
-		for (BuildingTypesEnum item : BuildingTypesEnum.values()) {
-			TypesResponse typesResponse = new TypesResponse();
-			typesResponse.setCode(item.toString());
-			typesResponse.setValue(item.getBuildingTypeValue());
+    @Override
+    public List<TypesResponse> getBuildingTypes() {
+        List<TypesResponse> listTypes = new ArrayList<>();
+        for (BuildingTypesEnum item : BuildingTypesEnum.values()) {
+            TypesResponse typesResponse = new TypesResponse();
+            typesResponse.setCode(item.toString());
+            typesResponse.setValue(item.getBuildingTypeValue());
 
-			listTypes.add(typesResponse);
-		}
-		return listTypes;
-	}
+            listTypes.add(typesResponse);
+        }
+        return listTypes;
+    }
 
-	@Override
-	public BuildingDTO getOne(Long id) {
-		try {
-			BuildingEntity entity = buildingRepository.findById(id);
-			return buildingConverter.convertEntityToDTO(entity);
-		} catch (NoSuchElementException e) {
-			return new BuildingDTO();
-		}
-	}
+    @Override
+    public List<TypesResponse> getBuildingTypes(List<String> rentypes) {
+        List<TypesResponse> typeList = getBuildingTypes();
+        if (rentypes == null) return typeList;
+        for (TypesResponse item : typeList) {
 
-	@Override
-	public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
-		//mapper.
-		List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
-		List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
-				.collect(Collectors.toList());
+            for (String item2 : rentypes) {
+                if (item.getCode().equals(item2)) {
+                    item.setChecked("checked");
+                }
+            }
 
-		//List<BuildingResponse> result = new ArrayList<>();
+        }
+        return typeList;
+    }
+
+    @Override
+    public BuildingDTO getOne(Long id) {
+        try {
+            BuildingEntity entity = buildingRepository.findById(id);
+            return buildingConverter.convertEntityToDTO(entity);
+        } catch (NoSuchElementException e) {
+            return new BuildingDTO();
+        }
+    }
+
+    @Override
+    public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
+        //mapper.
+        List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
+        List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
+                .collect(Collectors.toList());
+
+        //List<BuildingResponse> result = new ArrayList<>();
 //		for (BuildingEntity entity : entities) {
 //			BuildingDTO dto = buildingConverter.convertEntityToDTO(entity);
 //			result.add(buildingConverter.convertSpecial(dto, new BuildingResponse()));
 //		}
-		return result;
-	}
+        return result;
+    }
 
-	@Override
-	public void save(BuildingDTO newBuilding) {
-		// save building
-		BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+    @Override
+    public void save(BuildingDTO newBuilding) {
+        // save building
+        BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 
-		// save RentArea
+        // save RentArea
         String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
         String regex = "[0-9]+";
         for (String item : rentAreaStrs) {
             RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if(item.trim().matches(regex)){
+            if (item.trim().matches(regex)) {
                 rentAreaEntity.setValue(Integer.parseInt(item.trim()));
                 rentAreaEntity.setBuilding(entity);
 
-				rentAreaRepository.save(rentAreaEntity);
+                rentAreaRepository.save(rentAreaEntity);
             }
         }
 
-	}
+    }
 
 
+    @Override
+    public void update(BuildingDTO newBuilding) {
+        //update building
+        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 
+        //update rentArea
+        IRentAreaService.updateRentArea(newBuilding);
+    }
 
-	@Override
-	public void update(BuildingDTO newBuilding) {
-		//update building
-		buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-
-		//update rentArea
-		IRentAreaService.updateRentArea(newBuilding);
-	}
-
-	@Override
-	public void deleteById(Long id) {
-		buildingRepository.delete(id);
-	}
+    @Override
+    public void deleteById(Long id) {
+        buildingRepository.delete(id);
+    }
 
 }

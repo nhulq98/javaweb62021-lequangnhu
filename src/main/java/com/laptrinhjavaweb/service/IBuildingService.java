@@ -14,6 +14,8 @@ public interface IBuildingService {
 
     List<TypesResponse> getBuildingTypes();
 
+    List<TypesResponse> getBuildingTypes(List<String> rentypes);
+
     List<BuildingResponse> findByCondition(Map<String, Object> requestParam);
 
     BuildingDTO getOne(Long id);

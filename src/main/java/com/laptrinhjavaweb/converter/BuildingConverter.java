@@ -10,8 +10,10 @@ import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 //@Qualifier("BuildingConverter") ==> the same with component("BuildingConverter")
@@ -30,6 +32,9 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
             rentAreaStrs.add(String.valueOf(item.getValue()));
         }
         dto.setRentAreas(String.join(", ", rentAreaStrs));
+        String[] types = entity.getRentType().split(",");
+
+        dto.setRentTypes(Arrays.stream(types).collect(Collectors.toList()));
 
         return dto;
     }
@@ -37,7 +42,8 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
     @Override
     public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) {
         BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
-
+        List<String> typeList = buildingDTO.getRentTypes();
+        entity.setRentType(typeList.stream().map(item -> item).collect(Collectors.joining(",")));
         return entity;
     }
 

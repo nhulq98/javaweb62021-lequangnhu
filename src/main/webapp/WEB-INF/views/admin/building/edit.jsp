@@ -253,11 +253,21 @@
                             <label>Building Types</label>
                             <form>
                                 <div class="col-sm-10 pull-right">
-                                    <%--<c:forEach var="item" items="model">--%>
-                                        <%----%>
-                                    <%--</c:forEach> --%>
-                                    <form:checkboxes path="rentTypes" items="${renttype}"
-                                                     itemValue="code" itemLabel="value" />
+                                    <c:if test="${model.id != null}">
+                                        <c:forEach var="item" items="${renttypeedit}">
+                                            <input class="checkboxclass" type="checkbox" name="${item.value}" value="${item.code}" ${item.checked}>
+                                            <label>${item.value}</label>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${model.id == null}">
+                                        <c:forEach var="item" items="${renttype}">
+                                            <input class="checkboxclass" type="checkbox" name="${item.value}" value="${item.code}">
+                                            <label>${item.value}</label>
+                                        </c:forEach>
+                                    </c:if>
+                                        <%--<form:checkboxes path="rentTypes2" items="${renttype}"--%>
+                                        <%--itemValue="code" itemLabel="value" />--%>
+
                                 </div>
                             </form>
                         </div>
@@ -285,25 +295,31 @@
     </div>
 </div>
 <script>
+    //loadBuildingType();
     function loadBuildingType(){
         var buildingId = $('#buildingId').val();
         if (buildingId != "") {//update
             //get BuildingTypes
             $.ajax({
-                url: '${buildingAPI}',
-                type: 'POST',
+                url: '/building/api/buildingtype/{id}',
+                type: 'GET',
                 dataType: "json", // define data type for output data from server
                 data: JSON.stringify(data),
                 contentType: "application/json", // define data type for input data server
                 success: function (res) {
-                    console.log('success');
-                    window.location.href = "<c:url value='/admin/building-list?message=add_success'/>";
+                    $.each(res, function(index, item) {
+                        row += '<input type="checkbox" name="checkList" value=' + item.id + ' id="checkbox_' + item.id + '" class="check-box-element"' + item.checked + '/>';
+                    });
+                    $('#typeList').html(row);
                 },
                 error: function (res) {
                     console.log('failed');
-                    window.location.href = "<c:url value='/admin/building-list?message=add_failed'/>";
                     console.log(res);
                 }
+            });
+        }else{
+            $.each(res, function(index, item) {
+                row += '<td class="text-center"> <input type="checkbox" name="checkList" value=' + item.id + ' id="checkbox_' + item.id + '" class="check-box-element"' + item.checked + '/></td>';
             });
         }
     }
@@ -316,6 +332,11 @@
         $.each(formData, function (i, v) {
             data["" + v.name + ""] = v.value;
         });
+        var SlectedList = new Array();
+        $('input[class="checkboxclass"]:checked').each(function() {
+            SlectedList.push(this.value);
+        });
+        data["rentTypes"] = SlectedList;
         if ($('#buildingId').val() != "") {//update
             var buildingId = $('#buildingId').val();
             data["id"] = buildingId;

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class TypesResponse {
     private String code;
     private String value;
+    private String checked = "";
 }

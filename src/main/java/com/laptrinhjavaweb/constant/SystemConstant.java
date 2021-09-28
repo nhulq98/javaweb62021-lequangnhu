@@ -16,6 +16,7 @@ public class SystemConstant {
     public static final String STAFF = "staff";
     public static final String STAFF_BUILDING = "staffbuilding";
     public static final String RENT_TYPE = "renttype";
+    public static final String RENT_TYPE_EDIT = "renttypeedit";
     public static final String INSERT_SUCCESS = "insert_success";
     public static final String UPDATE_SUCCESS = "update_success";
     public static final String DELETE_SUCCESS = "delete_success";

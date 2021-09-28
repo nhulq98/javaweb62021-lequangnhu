@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.TypesResponse;
 import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.impl.AssignmentBuildingService;
 import com.laptrinhjavaweb.utils.MessageUtils;
@@ -65,11 +66,15 @@ public class BuildingController {
     @RequestMapping(value = "/admin/building-edit-{id}", method = RequestMethod.GET)
     public ModelAndView update(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
-        System.out.println("=========ID: " + id + "===============");
+        BuildingDTO dto = buildingService.getOne(id);
         // get building by Id and return for front-end
         mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
-        mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
-        mav.addObject(SystemConstant.MODEL, buildingService.getOne(id));
+
+        List<TypesResponse> types = buildingService.getBuildingTypes(dto.getRentTypes());
+        //send checked
+        mav.addObject(SystemConstant.RENT_TYPE_EDIT, types);
+
+        mav.addObject(SystemConstant.MODEL, dto);
         return mav;
     }
 }

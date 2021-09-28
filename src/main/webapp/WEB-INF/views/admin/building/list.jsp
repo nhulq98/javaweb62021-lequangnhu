@@ -387,10 +387,7 @@ select
 						//contentType: "text/plain", // define data type for input data server
 						success : function(res) {
 							var row = '';
-							$
-									.each(
-											res,
-											function(index, item) {
+							$.each(res, function(index, item) {
 												row += '<tr>';
 												row += '<td class="text-center"> <input type="checkbox" name="checkList" value=' + item.id + ' id="checkbox_' + item.id + '" class="check-box-element"' + item.checked + '/></td>';
 												row += '<td class="text-center">'

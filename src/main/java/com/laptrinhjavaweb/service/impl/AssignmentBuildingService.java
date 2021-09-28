@@ -146,7 +146,9 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 		saveAssignmentStaffs(staffsFromRequest);
 
 		/*
-		 * Mong muốn cải thiện: dùng 1 vòng lặp lặp qua 2 list số nguyên và tìm xóa được
+		 * Mong muốn cải thiện: chỉ dùng 1 vòng lặp để xử lý bài toán
+		 *
+		 * cùng lúc lặp qua 2 list số nguyên và tìm xóa được
 		 * các tu trùng nhau bỏ 2 ds vào 1 mảng kiểm tra nếu 2ptu liên tiếp == nhau thì
 		 * ta bỏ vào 1 mảng trùng. chạy qua mảng trùng và xóa cùng lúc các phần tử trong
 		 * cả 2 danh sách

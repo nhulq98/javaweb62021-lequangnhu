@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.api.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.BuildingTypesResponse;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.IBuildingService;
@@ -69,7 +70,8 @@ public class BuildingAPI {
     @PostMapping
     public ResponseEntity<BuildingDTO> createBuilding(@RequestBody BuildingDTO newBuilding) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(buildingService.save(newBuilding));
+            buildingService.save(newBuilding);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -88,11 +90,12 @@ public class BuildingAPI {
     }
 
     @PutMapping("/{id}")
-    public @ResponseBody
-    ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@PathVariable Long id) {
+    public
+    ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@RequestBody BuildingDTO dto) {
         try {
-            //buildingService.(id);
+            buildingService.update(dto);
             return ResponseEntity.status(HttpStatus.OK).build();
+
         } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -104,6 +107,18 @@ public class BuildingAPI {
         try {
             assignmentBuildingService.updateAssignment(request);
             return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/buildingtype/{id}")
+    public @ResponseBody
+    ResponseEntity<List<BuildingTypesResponse>> getTypesOfBuilding(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().build();
+            //return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
         } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

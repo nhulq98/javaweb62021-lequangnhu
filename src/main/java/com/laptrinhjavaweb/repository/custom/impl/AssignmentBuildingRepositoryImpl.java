@@ -27,19 +27,19 @@ public class AssignmentBuildingRepositoryImpl implements AssignmentBuildingRepos
 	@Override
 	public List<StaffEntity> findAllCustom(Long buildingId) {
 		StringBuilder sql = new StringBuilder("SELECT US.id, US.fullname, US.createdby, US.createddate, US.modifiedby, US.modifieddate")
-				.append(",(case ")
-				.append(" WHEN USR.userid in ")
-				.append(" (select ASB.staffid ")
-				.append(" FROM assignmentbuilding ASB ")
-				.append(" WHERE ASB.buildingid = " + buildingId)
-				.append(") THEN 'checked' ")
-				.append(" ELSE 'NULL' ")
-				.append(" END) AS checked ") 
-				.append(" FROM user US, user_role USR ")
-				.append(" WHERE US.id = USR.userid ")
-				.append(" AND USR.roleid = 2 -- role staff (default)");
-		
-		Query query = entityManager.createNativeQuery(sql.toString(), StaffEntity.class);
+			.append(",(case ")
+			.append(" WHEN USR.userid in ")
+			.append(" (select ASB.staffid ")
+			.append(" FROM assignmentbuilding ASB ")
+			.append(" WHERE ASB.buildingid = " + buildingId)
+			.append(") THEN 'checked' ")
+			.append(" ELSE 'NULL' ")
+			.append(" END) AS checked ")
+			.append(" FROM user US, user_role USR ")
+			.append(" WHERE US.id = USR.userid ")
+			.append(" AND USR.roleid = 2 -- role staff (default)");
+
+	Query query = entityManager.createNativeQuery(sql.toString(), StaffEntity.class);
         return query.getResultList();
-	}
+}
 }

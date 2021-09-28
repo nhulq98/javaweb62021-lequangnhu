@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // set nếu đang nhập rồi mới được vô các url khác
                 http.csrf().disable().authorizeRequests()
                 //authorization for building manage
                 //staff only edit and search building. any else deny all

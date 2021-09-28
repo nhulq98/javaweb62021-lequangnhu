@@ -38,16 +38,6 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
     public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) {
         BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
 
-        // convert rentAreaStrs to List<RentAreaEntity>
-        String[] rentAreaStrs = buildingDTO.getRentAreas().split(",");
-        List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
-        for (String item : rentAreaStrs) {
-            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            rentAreaEntity.setValue(Integer.parseInt(item));
-            rentAreaEntities.add(rentAreaEntity);
-        }
-        entity.setRentAreas(rentAreaEntities);
-
         return entity;
     }
 

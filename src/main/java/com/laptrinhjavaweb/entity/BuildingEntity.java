@@ -19,11 +19,12 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "street")
     private String street;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
-    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
-    //==============================relationship==============================
     @Column(name = "ward")
     private String ward;
+    //==============================relationship==============================
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
+
     //@OneToMany //đọc là: @ 1 entity(this class) To many entity(below variable)
     @OneToMany(mappedBy = "building")
 // @OneToMany thì dùng mappedby = tên đối tượng khai báo bên bảng mà ta liên kết. Ở đây là rentarea

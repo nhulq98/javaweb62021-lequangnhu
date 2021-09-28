@@ -19,7 +19,11 @@ public interface IBuildingService {
     BuildingDTO getOne(Long id);
 
     //Change Data
-    BuildingDTO save(BuildingDTO newBuilding);
+    void save(BuildingDTO newBuilding);
+
+    void update(BuildingDTO newBuilding);
+
+
 
     void deleteById(Long id);
     //==============================================

@@ -1,16 +1,18 @@
 package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.converter.BuildingConverter;
-import com.laptrinhjavaweb.converter.DistrictConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.dto.response.DistrictResponse;
 import com.laptrinhjavaweb.dto.response.TypesResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
+import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
+import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
+import com.laptrinhjavaweb.service.IRentAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +28,15 @@ public class BuildingService implements IBuildingService {
 	@Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
 	private BuildingRepository buildingRepository;
 
-	@Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
-	private BuildingConverter buildingConverter;
+	@Autowired
+	private RentAreaRepository rentAreaRepository;
 
 	@Autowired
-	private DistrictConverter districtConverter;
+	IRentAreaService IRentAreaService;
+
+
+	@Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+	private BuildingConverter buildingConverter;
 
 	@Override
 	public List<DistrictResponse> getDistricts() {
@@ -84,12 +90,35 @@ public class BuildingService implements IBuildingService {
 	}
 
 	@Override
-	public BuildingDTO save(BuildingDTO newBuilding) {
-		return buildingConverter.convertEntityToDTO(
-				buildingRepository.save(
-						buildingConverter.convertSpecial(newBuilding, new BuildingEntity())
-				)
-		);
+	public void save(BuildingDTO newBuilding) {
+		// save building
+		BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+
+		// save RentArea
+        String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
+        String regex = "[0-9]+";
+        for (String item : rentAreaStrs) {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            if(item.trim().matches(regex)){
+                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
+                rentAreaEntity.setBuilding(entity);
+
+				rentAreaRepository.save(rentAreaEntity);
+            }
+        }
+
+	}
+
+
+
+
+	@Override
+	public void update(BuildingDTO newBuilding) {
+		//update building
+		buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+
+		//update rentArea
+		IRentAreaService.updateRentArea(newBuilding);
 	}
 
 	@Override

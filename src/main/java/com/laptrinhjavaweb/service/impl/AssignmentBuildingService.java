@@ -157,7 +157,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 	@Transactional
 	public void deleteAssignmentStaffs(List<AssignmentBuildingEntity> entities) {
 		for (AssignmentBuildingEntity entity : entities) {
-			assignmentBuildingRepository.delete(entity);
+			assignmentBuildingRepository.delete(entity.getId());
 		}
 	}
 

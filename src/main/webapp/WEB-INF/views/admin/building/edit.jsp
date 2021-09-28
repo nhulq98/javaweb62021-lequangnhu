@@ -243,11 +243,21 @@
                         <%--                        </div>--%>
 
                         <div class="col-sm-12 form-group">
+                            <label>Rent Area</label>
+                            <div class="col-sm-10 pull-right">
+                                <form:input type="text" class="form-control" path="rentAreas"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 form-group">
                             <label>Building Types</label>
                             <form>
                                 <div class="col-sm-10 pull-right">
+                                    <%--<c:forEach var="item" items="model">--%>
+                                        <%----%>
+                                    <%--</c:forEach> --%>
                                     <form:checkboxes path="rentTypes" items="${renttype}"
-                                                     itemValue="code" itemLabel="value"/>
+                                                     itemValue="code" itemLabel="value" />
                                 </div>
                             </form>
                         </div>
@@ -275,6 +285,30 @@
     </div>
 </div>
 <script>
+    function loadBuildingType(){
+        var buildingId = $('#buildingId').val();
+        if (buildingId != "") {//update
+            //get BuildingTypes
+            $.ajax({
+                url: '${buildingAPI}',
+                type: 'POST',
+                dataType: "json", // define data type for output data from server
+                data: JSON.stringify(data),
+                contentType: "application/json", // define data type for input data server
+                success: function (res) {
+                    console.log('success');
+                    window.location.href = "<c:url value='/admin/building-list?message=add_success'/>";
+                },
+                error: function (res) {
+                    console.log('failed');
+                    window.location.href = "<c:url value='/admin/building-list?message=add_failed'/>";
+                    console.log(res);
+                }
+            });
+        }
+    }
+
+
     $("#btnAddOrUpdateBuildings").click(function (event) {
         event.preventDefault();
         var formData = $("#formEdit").serializeArray();
@@ -284,7 +318,8 @@
         });
         if ($('#buildingId').val() != "") {//update
             var buildingId = $('#buildingId').val();
-            //updateUser(data, $('#buildingId').val());
+            data["id"] = buildingId;
+            updateBuilding(data, buildingId);
         } else {//add
             $('#loading_image').show();
             addBuilding(data);
@@ -318,10 +353,12 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (res) {
+                window.location.href = "<c:url value='/admin/building-list?message=edit_success'/>";
                 console.log('success');
             },
             error: function (res) {
                 console.log('failed');
+                window.location.href = "<c:url value='/admin/building-list?message=edit_failed'/>";
                 console.log(res);
             }
         });

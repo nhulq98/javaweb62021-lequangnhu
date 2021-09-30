@@ -96,7 +96,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 			entity.setBuilding(buildingEntity);
 
 			result.add(entity);
-			// result.add(assignmentBuildingRepository.findByStaffId(item));
 		}
 
 		return result;
@@ -159,7 +158,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 	}
 
 	@Override
-	@Transactional
 	public void deleteAssignmentStaffs(List<AssignmentBuildingEntity> entities) {
 		for (AssignmentBuildingEntity entity : entities) {
 			assignmentBuildingRepository.delete(entity.getId());
@@ -167,10 +165,9 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 	}
 
 	@Override
-	@Transactional
 	public void saveAssignmentStaffs(List<AssignmentBuildingEntity> entities) {
 		if (entities.size() > 0) {
-			// entities.stream().map(item -> assignmentBuildingRepository.save(item)).;
+			//entities.stream().map(item2 -> assignmentBuildingRepository.save(item2)).;
 			for (AssignmentBuildingEntity item : entities) {
 				assignmentBuildingRepository.save(item);
 			}

@@ -9,6 +9,7 @@ import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,13 +38,8 @@ public class BuildingAPI {
     public @ResponseBody
     ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
                                                            @RequestParam(value = "listType", required = false) List<String> listType) {
-        try {
-            requestParam.put("buildingTypes", listType);
-            return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        requestParam.put("buildingTypes", listType);
+        return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
     }
 
     /**
@@ -56,58 +52,44 @@ public class BuildingAPI {
     @GetMapping("/{id}/staffs")
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
+
     }
 
     //SCOPE FOR CHANGE DATA
 
     @PostMapping
     public ResponseEntity<BuildingDTO> createBuilding(@RequestBody BuildingDTO newBuilding) {
-        try {
-            buildingService.save(newBuilding);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+
+        buildingService.save(newBuilding);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
     @DeleteMapping("/{id}")
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> deleteBuilding(@PathVariable Long id) {
-        try {
-            buildingService.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
+        buildingService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
     @PutMapping("/{id}")
-    public
-    ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@RequestBody BuildingDTO dto) {
-        try {
-            buildingService.update(dto);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@RequestBody BuildingDTO dto) {
+
+        buildingService.update(dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
     @PostMapping("/assignmentbuilding")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffBuildingRequest request) {
-        try {
-            assignmentBuildingService.updateAssignment(request);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
+        assignmentBuildingService.updateAssignment(request);
+        return ResponseEntity.ok().build();
+
     }
 }

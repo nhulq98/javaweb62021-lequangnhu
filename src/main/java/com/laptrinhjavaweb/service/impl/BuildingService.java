@@ -96,11 +96,6 @@ public class BuildingService implements IBuildingService {
         List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
                 .collect(Collectors.toList());
 
-        //List<BuildingResponse> result = new ArrayList<>();
-//		for (BuildingEntity entity : entities) {
-//			BuildingDTO dto = buildingConverter.convertEntityToDTO(entity);
-//			result.add(buildingConverter.convertSpecial(dto, new BuildingResponse()));
-//		}
         return result;
     }
 

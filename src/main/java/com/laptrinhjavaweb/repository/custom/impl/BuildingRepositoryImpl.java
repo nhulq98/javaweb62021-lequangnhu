@@ -123,7 +123,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         } else if (temp == false) {//case 3: User Logged has role: MANAGER
             sql.append(" WHERE 1=1 ");
         }
-        //===========================================================
+        //==========================END authorization when search building=================================
 
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);

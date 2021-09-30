@@ -7,7 +7,6 @@ import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.service.IRentAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,39 +34,28 @@ public class RentAreaService implements IRentAreaService {
      * @param newBuilding
      */
     @Override
-    @Transactional
     public void updateRentArea(BuildingDTO newBuilding) {
 
-        // B1: get List1 rentArea of this building from database
+        // B1: get List1 rentAreaEntity of this building from database
         List<RentAreaEntity> rentAreaOfBuildingFromDB = rentAreaRepository.findAllByBuildingId(newBuilding.getId());
 
-        // B2: get List2 rentArea is sent from front-end
-        List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
-        String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
-        String regex = "[0-9]+";
-        for (String item : rentAreaStrs) {
-            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if(item.trim().matches(regex)){// is number
-                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
-                rentAreaEntity.setBuilding(buildingConverter.convertDTOToEntity(newBuilding));
-
-                rentAreaFromRequest.add(rentAreaEntity);
-            }
-        }
+        // B2: get List2 rentAreaEntity is sent from front-end
+        List<RentAreaEntity> rentAreaFromRequest = loadRentAreaFromRequest(newBuilding.getRentAreas(), newBuilding);
 
         // Step1: find element duplicate and remove it
 		for (int i = 0; i < rentAreaOfBuildingFromDB.size(); i++) {
-			for (int j = 0; j < rentAreaFromRequest.size(); j++) {
-				if (rentAreaOfBuildingFromDB.get(i).getValue()
-						 == rentAreaFromRequest.get(j).getValue()) {
+            for (int j = 0; j < rentAreaFromRequest.size(); j++) {
+                if (rentAreaOfBuildingFromDB.get(i).getValue()
+                        == rentAreaFromRequest.get(j).getValue()) {
                     rentAreaOfBuildingFromDB.remove(i);
                     rentAreaFromRequest.remove(j);
-					i--;
-					break;
-				}
-			}
-		}
+                    i--;
+                    break;
+                }
+            }
+        }
 
+        // step 2,3:
 		deleteRentAreas(rentAreaOfBuildingFromDB);
 		saveRentAreas(rentAreaFromRequest);
     }
@@ -84,5 +72,22 @@ public class RentAreaService implements IRentAreaService {
         for(RentAreaEntity item: rentAreaEntities){
             rentAreaRepository.save(item);
         }
+    }
+
+    @Override
+    public List<RentAreaEntity> loadRentAreaFromRequest(String rentAreas, BuildingDTO newBuilding) {
+        List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
+        String[] rentAreaStrs = rentAreas.split(",");
+        String regex = "[0-9]+";
+        for (String item : rentAreaStrs) {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            if(item.trim().matches(regex)){// is number
+                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
+                rentAreaEntity.setBuilding(buildingConverter.convertDTOToEntity(newBuilding));
+
+                rentAreaFromRequest.add(rentAreaEntity);
+            }
+        }
+        return rentAreaFromRequest;
     }
 }

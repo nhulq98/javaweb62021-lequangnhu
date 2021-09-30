@@ -71,7 +71,7 @@ public class BuildingAPI {
         try {
             buildingService.save(newBuilding);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -94,7 +94,6 @@ public class BuildingAPI {
         try {
             buildingService.update(dto);
             return ResponseEntity.status(HttpStatus.OK).build();
-
         } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -9,7 +9,6 @@ import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,28 +21,33 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
     @Override
     public BuildingDTO convertEntityToDTO(BuildingEntity entity) {
         BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
+        try {
+            dto.setAddress(entity.getStreet() + ", " + entity.getWard() + ", " + DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue());
 
-        dto.setAddress(entity.getStreet() + ", " + entity.getWard() + ", " + DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue());
+            // Convert from List<RentAreaEntity> to rentAreaStrs with format: 200,300,400...
+            List<RentAreaEntity> rentAreas = entity.getRentAreas();
+            List<String> rentAreaStrs = rentAreas.stream().
+                    map(item -> String.valueOf(item.getValue())).collect(Collectors.toList());
+            dto.setRentAreas(String.join(", ", rentAreaStrs));
 
-        // convert List<RentAreaEntity> to rentAreaStrs with format: 200,300,400...
-        List<RentAreaEntity> rentAreas = entity.getRentAreas();
-        List<String> rentAreaStrs = new ArrayList<>();
-        for (RentAreaEntity item : rentAreas) {
-            rentAreaStrs.add(String.valueOf(item.getValue()));
+            //Convert from rentType(String) with format: TANG_TRET,NGUYEN_CAN become to List<String>
+            if (entity.getRentType() == null) {
+                throw new NullPointerException("Rentype of buildingName: "+entity.getName()+" is Null, please check it!");
+            }
+            List<String> types = Arrays.stream(entity.getRentType().split(",")).collect(Collectors.toList());
+            dto.setRentTypes(types);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
-        dto.setRentAreas(String.join(", ", rentAreaStrs));
-        String[] types = entity.getRentType().split(",");
-
-        dto.setRentTypes(Arrays.stream(types).collect(Collectors.toList()));
 
         return dto;
     }
 
     @Override
-    public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) {
+    public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) throws RuntimeException {
         BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
         List<String> typeList = buildingDTO.getRentTypes();
-        entity.setRentType(typeList.stream().map(item -> item).collect(Collectors.joining(",")));
+        entity.setRentType(typeList.stream().collect(Collectors.joining(",")));
         return entity;
     }
 

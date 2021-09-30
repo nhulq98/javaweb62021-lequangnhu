@@ -15,11 +15,11 @@ import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.IRentAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service // nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất cho nó (singleton)
@@ -69,7 +69,6 @@ public class BuildingService implements IBuildingService {
         List<TypesResponse> typeList = getBuildingTypes();
         if (rentypes == null) return typeList;
         for (TypesResponse item : typeList) {
-
             for (String item2 : rentypes) {
                 if (item.getCode().equals(item2)) {
                     item.setChecked("checked");
@@ -85,7 +84,7 @@ public class BuildingService implements IBuildingService {
         try {
             BuildingEntity entity = buildingRepository.findById(id);
             return buildingConverter.convertEntityToDTO(entity);
-        } catch (NoSuchElementException e) {
+        } catch (RuntimeException e) {
             return new BuildingDTO();
         }
     }
@@ -127,6 +126,7 @@ public class BuildingService implements IBuildingService {
 
 
     @Override
+    @Transactional
     public void update(BuildingDTO newBuilding) {
         //update building
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));

@@ -1,6 +1,5 @@
 package com.laptrinhjavaweb.service.impl;
 
-import com.laptrinhjavaweb.converter.AssignmentBuildingConverter;
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
@@ -28,9 +27,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private AssignmentBuildingConverter converter;
-
+    @Override
     public List<StaffBuildingResponse> findAllStaff() {
         List<UserEntity> entities = userRepository.getStaffs();
         List<StaffBuildingResponse> result = new ArrayList<>();

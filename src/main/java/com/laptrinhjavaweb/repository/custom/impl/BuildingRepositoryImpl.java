@@ -83,33 +83,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      */
     @Override
     public void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
-        // This code below to process authorization when user logged search
-        /* Has 3 Case:
-        case 1: current user has role is staff ==> search by userID(current user)
-        case 2: current user has role is manager ==> search normal(not by userID(current user))
-        case 3: if current user has role is manager and it's searching by staffId ==> search by staffID
-        */
-        boolean temp = false; // user Logged has role: MANAGER
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetail userDetails = (MyUserDetail) authentication.getPrincipal();
-        //case 1:
-        for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
-            if (grantedAuthority.getAuthority().contains(SystemConstant.ROLE_STAFF)) {// default: search value follow by current logged user
-                sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-                sql.append(" WHERE 1=1 ");
-                sql.append(" AND ASB.staffid =" + userDetails.getId());
-                temp = true; // user Logged has role: STAFF
-            }
-        }
-        //case 2:
-        if (temp == false && buildingSearch.getStaffId() != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
-            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-            sql.append(" WHERE 1=1 ");
-        } else if (temp == false) {//case 3: User Logged has role: MANAGER
-            sql.append(" WHERE 1=1 ");
-        }
-        //==========================END authorization when search building=================================
-
+        authorization(sql, buildingSearch.getStaffId());
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);
         buildConditionForBuildingType(buildingSearch, sql);
@@ -136,6 +110,39 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 }
 
             }
+        }
+    }
+
+    /**
+     * // This code below to process authorization when user logged search
+     * Has 3 Case:
+     *    case 1: current user has role is staff ==> search by userID(current user)
+     *    case 2: current user has role is manager ==> search normal(not by userID(current user))
+     *    case 3: if current user has role is manager and it's searching by staffId ==> search by staffID
+     *
+     * @param sql
+     * @param staffId
+     */
+    public void authorization(StringBuilder sql, Long staffId){
+
+        boolean temp = false; // user Logged has role: MANAGER
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetail userDetails = (MyUserDetail) authentication.getPrincipal();
+        //case 1:
+        for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
+            if (grantedAuthority.getAuthority().contains(SystemConstant.ROLE_STAFF)) {// default: search value follow by current logged user
+                sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
+                sql.append(" WHERE 1=1 ");
+                sql.append(" AND ASB.staffid =" + userDetails.getId());
+                temp = true; // user Logged has role: STAFF
+            }
+        }
+        //case 2:
+        if (temp == false && staffId != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
+            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
+            sql.append(" WHERE 1=1 ");
+        } else if (temp == false) {//case 3: User Logged has role: MANAGER
+            sql.append(" WHERE 1=1 ");
         }
     }
 

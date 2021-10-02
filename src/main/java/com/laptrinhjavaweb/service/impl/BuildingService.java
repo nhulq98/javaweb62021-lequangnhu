@@ -119,7 +119,6 @@ public class BuildingService implements IBuildingService {
 
     }
 
-
     @Override
     @Transactional
     public void update(BuildingDTO newBuilding) {

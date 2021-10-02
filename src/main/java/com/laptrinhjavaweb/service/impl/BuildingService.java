@@ -134,5 +134,4 @@ public class BuildingService implements IBuildingService {
     public void deleteById(Long id) {
         buildingRepository.delete(id);
     }
-
 }

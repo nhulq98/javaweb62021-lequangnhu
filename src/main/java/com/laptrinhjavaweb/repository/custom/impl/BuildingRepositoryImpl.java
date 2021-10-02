@@ -35,7 +35,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     public List<BuildingEntity> findByCondition(Map<String, Object> requestParam) {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
-        System.out.println(sql.toString());
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
     }
@@ -51,7 +50,9 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         //SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
         StringBuilder sql = new StringBuilder("SELECT BD.*")
                 .append(" FROM building BD ");
-        this.buildJoinSQLClause(buildingSearch, sql);
+        if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
+            sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
+        }
         this.buildWhereSQLClause(buildingSearch, sql);
         sql.append(" GROUP BY BD.id ");
         return sql;
@@ -72,22 +73,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @Override
     public StringBuilder buildBuildingSearchPart2(BuildingSearch buildingSearch) {
         return null;
-    }
-
-    /**
-     * Add join statment if it exists
-     *
-     * @param buildingSearch
-     * @return join statement String
-     */
-    @Override
-    public void buildJoinSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
-//        if (buildingSearch.getStaffId() != null) {
-//            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-//        }
-        if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
-            sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
-        }
     }
 
     /**

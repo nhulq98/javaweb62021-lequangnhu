@@ -68,6 +68,7 @@ public class BuildingAPI {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> deleteBuilding(@PathVariable Long id) {
 

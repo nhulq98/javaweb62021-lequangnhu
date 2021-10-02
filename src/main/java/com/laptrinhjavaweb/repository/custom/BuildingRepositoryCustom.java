@@ -20,7 +20,7 @@ public interface BuildingRepositoryCustom {
      */
     StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch);
 
-    void buildJoinSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
+    //void buildJoinSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
 
     void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
 

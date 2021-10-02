@@ -36,42 +36,26 @@ public class RentAreaService implements IRentAreaService {
     @Override
     public void updateRentArea(BuildingDTO newBuilding) {
 
-        // B1: get List1 rentAreaEntity of this building from database
-        List<RentAreaEntity> rentAreaOfBuildingFromDB = rentAreaRepository.findAllByBuildingId(newBuilding.getId());
+        List<RentAreaEntity> rentAreasOld = rentAreaRepository.findAllByBuildingId(newBuilding.getId());
+        List<RentAreaEntity> rentAreaFromView = loadRentAreaFromRequest(newBuilding.getRentAreas(), newBuilding);
 
-        // B2: get List2 rentAreaEntity is sent from front-end
-        List<RentAreaEntity> rentAreaFromRequest = loadRentAreaFromRequest(newBuilding.getRentAreas(), newBuilding);
+        if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return;}
+        if(rentAreasOld.size() == 0 && rentAreaFromView.size() != 0){rentAreaRepository.save(rentAreaFromView); return;}
+        if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){rentAreaRepository.delete(rentAreasOld);; return;}
 
-        // Step1: find element duplicate and remove it
-		for (int i = 0; i < rentAreaOfBuildingFromDB.size(); i++) {
-            for (int j = 0; j < rentAreaFromRequest.size(); j++) {
-                if (rentAreaOfBuildingFromDB.get(i).getValue()
-                        == rentAreaFromRequest.get(j).getValue()) {
-                    rentAreaOfBuildingFromDB.remove(i);
-                    rentAreaFromRequest.remove(j);
+        for (int i = 0; i < rentAreasOld.size(); i++) {
+            for (int j = 0; j < rentAreaFromView.size(); j++) {
+                if (rentAreasOld.get(i).getValue()
+                        == rentAreaFromView.get(j).getValue()) {
+                    rentAreasOld.remove(i);
+                    rentAreaFromView.remove(j);
                     i--;
                     break;
                 }
             }
         }
-
-        // step 2,3:
-		deleteRentAreas(rentAreaOfBuildingFromDB);
-		saveRentAreas(rentAreaFromRequest);
-    }
-
-    @Override
-    public void deleteRentAreas(List<RentAreaEntity> rentAreaEntities){
-        for(RentAreaEntity item: rentAreaEntities){
-            rentAreaRepository.delete(item.getId());
-        }
-    }
-
-    @Override
-    public void saveRentAreas (List<RentAreaEntity> rentAreaEntities){
-        for(RentAreaEntity item: rentAreaEntities){
-            rentAreaRepository.save(item);
-        }
+        rentAreaRepository.delete(rentAreasOld);
+		rentAreaRepository.save(rentAreaFromView);
     }
 
     @Override

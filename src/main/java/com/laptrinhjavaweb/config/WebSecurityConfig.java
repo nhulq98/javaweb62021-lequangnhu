@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //authorization for building manage
                 //staff only edit and search building. any else deny all
                         .antMatchers("/api/building/assignmentbuilding").hasRole("MANAGER")
+                        .antMatchers("/api/building/assignmentbuilding").permitAll()
                         .antMatchers("/api/building/**").hasRole("MANAGER")//delete function
                         .and()
                 .formLogin().loginPage("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll()

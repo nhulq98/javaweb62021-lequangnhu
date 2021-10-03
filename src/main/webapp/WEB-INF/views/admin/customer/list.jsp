@@ -2,9 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="formUrl" value="/admin/building-list" />
-<c:url var="buildingAPI" value="/api/building" />
-<c:url var="assignmentBuildingAPI" value="/api/building/assignment" />
+<c:url var="formUrl" value="/admin/customer-list" />
 <%--<c:url var="formAjax" value="/api/user"/>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -73,7 +71,7 @@ select
 											</a>
 										</div>
 									</div>
-									<form:form commandName="buildingSearchForm"
+									<form:form commandName="customerSearchForm"
 										action="${formUrl}" id="listForm" method="GET">
 										<div class="widget-body">
 											<div class="widget-main">
@@ -82,117 +80,27 @@ select
 													<!-- Row 1-->
 													<div class="col-sm-6">
 														<div>
-															<label>Building name</label>
+															<label>Customer Name</label>
 															<form:input type="text" cssClass="form-control"
-																path="name" />
+																path="fullName" />
 														</div>
 													</div>
 													<div class="col-sm-6">
 														<div>
-															<label>Floor Erea</label>
-															<form:input type="number" cssClass="form-control"
-																path="floorArea" />
-														</div>
-													</div>
-
-													<!-- ROW 2-->
-													<div class="col-sm-4" id="profile"
-														style="top: 25px; left: 10px;">
-														<div class="form-group">
-															<div class="col-sm-9 no-padding-left">
-																<form:select path="district">
-																	<form:option value="" label="--- Chọn Quận ---" />
-																	<form:options items="${district}" var="mapItem"
-																		itemValue="code" itemLabel="value" />
-																</form:select>
-
-															</div>
-														</div>
-													</div>
-													<div class="col-sm-4">
-														<div>
-															<label>Ward</label>
+															<label>Phone number</label>
 															<form:input type="text" cssClass="form-control"
-																path="ward" />
+																path="phone" />
 														</div>
 													</div>
-													<div class="col-sm-4">
+
+													<div class="col-sm-6">
 														<div>
-															<label>Street</label>
+															<label>Email</label>
 															<form:input type="text" cssClass="form-control"
-																path="street" />
-														</div>
-													</div>
-													<!-- ROW 3-->
-													<div class="col-sm-4">
-														<div>
-															<label>Basement Number</label>
-															<form:input type="number" cssClass="form-control"
-																path="numberOfBasement" />
-														</div>
-													</div>
-													<div class="col-sm-4">
-														<div>
-															<label>Direction</label>
-															<form:input type="number" cssClass="form-control"
-																path="direction" />
-														</div>
-													</div>
-													<div class="col-sm-4">
-														<div>
-															<label>Level</label>
-															<form:input type="text" cssClass="form-control"
-																path="level" />
-														</div>
-													</div>
-													<!-- ROW 4-->
-													<div class="col-sm-3">
-														<div>
-															<label>Area From</label>
-															<form:input type="number" cssClass="form-control"
-																path="rentAreaFrom" />
+																		path="email" />
 														</div>
 													</div>
 
-													<div class="col-sm-3">
-														<div>
-															<label for="rentAreaTo">Area to</label>
-															<form:input type="number" cssClass="form-control"
-																path="rentAreaTo" />
-														</div>
-													</div>
-													<div class="col-sm-3">
-														<div>
-															<label for="rentPriceFrom">Cost Rent from</label>
-															<form:input type="number" cssClass="form-control"
-																path="rentPriceFrom" />
-														</div>
-													</div>
-
-
-													<div class="col-sm-3">
-														<div>
-															<label for="rentPriceTo">Cost Rent to</label>
-															<form:input type="number" cssClass="form-control"
-																path="rentPriceTo" />
-														</div>
-													</div>
-													<!-- ROW 5-->
-													<div class="col-sm-4">
-														<div>
-															<label for="managerName">Manager name</label>
-															<form:input type="text" cssClass="form-control"
-																path="managerName" />
-														</div>
-													</div>
-
-													<div class="col-sm-4">
-														<div>
-															<label for="managerPhone">Manager phone number</label>
-															<form:input type="number" cssClass="form-control"
-																path="managerPhone" />
-														</div>
-													</div>
 													<div class="col-sm-4">
 														<div class="form-group">
 															<div class="col-sm-9"
@@ -204,11 +112,6 @@ select
 																</form:select>
 															</div>
 														</div>
-													</div>
-
-													<div class="col-sm-12 pull-right">
-														<form:checkboxes path="rentTypes" items="${renttype}"
-															itemValue="code" itemLabel="value" />
 													</div>
 
 													<div class="form-group">
@@ -263,53 +166,47 @@ select
 											<%--                                        </fieldset>--%>
 										</display:column>
 
-										<display:column headerClass="text-left" property="createdDate"
-											title="ngày" />
-										<display:column headerClass="text-left" property="name"
-											title="Tên Sản Phẩm" />
-										<display:column headerClass="text-left" property="address"
-											title="Địa Chỉ" />
+										<display:column headerClass="text-left" property="fullName"
+											title="Tên" />
 										<display:column headerClass="text-left" property="managerName"
 											title="Tên Quản Lý" />
 										<display:column headerClass="text-left"
-											property="managerPhone" title="Số Điện Thoại" />
-										<display:column headerClass="text-left" property="floorArea"
-											title="DT Sàn" />
-										<display:column headerClass="text-left" title="DT Trống" />
-										<display:column headerClass="text-left" property="rentPrice"
-											title="Giá Thuê" />
-										<display:column headerClass="text-left" property="serviceFee"
-											title="Phí Dịch Vụ" />
-										<display:column headerClass="text-left" title="Phí MG" />
-										<display:column headerClass="col-actions" title="Thao tác">
-											<button onclick="assignmentBuilding(this.value)"
-												value="${item.id}" type="button"
-												class="btn btn-success btn-sm popup"
-												data-toggle="tooltip; modal" title="Delevery Buildings!"
-												data-target="#myModal" id="btnAssingmentBuilding">
-												<i class="ace-icon fa fa-tasks"></i>
-											</button>
-											<input type="hidden" id="buildingIdCurrent"
-												value="${item.id}" />
-											<a class="btn btn-info btn-sm" data-toggle="tooltip"
-												title="Cập nhật tòa nhà"
-												href='<c:url value="/admin/building-edit-${item.id}"/>'>
-												<i class="fa fa-pencil-square-o"></i>
-											</a>
-											<%--                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"--%>
-											<%--                                                class="btn btn-info btn-sm"--%>
-											<%--                                                data-toggle="tooltip"--%>
-											<%--                                                title="Edit Buildings!">--%>
-											<%--                                            <i class="ace-icon fa fa-pencil bigger-110"></i>--%>
-											<%--                                        </button>--%>
-											<button onclick="deleteBuilding(this.value)"
-												value="${item.id}" id="btnDelete" type="button"
-												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-												data-toggle="tooltip" title="Xóa Tòa Nhà">
-												<span> <i class="fa fa-trash-o bigger-110 pink"></i>
-												</span>
-											</button>
-										</display:column>
+											property="phone" title="Số Điện Thoại" />
+										<display:column headerClass="text-left" property="email"
+											title="Email" />
+										<display:column headerClass="text-left" property="" title="Nhu cầu" />
+										<display:column headerClass="text-left" property="createby" title="Người Nhập" />
+										<display:column headerClass="text-left" property="createdate" title="Ngày Nhập" />
+										<display:column headerClass="text-left" property="" title="Tình trạng" />
+										<%--<display:column headerClass="col-actions" title="Thao tác">--%>
+											<%--<button onclick="assignmentBuilding(this.value)"--%>
+												<%--value="${item.id}" type="button"--%>
+												<%--class="btn btn-success btn-sm popup"--%>
+												<%--data-toggle="tooltip; modal" title="Delevery Buildings!"--%>
+												<%--data-target="#myModal" id="btnAssingmentBuilding">--%>
+												<%--<i class="ace-icon fa fa-tasks"></i>--%>
+											<%--</button>--%>
+											<%--<input type="hidden" id="buildingIdCurrent"--%>
+												<%--value="${item.id}" />--%>
+											<%--<a class="btn btn-info btn-sm" data-toggle="tooltip"--%>
+												<%--title="Cập nhật tòa nhà"--%>
+												<%--href='<c:url value="/admin/building-edit-${item.id}"/>'>--%>
+												<%--<i class="fa fa-pencil-square-o"></i>--%>
+											<%--</a>--%>
+											<%--&lt;%&ndash;                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"&ndash;%&gt;--%>
+											<%--&lt;%&ndash;                                                class="btn btn-info btn-sm"&ndash;%&gt;--%>
+											<%--&lt;%&ndash;                                                data-toggle="tooltip"&ndash;%&gt;--%>
+											<%--&lt;%&ndash;                                                title="Edit Buildings!">&ndash;%&gt;--%>
+											<%--&lt;%&ndash;                                            <i class="ace-icon fa fa-pencil bigger-110"></i>&ndash;%&gt;--%>
+											<%--&lt;%&ndash;                                        </button>&ndash;%&gt;--%>
+											<%--<button onclick="deleteBuilding(this.value)"--%>
+												<%--value="${item.id}" id="btnDelete" type="button"--%>
+												<%--class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"--%>
+												<%--data-toggle="tooltip" title="Xóa Tòa Nhà">--%>
+												<%--<span> <i class="fa fa-trash-o bigger-110 pink"></i>--%>
+												<%--</span>--%>
+											<%--</button>--%>
+										<%--</display:column>--%>
 									</display:table>
 								</div>
 							</div>
@@ -378,7 +275,7 @@ select
 		function showListStaffById(buildingId) {
 			$
 					.ajax({
-						url : '${assignmentBuildingAPI}/' + buildingId + '/staffs',
+						url : '${buildingAPI}/' + buildingId + '/staffs',
 						type : 'GET',
 						dataType : "json", // define data type for output data from server
 						//data: JSON.stringify(dataArray),
@@ -415,7 +312,7 @@ select
 
 		function updateStaff(object) {
 			$.ajax({
-				url : '${assignmentBuildingAPI}/assignmentbuilding',
+				url : '${updateAssignmentAPI}',
 				type : 'POST',
 				//dataType: "json", // define data type for output data from server
 				data : JSON.stringify(object),
@@ -439,6 +336,7 @@ select
 							url : '${buildingAPI}/' + buildingId,
 							type : 'DELETE',
 							success : function(res) {
+								console.log('success');
 								window.location.href = "<c:url value='/admin/building-list?message=delete_success'/>";
 							},
 							error : function(res) {

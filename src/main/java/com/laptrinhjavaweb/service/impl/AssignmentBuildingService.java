@@ -98,6 +98,14 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         return result;
     }
 
+    @Override
+    public boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld){
+        if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return true;}
+        if(rentAreasOld.size() == 0 && rentAreaFromView.size() != 0){assignmentBuildingRepository.save(rentAreaFromView); return true;}
+        if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){assignmentBuildingRepository.delete(rentAreasOld);; return true;}
+        return false;
+    }
+
     // For change data
 
     /**
@@ -120,13 +128,19 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
                 .findByBuildingId(request.getBuildingId());
         List<Long> staffsIdChecked = request.getStaffIds();
         List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
-        if(staffsOld.size() == 0 &&(staffsIdChecked.size() == 0 || staffsIdChecked == null)) { return;}
-        if(staffsOld.size() == 0 && staffsIdChecked.size() != 0){assignmentBuildingRepository.save(staffsFromRequest); return;}
-        if(staffsOld.size() != 0 && staffsIdChecked.size() == 0){assignmentBuildingRepository.delete(staffsOld); return;}
+        if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
+
+        //another case
+        removeDuplicate(staffsOld, staffsFromRequest);
+        assignmentBuildingRepository.delete(staffsOld);
+        assignmentBuildingRepository.save(staffsFromRequest);
+    }
+
+    @Override
+    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest){
         for (int i = 0; i < staffsOld.size(); i++) {
             for (int j = 0; j < staffsFromRequest.size(); j++) {
-                if (staffsOld.get(i).getUser().getId()
-                        .equals(staffsFromRequest.get(j).getUser().getId())) {
+                if (staffsOld.get(i).getUser().getId() == staffsFromRequest.get(j).getUser().getId()) {
                     staffsOld.remove(i);
                     staffsFromRequest.remove(j);
                     i--;
@@ -134,8 +148,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
                 }
             }
         }
-        assignmentBuildingRepository.delete(staffsOld);
-        assignmentBuildingRepository.save(staffsFromRequest);
     }
 
     /**

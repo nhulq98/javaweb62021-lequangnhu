@@ -6,7 +6,12 @@ import com.laptrinhjavaweb.entity.RentAreaEntity;
 import java.util.List;
 
 public interface IRentAreaService {
+    List<RentAreaEntity> loadRentAreaFromRequest(String rentAreas, BuildingDTO newBuilding);
+
     void updateRentArea(BuildingDTO newBuilding);
 
-    List<RentAreaEntity> loadRentAreaFromRequest(String rentAreas, BuildingDTO newBuilding);
+    void removeDuplicate(List<RentAreaEntity> rentAreasOld, List<RentAreaEntity> rentAreaFromView);
+
+    //logic
+    boolean testSpecialCases(List<RentAreaEntity> rentAreaFromView, List<RentAreaEntity> rentAreasOld);
 }

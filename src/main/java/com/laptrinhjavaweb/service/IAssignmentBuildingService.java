@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.service;
 
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 
 import java.util.List;
 
@@ -13,4 +14,9 @@ public interface IAssignmentBuildingService {
     //Change Data
 
     void updateAssignment(StaffBuildingRequest request);
+    void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest);
+
+
+    // logic
+    boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld);
 }

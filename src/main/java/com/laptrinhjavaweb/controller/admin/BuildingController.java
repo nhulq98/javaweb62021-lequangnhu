@@ -1,6 +1,5 @@
 package com.laptrinhjavaweb.controller.admin;
 
-import com.laptrinhjavaweb.api.admin.BuildingAPI;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
@@ -40,7 +39,6 @@ public class BuildingController {
     public ModelAndView getAll(@ModelAttribute(SystemConstant.BUILDING_SEARCH_FORM_MODEL) BuildingRequest buildingSearchModel) {
         ModelAndView mav = new ModelAndView("admin/building/list");
         List<BuildingResponse> result = buildingService.findByCondition(buildingConverter.convertRequestToMap(buildingSearchModel));
-        BuildingAPI buildingAPI = new BuildingAPI();
 
         //add model to view
         mav.addObject(SystemConstant.BUILDING_SEARCH_FORM_MODEL, buildingSearchModel);

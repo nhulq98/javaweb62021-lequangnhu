@@ -122,10 +122,8 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void update(BuildingDTO newBuilding) {
-        //update building
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 
-        //update rentArea
         IRentAreaService.updateRentArea(newBuilding);
     }
 

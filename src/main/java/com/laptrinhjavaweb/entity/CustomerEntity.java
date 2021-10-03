@@ -20,10 +20,13 @@ public class CustomerEntity extends BaseEntity {
     // relationship
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<TransactionEntity> transactions = new ArrayList<>();
+
     @Column(name = "fullname")
     private String fullName;
+
     @Column(name = "phone", unique = true)
     private String phone;
+
     @Column(name = "email", unique = true)
     private String email;
 //============================================================

@@ -108,7 +108,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }

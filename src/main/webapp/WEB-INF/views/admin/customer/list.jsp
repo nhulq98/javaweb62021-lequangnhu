@@ -174,25 +174,25 @@ select
 											property="phone" title="Số Điện Thoại" />
 										<display:column headerClass="text-left" property="email"
 											title="Email" />
-										<display:column headerClass="text-left" property="" title="Nhu cầu" />
-										<display:column headerClass="text-left" property="createby" title="Người Nhập" />
-										<display:column headerClass="text-left" property="createdate" title="Ngày Nhập" />
-										<display:column headerClass="text-left" property="" title="Tình trạng" />
-										<%--<display:column headerClass="col-actions" title="Thao tác">--%>
-											<%--<button onclick="assignmentBuilding(this.value)"--%>
-												<%--value="${item.id}" type="button"--%>
-												<%--class="btn btn-success btn-sm popup"--%>
-												<%--data-toggle="tooltip; modal" title="Delevery Buildings!"--%>
-												<%--data-target="#myModal" id="btnAssingmentBuilding">--%>
-												<%--<i class="ace-icon fa fa-tasks"></i>--%>
-											<%--</button>--%>
-											<%--<input type="hidden" id="buildingIdCurrent"--%>
-												<%--value="${item.id}" />--%>
-											<%--<a class="btn btn-info btn-sm" data-toggle="tooltip"--%>
-												<%--title="Cập nhật tòa nhà"--%>
-												<%--href='<c:url value="/admin/building-edit-${item.id}"/>'>--%>
-												<%--<i class="fa fa-pencil-square-o"></i>--%>
-											<%--</a>--%>
+										<%--<display:column headerClass="text-left" property="" title="Nhu cầu" />--%>
+										<display:column headerClass="text-left" property="createdBy" title="Người Nhập" />
+										<display:column headerClass="text-left" property="createdDate" title="Ngày Nhập" />
+										<%--<display:column headerClass="text-left" property="" title="Tình trạng" />--%>
+										<display:column headerClass="col-actions" title="Thao tác">
+											<button onclick="assignmentBuilding(this.value)"
+												value="${item.id}" type="button"
+												class="btn btn-succcreateStaffs ess btn-sm popup"
+												data-toggle="tooltip; modal" title="Delevery Buildings!"
+												data-target="#myModal" id="btnAssingmentBuilding">
+												<i class="ace-icon fa fa-tasks"></i>
+											</button>
+											<input type="hidden" id="buildingIdCurrent"
+												value="${item.id}" />
+											<a class="btn btn-info btn-sm" data-toggle="tooltip"
+												title="Cập nhật tòa nhà"
+												href='<c:url value="/admin/building-edit-${item.id}"/>'>
+												<i class="fa fa-pencil-square-o"></i>
+											</a>
 											<%--&lt;%&ndash;                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                                class="btn btn-info btn-sm"&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                                data-toggle="tooltip"&ndash;%&gt;--%>

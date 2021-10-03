@@ -10,7 +10,8 @@ public class SystemConstant {
     public static final String HOME = "/trang-chu";
     public static final String ADMIN_HOME = "/admin/home";
     public static final String BUILDING_SEARCH_FORM_MODEL = "buildingSearchForm";
-    public static final String SEARCH_RESULT_MODEL = "buildingResult";
+    public static final String CUSTOMMER_SEARCH_FORM_MODEL = "customerSearchForm";
+    public static final String SEARCH_RESULT_MODEL = "result";
     public static final String MODEL = "model";
     public static final String DISTRICT = "district";
     public static final String STAFF = "staff";

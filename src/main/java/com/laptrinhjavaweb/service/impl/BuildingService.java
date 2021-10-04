@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
@@ -106,10 +107,9 @@ public class BuildingService implements IBuildingService {
 
         // save RentArea
         String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
-        String regex = "[0-9]+";
         for (String item : rentAreaStrs) {
             RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if (item.trim().matches(regex)) {
+            if (item.trim().matches(SystemConstant.ISNUMBER)) {
                 rentAreaEntity.setValue(Integer.parseInt(item.trim()));
                 rentAreaEntity.setBuilding(entity);
 

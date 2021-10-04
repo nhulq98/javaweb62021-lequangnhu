@@ -19,4 +19,5 @@ public interface IAssignmentBuildingService {
 
     // logic
     boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld);
+    List<AssignmentBuildingEntity> createStaffs(Long buildingId, List<Long> idStaffs);
 }

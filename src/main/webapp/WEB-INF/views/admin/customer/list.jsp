@@ -199,14 +199,14 @@ select
 											<%--&lt;%&ndash;                                                title="Edit Buildings!">&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                            <i class="ace-icon fa fa-pencil bigger-110"></i>&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                        </button>&ndash;%&gt;--%>
-											<%--<button onclick="deleteBuilding(this.value)"--%>
-												<%--value="${item.id}" id="btnDelete" type="button"--%>
-												<%--class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"--%>
-												<%--data-toggle="tooltip" title="Xóa Tòa Nhà">--%>
-												<%--<span> <i class="fa fa-trash-o bigger-110 pink"></i>--%>
-												<%--</span>--%>
-											<%--</button>--%>
-										<%--</display:column>--%>
+											<button onclick="deleteBuilding(this.value)"
+												value="${item.id}" id="btnDelete" type="button"
+												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
+												data-toggle="tooltip" title="Xóa Tòa Nhà">
+												<span> <i class="fa fa-trash-o bigger-110 pink"></i>
+												</span>
+											</button>
+										</display:column>
 									</display:table>
 								</div>
 							</div>

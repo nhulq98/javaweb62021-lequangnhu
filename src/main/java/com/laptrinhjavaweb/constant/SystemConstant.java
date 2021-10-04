@@ -1,8 +1,8 @@
 package com.laptrinhjavaweb.constant;
 
 public class SystemConstant {
-    public static final String IDMODEL = "IDMODEL";
 
+    // scope for Spring MVC
     /*Spring security 4: ROLE_ADMIN, Spring security 3 not required*/
     public static final String ROLE_MANAGER = "ROLE_MANAGER";
     /*Spring security 4: ROLE_ADMIN, Spring security 3 not required*/
@@ -26,4 +26,9 @@ public class SystemConstant {
     public static final String MESSAGE_RESPONSE = "messageResponse";
     public static final String PASSWORD_DEFAULT = "123456";
     public static final String CHANGE_PASSWORD_FAIL = "change_password_fail";
+
+
+    // Scope for Logic
+    public static final String ISNUMBER = "[0-9]+";
+    public static final String IDMODEL = "IDMODEL";
 }

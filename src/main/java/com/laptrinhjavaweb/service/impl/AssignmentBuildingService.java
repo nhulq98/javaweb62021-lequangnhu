@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,29 +45,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
      * @param buildingId
      * @return all staff available
      */
-    /*
-     * @Override public List<StaffBuildingResponse> getStaffsAssignment(Long
-     * buildingId) { List<StaffBuildingResponse> staffsAll = findAllStaff();
-     * List<AssignmentBuildingEntity> staffsOfBuilding =
-     * assignmentBuildingRepository.findAllByBuildingId(buildingId);
-     *
-     * List<StaffBuildingResponse> result = new ArrayList<>();
-     *
-     * //convert to staffResponse for (int i = 0; i < staffsAll.size(); i++) {
-     * result.add(staffsAll.get(i)); for (AssignmentBuildingEntity staff :
-     * staffsOfBuilding) { if (staffsAll.get(i).getId() == staff.getUser().getId())
-     * { result.get(i).setChecked("checked"); staffsOfBuilding.remove(staff);// to
-     * reduce loop numbers break;// exit for outside loop } } }
-     *
-     * return result; }
-     */
-
-    /**
-     * Get All Staff and set status is "checked" if staff is managing building
-     *
-     * @param buildingId
-     * @return all staff available
-     */
     @Override
     public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
         List<StaffEntity> staffsAll = assignmentBuildingRepository.findAllCustom(buildingId);
@@ -79,6 +54,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         return result;
     }
 
+    @Override
     public List<AssignmentBuildingEntity> createStaffs(Long buildingId, List<Long> idStaffs) {
         List<AssignmentBuildingEntity> result = new LinkedList<>();
         for (Long item : idStaffs) {
@@ -96,14 +72,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         }
 
         return result;
-    }
-
-    @Override
-    public boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld){
-        if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return true;}
-        if(rentAreasOld.size() == 0 && rentAreaFromView.size() != 0){assignmentBuildingRepository.save(rentAreaFromView); return true;}
-        if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){assignmentBuildingRepository.delete(rentAreasOld);; return true;}
-        return false;
     }
 
     // For change data
@@ -128,26 +96,13 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
                 .findByBuildingId(request.getBuildingId());
         List<Long> staffsIdChecked = request.getStaffIds();
         List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
+
         if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
 
-        //another case
+        //another cases
         removeDuplicate(staffsOld, staffsFromRequest);
         assignmentBuildingRepository.delete(staffsOld);
         assignmentBuildingRepository.save(staffsFromRequest);
-    }
-
-    @Override
-    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest){
-        for (int i = 0; i < staffsOld.size(); i++) {
-            for (int j = 0; j < staffsFromRequest.size(); j++) {
-                if (staffsOld.get(i).getUser().getId() == staffsFromRequest.get(j).getUser().getId()) {
-                    staffsOld.remove(i);
-                    staffsFromRequest.remove(j);
-                    i--;
-                    break;
-                }
-            }
-        }
     }
 
     /**
@@ -204,4 +159,33 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 //
 //    }
 
+    @Override
+    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest){
+        Map<String, Object> map = new HashMap<>();
+
+        for (int i = 0; i < staffsOld.size(); i++) {
+            for (int j = 0; j < staffsFromRequest.size(); j++) {
+                if (staffsOld.get(i).getUser().getId() == staffsFromRequest.get(j).getUser().getId()) {
+                    staffsOld.remove(i);
+                    staffsFromRequest.remove(j);
+                    i--;
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * those cases which we can guess. If return True ==> done process
+     * @param rentAreaFromView
+     * @param rentAreasOld
+     * @return
+     */
+    @Override
+    public boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld){
+        if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return true;}
+        if(rentAreasOld.size() == 0 && rentAreaFromView.size() != 0){assignmentBuildingRepository.save(rentAreaFromView); return true;}
+        if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){assignmentBuildingRepository.delete(rentAreasOld);; return true;}
+        return false;
+    }
 }

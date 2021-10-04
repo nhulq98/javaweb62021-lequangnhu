@@ -78,6 +78,12 @@ public class RentAreaService implements IRentAreaService {
         }
     }
 
+    /**
+     * those cases which we can guess
+     * @param rentAreaFromView
+     * @param rentAreasOld
+     * @return
+     */
     @Override
     public boolean testSpecialCases(List<RentAreaEntity> rentAreaFromView, List<RentAreaEntity> rentAreasOld){
         if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return true;}

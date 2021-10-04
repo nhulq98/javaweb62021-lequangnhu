@@ -16,10 +16,10 @@ import java.util.List;
 public class RentAreaService implements IRentAreaService {
 
     @Autowired
-    RentAreaRepository rentAreaRepository;
+    private RentAreaRepository rentAreaRepository;
 
     @Autowired
-    BuildingConverter buildingConverter;
+    private BuildingConverter buildingConverter;
 
     @Override
     public List<RentAreaEntity> loadRentAreaFromRequest(String rentAreas, BuildingDTO newBuilding) {

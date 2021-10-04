@@ -33,7 +33,7 @@ public class BuildingService implements IBuildingService {
     private RentAreaRepository rentAreaRepository;
 
     @Autowired
-    IRentAreaService IRentAreaService;
+    private IRentAreaService IRentAreaService;
 
 
     @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
@@ -125,7 +125,7 @@ public class BuildingService implements IBuildingService {
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 
         IRentAreaService.updateRentArea(newBuilding);
-    }
+}
 
     @Override
     public void deleteById(Long id) {

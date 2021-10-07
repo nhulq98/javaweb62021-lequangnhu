@@ -37,7 +37,8 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
-        Utils.customGC(sql, searchBuilder);
+
+        Utils.destroyReference(sql, searchBuilder);
         return query.getResultList();
     }
 
@@ -112,7 +113,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 }
             }
         }
-        Utils.customGC(fields);
+        Utils.destroyReference(fields);
     }
 
     /**

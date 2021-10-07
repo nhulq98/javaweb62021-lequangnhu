@@ -1,5 +1,8 @@
 package com.laptrinhjavaweb.utils;
 
+import com.laptrinhjavaweb.constant.SystemConstant;
+import com.laptrinhjavaweb.entity.RentAreaEntity;
+
 import java.util.*;
 
 interface Song{
@@ -73,15 +76,36 @@ class Father implements Song{
 public class Utils extends Father implements Comparator<Utils>{
 
     /**
-     * làm cho đối tượng đủ đk để Garbage collection bằng cách hủy tham chiếu đến đối tượng
+     * make for object đủ đk để Garbage collection bằng cách hủy tham chiếu đến đối tượng
      * @param param
      * @param <T>
      */
-    public static <T> void customGC(T ...param){
+    public static <T> void destroyReference(T ...param){
         for(T item: param){
             item =  null;
         }
         //System.gc();// call Garbage collection
+    }
+
+    /**
+     * convert String with format: 100, 200 to List<RentAreaEntity>
+     * @param rentAreas
+     * @return List<RentAreaEntity>
+     */
+    public static List<RentAreaEntity> convertStringToRentAreaEntities(String rentAreas){
+        List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
+        String[] rentAreaStrs = rentAreas.split(",");
+        for (String item : rentAreaStrs) {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            if(item.trim().matches(SystemConstant.ISNUMBER)){// is number
+                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
+                //rentAreaEntity.setBuilding(buildingConverter.convertDTOToEntity(newBuilding));
+
+                rentAreaFromRequest.add(rentAreaEntity);
+            }
+            Utils.destroyReference(rentAreaEntity);
+        }
+        return rentAreaFromRequest;
     }
 
     public static <T extends Song> void hehe(T a){};

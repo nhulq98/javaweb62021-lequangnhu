@@ -105,12 +105,12 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         assignmentBuildingRepository.delete(staffsOld);
         assignmentBuildingRepository.save(staffsFromRequest);
 
-        Utils.customGC(staffsOld, staffsIdChecked, staffsFromRequest);
+        Utils.destroyReference(staffsOld, staffsIdChecked, staffsFromRequest);
     }
 
     /**
      * Ý tưởng: chia ra thành 2 danh sách:  Old là bị bỏ chọn, new là được chọn mới
-     * @param request
+     * @param
      */
 //    @Override
 //    @Transactional

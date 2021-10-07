@@ -21,7 +21,7 @@ public class AssignmentBuildingRepositoryImpl implements AssignmentBuildingRepos
     public List<AssignmentBuildingEntity> findAllByBuildingId(Long id) {
         String sql = "SELECT * FROM assignmentbuilding WHERE buildingid = " + id;
         Query query = entityManager.createNativeQuery(sql, AssignmentBuildingEntity.class);
-        Utils.customGC(sql);
+        Utils.destroyReference(sql);
         return query.getResultList();
     }
 
@@ -42,7 +42,7 @@ public class AssignmentBuildingRepositoryImpl implements AssignmentBuildingRepos
                 .append(" AND USR.roleid = 2 -- role staff (default)");
 
         Query query = entityManager.createNativeQuery(sql.toString(), StaffEntity.class);
-        Utils.customGC(sql);
+        Utils.destroyReference(sql);
         return query.getResultList();
     }
 }

@@ -10,6 +10,7 @@ public interface IRentAreaService {
 
     void updateRentArea(BuildingDTO newBuilding);
 
+
     void removeDuplicate(List<RentAreaEntity> rentAreasOld, List<RentAreaEntity> rentAreaFromView);
 
     //logic

@@ -39,7 +39,6 @@ public class RentAreaService implements IRentAreaService {
         return rentAreaFromRequest;
     }
 
-
     /**
      * ý tưởng: step1: Tìm những phần tử cùng tồn tại ở cả 2 ds thì xóa ra. Bởi vì
      * các ptu này không thay đổi
@@ -63,7 +62,7 @@ public class RentAreaService implements IRentAreaService {
         rentAreaRepository.delete(rentAreasOld);
 		rentAreaRepository.save(rentAreaFromView);
 
-        Utils.customGC(rentAreasOld, rentAreaFromView);
+        Utils.destroyReference(rentAreasOld, rentAreaFromView);
     }
 
     @Override
@@ -94,4 +93,5 @@ public class RentAreaService implements IRentAreaService {
         if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){rentAreaRepository.delete(rentAreasOld);; return true;}
         return false;
     }
+
 }

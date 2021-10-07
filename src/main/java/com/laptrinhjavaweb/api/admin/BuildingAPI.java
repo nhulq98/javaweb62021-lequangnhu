@@ -59,6 +59,5 @@ public class BuildingAPI {
 
         buildingService.update(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
-
     }
 }

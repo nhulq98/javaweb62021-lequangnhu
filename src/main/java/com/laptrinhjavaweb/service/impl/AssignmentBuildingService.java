@@ -9,6 +9,7 @@ import com.laptrinhjavaweb.entity.view.StaffEntity;
 import com.laptrinhjavaweb.repository.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +104,8 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         removeDuplicate(staffsOld, staffsFromRequest);
         assignmentBuildingRepository.delete(staffsOld);
         assignmentBuildingRepository.save(staffsFromRequest);
+
+        Utils.customGC(staffsOld, staffsIdChecked, staffsFromRequest);
     }
 
     /**

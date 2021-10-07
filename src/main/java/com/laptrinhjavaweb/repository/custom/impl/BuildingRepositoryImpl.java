@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
+import com.laptrinhjavaweb.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        Utils.customGC(sql, searchBuilder);
         return query.getResultList();
     }
 
@@ -110,6 +112,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 }
             }
         }
+        Utils.customGC(fields);
     }
 
     /**

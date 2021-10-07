@@ -5,6 +5,7 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.service.IRentAreaService;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +62,8 @@ public class RentAreaService implements IRentAreaService {
         removeDuplicate(rentAreasOld, rentAreaFromView);
         rentAreaRepository.delete(rentAreasOld);
 		rentAreaRepository.save(rentAreaFromView);
+
+        Utils.customGC(rentAreasOld, rentAreaFromView);
     }
 
     @Override
@@ -91,5 +94,4 @@ public class RentAreaService implements IRentAreaService {
         if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){rentAreaRepository.delete(rentAreasOld);; return true;}
         return false;
     }
-
 }

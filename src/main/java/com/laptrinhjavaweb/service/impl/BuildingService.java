@@ -14,6 +14,7 @@ import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.IRentAreaService;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +103,8 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public void save(BuildingDTO newBuilding) {
+        // add rentArea to Building
+
         // save building
         BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 
@@ -115,8 +118,9 @@ public class BuildingService implements IBuildingService {
 
                 rentAreaRepository.save(rentAreaEntity);
             }
+            Utils.customGC(rentAreaEntity);
         }
-
+        Utils.customGC(entity);
     }
 
     @Override

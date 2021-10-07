@@ -26,7 +26,6 @@ public class BuildingAPI {
     @PostMapping("/{id}")
     public ResponseEntity<BuildingDTO> getOne(@PathVariable(name = "id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.getOne(id));
-
     }
 
     @GetMapping

@@ -99,9 +99,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         // apply cascade
         BuildingEntity buildingEntity = buildingRepository.findOne(request.getBuildingId());
 
-        List<UserEntity> staffs = getStaffEntity(request.getStaffIds());
-
-        buildingEntity.setStaffs(staffs);
+        buildingEntity.setStaffs(getStaffEntity(request.getStaffIds()));
 
         buildingRepository.save(buildingEntity);
     }

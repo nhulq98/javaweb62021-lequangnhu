@@ -139,12 +139,7 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public void update(BuildingDTO newBuilding) throws RuntimeException{
         // apply cascade
-        BuildingEntity entity = buildingConverter.convertDTOToEntity(newBuilding);
-        buildingRepository.save(entity);
-
-        Utils.destroyReference(entity);
-//        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-//        IRentAreaService.updateRentArea(newBuilding);
+        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
 }
 
     @Override

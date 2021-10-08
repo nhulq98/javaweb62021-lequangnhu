@@ -23,12 +23,12 @@ public class BuildingEntity extends BaseEntity {
     private String ward;
     //==============================relationship==============================
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE} )
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true )
     List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
 
     //@OneToMany //đọc là: @ 1 entity(this class) To many entity(below variable)
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 // @OneToMany thì dùng mappedby = tên đối tượng khai báo bên bảng mà ta liên kết. Ở đây là rentarea
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();// khai báo đối tượng quan hệ
 
     //========================================================================

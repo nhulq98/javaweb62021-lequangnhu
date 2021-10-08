@@ -29,7 +29,6 @@ public class AssignmentBuildingAPI {
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
-
     }
 
     @PostMapping("/assignmentbuilding")

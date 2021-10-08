@@ -15,7 +15,7 @@ public class RentAreaEntity extends BaseEntity {
     private Integer value;
 
     //relationship
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "buildingid")
     private BuildingEntity building = new BuildingEntity();
 

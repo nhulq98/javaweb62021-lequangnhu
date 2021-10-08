@@ -9,7 +9,13 @@ import org.springframework.boot.web.support.ErrorPageFilter;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {
+        "com.laptrinhjavaweb.service",
+        "com.laptrinhjavaweb.config",
+        "com.laptrinhjavaweb.converter",
+        "com.laptrinhjavaweb.repository"
+},
+        exclude = {SecurityAutoConfiguration.class})
 public class SpringBootWebApplication extends SpringBootServletInitializer {
 
     @Override

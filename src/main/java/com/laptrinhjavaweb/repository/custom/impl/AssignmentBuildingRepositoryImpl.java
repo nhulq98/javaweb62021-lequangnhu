@@ -25,7 +25,7 @@ public class AssignmentBuildingRepositoryImpl implements AssignmentBuildingRepos
         return query.getResultList();
     }
 
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     @Override
     public List<StaffEntity> findAllCustom(Long buildingId) {
         StringBuilder sql = new StringBuilder("SELECT US.id, US.fullname, US.createdby, US.createddate, US.modifiedby, US.modifieddate")
@@ -34,6 +34,27 @@ public class AssignmentBuildingRepositoryImpl implements AssignmentBuildingRepos
                 .append(" (select ASB.staffid ")
                 .append(" FROM assignmentbuilding ASB ")
                 .append(" WHERE ASB.buildingid = " + buildingId)
+                .append(") THEN 'checked' ")
+                .append(" ELSE 'NULL' ")
+                .append(" END) AS checked ")
+                .append(" FROM user US, user_role USR ")
+                .append(" WHERE US.id = USR.userid ")
+                .append(" AND USR.roleid = 2 -- role staff (default)");
+
+        Query query = entityManager.createNativeQuery(sql.toString(), StaffEntity.class);
+        Utils.destroyReference(sql);
+        return query.getResultList();
+    }*/
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<StaffEntity> findAllCustom(Long buildingId) {
+        StringBuilder sql = new StringBuilder("SELECT US.id, US.fullname, US.createdby, US.createddate, US.modifiedby, US.modifieddate")
+                .append(",(case ")
+                .append(" WHEN USR.userid in ")
+                .append(" (select SB.staffid ")
+                .append(" FROM staff_building SB ")
+                .append(" WHERE SB.buildingid = " + buildingId)
                 .append(") THEN 'checked' ")
                 .append(" ELSE 'NULL' ")
                 .append(" END) AS checked ")

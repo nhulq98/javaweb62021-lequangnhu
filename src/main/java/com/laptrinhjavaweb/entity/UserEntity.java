@@ -25,6 +25,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
+    // khai báo mappedBy phải trùng tên với biến của bên RoleEntity
+    @ManyToMany(mappedBy = "staffs", fetch = FetchType.LAZY)
+    private List<BuildingEntity> buildings = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "userid", nullable = false),

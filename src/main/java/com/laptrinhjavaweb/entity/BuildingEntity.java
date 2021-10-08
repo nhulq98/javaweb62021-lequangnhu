@@ -22,9 +22,14 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "ward")
     private String ward;
     //==============================relationship==============================
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "staff_building",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> staffs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true )
-    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
+//    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true )
+//    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
 
     //@OneToMany //đọc là: @ 1 entity(this class) To many entity(below variable)
 // @OneToMany thì dùng mappedby = tên đối tượng khai báo bên bảng mà ta liên kết. Ở đây là rentarea

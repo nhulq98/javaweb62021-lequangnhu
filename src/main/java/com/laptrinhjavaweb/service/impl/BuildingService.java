@@ -117,23 +117,26 @@ public class BuildingService implements IBuildingService {
     public void save(BuildingDTO newBuilding) {
         // apply cascade
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-
-//        // save building
-//        BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-//
-//        // save RentArea
-//        String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
-//        for (String item : rentAreaStrs) {
-//            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-//            if (item.trim().matches(SystemConstant.ISNUMBER)) {
-//                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
-//                rentAreaEntity.setBuilding(entity);
-//
-//                rentAreaRepository.save(rentAreaEntity);
-//            }
-//            Utils.customGC(rentAreaEntity);
-//        }
     }
+
+/*    @Override
+    public void save(BuildingDTO newBuilding) {
+        // save building
+        BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+
+        // save RentArea
+        String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
+        for (String item : rentAreaStrs) {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            if (item.trim().matches(SystemConstant.ISNUMBER)) {
+                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
+                rentAreaEntity.setBuilding(entity);
+
+                rentAreaRepository.save(rentAreaEntity);
+            }
+            Utils.customGC(rentAreaEntity);
+        }
+    }*/
 
     @Override
     @Transactional

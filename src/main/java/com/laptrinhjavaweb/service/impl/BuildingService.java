@@ -113,11 +113,11 @@ public class BuildingService implements IBuildingService {
         }
     }
 
-    @Override
-    public void save(BuildingDTO newBuilding) {
-        // apply cascade
-        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-    }
+//    @Override
+//    public void save(BuildingDTO newBuilding) {
+//        // apply cascade
+//        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+//    }
 
 /*    @Override
     public void save(BuildingDTO newBuilding) {
@@ -140,7 +140,8 @@ public class BuildingService implements IBuildingService {
 
     @Override
     @Transactional
-    public void update(BuildingDTO newBuilding) throws RuntimeException {
+    public void updateOrSave(BuildingDTO newBuilding) throws RuntimeException {
+
         // apply cascade
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
     }

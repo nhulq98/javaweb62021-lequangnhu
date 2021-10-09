@@ -87,6 +87,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @Override
     public void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
         authorization(sql, buildingSearch.getStaffId());
+
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);
         buildConditionForBuildingType(buildingSearch, sql);

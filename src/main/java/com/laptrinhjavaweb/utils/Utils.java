@@ -1,8 +1,10 @@
 package com.laptrinhjavaweb.utils;
 
 import com.laptrinhjavaweb.constant.SystemConstant;
+import com.laptrinhjavaweb.dto.AbstractDTO;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 interface Song{
@@ -48,10 +50,24 @@ class Person {
     }
 }
 
+class test{
+    private static final Father INSTANCE = new Father();
+
+    public static Father getInstance(){
+        return INSTANCE;
+    }
+}
+
+
 class Father implements Song{
     protected String name;
+    private static final Father INSTANCE = new Father();
 
     public Father(){}
+
+    public static Father getInstance(){
+        return INSTANCE;
+    }
 
     public Father(String name) {
         name.equals("le");
@@ -59,6 +75,9 @@ class Father implements Song{
         System.out.println("this is father");
     }
 
+    public void testGC(){
+        AbstractDTO a = new AbstractDTO();
+    }
 //    @Override
 //    public int hashCode(){
 //        //return 5;
@@ -87,27 +106,6 @@ public class Utils extends Father implements Comparator<Utils>{
         //System.gc();// call Garbage collection
     }
 
-    /**
-     * convert String with format: 100, 200 to List<RentAreaEntity>
-     * @param rentAreas
-     * @return List<RentAreaEntity>
-     */
-    public static List<RentAreaEntity> convertStringToRentAreaEntities(String rentAreas){
-        List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
-        String[] rentAreaStrs = rentAreas.split(",");
-        for (String item : rentAreaStrs) {
-            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if(item.trim().matches(SystemConstant.ISNUMBER)){// is number
-                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
-                //rentAreaEntity.setBuilding(buildingConverter.convertDTOToEntity(newBuilding));
-
-                rentAreaFromRequest.add(rentAreaEntity);
-            }
-            Utils.destroyReference(rentAreaEntity);
-        }
-        return rentAreaFromRequest;
-    }
-
     public static <T extends Song> void hehe(T a){};
     static String[] listSongs = {"Pink Moon", "Somersault",
     "Shiva Moon", "Circles",
@@ -116,25 +114,40 @@ public class Utils extends Father implements Comparator<Utils>{
     static int[] listInts = {66,9,22,35,8,66, 233, 432, 33};
 
     public static void main(String[] args) {
-        Person person = new Person();
-        //person.getPerson(new Student("sds"));
+Father father = new Father();
+father.testGC();
+        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        Date timeStamp = new Date();
+        Map<String, Integer> map1 = new HashMap<>(15);
+        map1.equals(null);
+        Map<String, String> hashtable = new Hashtable<>();
+        while (true){
+            map1.put("nhu", 23);
 
-        Map<String, String> map1 = new HashMap<>();
-        Map<String, String> map2 = new LinkedHashMap<>();
-        Map<String, String> map3 = new Hashtable<>();
-        Map<String, String> map4 = new TreeMap<>();
-
-        Set<String> set = new HashSet<>();
-        Set<String> set2 = new TreeSet<>();
-        Set<Person> set3 = new LinkedHashSet<>();
-        //List<String> list = new ArrayList<>();
-        Person a = new Person();
-        set3.add(new Person("le quang B"));
-        set3.add(new Person("le quang A"));
-        Iterator iterator = set2.iterator();
-        while (iterator.hasNext()){
-            System.out.println(iterator.next().toString());
         }
+
+
+
+//        System.out.println(map1.size());
+//        Map<String, String> map2 = new LinkedHashMap<>();
+
+//        Map<String, String> map4 = new TreeMap<>();
+//
+//        Set<String> set = new HashSet<>();
+//        Set<String> set2 = new TreeSet<>();
+//        Set<Person> set3 = new LinkedHashSet<>();
+//        //List<String> list = new ArrayList<>();
+//        Person a = new Person();
+//        set3.add(new Person("le quang B"));
+//        set3.add(new Person("le quang A"));
+//        Iterator iterator = set2.iterator();
+//        while (iterator.hasNext()){
+//            System.out.println(iterator.next().toString());
+//        }
+
+
+
+
 
 //list.contains();
         //list.contains(new String());

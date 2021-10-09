@@ -25,4 +25,25 @@ public class AbstractDTO<T> implements Serializable {
     private Integer totalPage;
     private Integer totalItem;
     private String searchValue;
+
+
+    // finalize method is called on object once
+    // before garbage collecting it
+    @Override
+    protected void finalize() {
+        id = null;
+        createdDate = null;
+        createdBy = null;
+        modifiedDate = null;
+        modifiedBy = null;
+        maxPageItems = 0;
+        page = 0;
+        listResult = null;
+        totalItems = 0;
+        tableId = null;
+        limit = null;
+        totalPage = null;
+        totalItem = null;
+        searchValue = null;
+    }
 }

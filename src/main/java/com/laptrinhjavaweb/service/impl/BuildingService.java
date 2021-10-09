@@ -42,7 +42,7 @@ public class BuildingService implements IBuildingService {
                 Utils.destroyReference(districtResponse);
             }
             return listDistrict;
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -61,7 +61,7 @@ public class BuildingService implements IBuildingService {
                 Utils.destroyReference(typesResponse);
             }
             return listTypes;
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -69,7 +69,7 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public List<TypesResponse> getBuildingTypes(List<String> rentypes) {
-        try{
+        try {
             List<TypesResponse> typeList = getBuildingTypes();
             if (rentypes == null) return typeList;
             for (TypesResponse item : typeList) {
@@ -80,7 +80,7 @@ public class BuildingService implements IBuildingService {
                 }
             }
             return typeList;
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -107,7 +107,7 @@ public class BuildingService implements IBuildingService {
             Utils.destroyReference(entities);
 
             return result;
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -140,10 +140,10 @@ public class BuildingService implements IBuildingService {
 
     @Override
     @Transactional
-    public void update(BuildingDTO newBuilding) throws RuntimeException{
+    public void update(BuildingDTO newBuilding) throws RuntimeException {
         // apply cascade
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-}
+    }
 
     @Override
     public void deleteById(Long id) {

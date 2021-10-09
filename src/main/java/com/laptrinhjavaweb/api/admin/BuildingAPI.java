@@ -41,7 +41,7 @@ public class BuildingAPI {
     @PostMapping
     public ResponseEntity<BuildingDTO> createBuilding(@RequestBody BuildingDTO newBuilding) {
 
-        buildingService.save(newBuilding);
+        buildingService.updateOrSave(newBuilding);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -57,7 +57,7 @@ public class BuildingAPI {
     @PutMapping("/{id}")
     public ResponseEntity<List<StaffBuildingResponse>> updateBuilding(@RequestBody BuildingDTO dto) {
 
-        buildingService.update(dto);
+        buildingService.updateOrSave(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -98,58 +98,61 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     public void updateAssignment(StaffBuildingRequest request) {
         // apply cascade
         BuildingEntity buildingEntity = buildingRepository.findOne(request.getBuildingId());
-
-        //buildingEntity.setStaffs(getStaffEntity(request.getStaffIds()));
         buildingEntity.setStaffs(userRepository.findByIdIn(request.getStaffIds()));
 
         buildingRepository.save(buildingEntity);
     }
 
-/*    @Override
+    /*@Override
     @Transactional
     public void updateAssignment(StaffBuildingRequest request) {
         List<Long> staffsIdChecked = request.getStaffIds();
         List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
         List<AssignmentBuildingEntity> staffsOld = assignmentBuildingRepository
                 .findByBuildingId(request.getBuildingId());
-        List<Long> staffsIdChecked = request.getStaffIds();
-        List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
-
-        if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
+        //if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
 
         //another cases
         removeDuplicate(staffsOld, staffsFromRequest);
         assignmentBuildingRepository.delete(staffsOld);
         assignmentBuildingRepository.save(staffsFromRequest);
 
-        Utils.destroyReference(staffsOld, staffsIdChecked, staffsFromRequest);
+        //Utils.destroyReference(staffsOld, staffsIdChecked, staffsFromRequest);
     }*/
 
-    @Override
-    public List<UserEntity> getStaffEntity(List<Long> staffsIdChecked){
-        List<UserEntity> staffs = new ArrayList<>();
-        for(Long item: staffsIdChecked){
-            UserEntity staff = userRepository.findOne(item);
-            staffs.add(staff);
+    /*@Override
+    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsNew){
+        //solution 1
+        Map<Long, Object> map = new HashMap<>();
+        //loop through list time: O(n)
+        for(AssignmentBuildingEntity a: staffsOld){
+            map.put(a.getId(), a);
         }
-        return staffs;
-    }
+        //loop through list time: O(n), delete take the time: O(1)
+        for (int i = 0; i < staffsNew.size(); i++) {
+            if (map.get(staffsNew.get(i).getId()) != null) {
+                map.remove(staffsNew.get(i).getId());
+                staffsNew.remove(i);
+            }
+        }
+        // Solution 1: Total: O(n + n + 1).
+        // VD: n = 9 ==> 19 iterator numbers
 
-    @Override
-    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest){
-        Map<String, Object> map = new HashMap<>();
 
-        for (int i = 0; i < staffsOld.size(); i++) {
-            for (int j = 0; j < staffsFromRequest.size(); j++) {
-                if (staffsOld.get(i).getUser().getId() == staffsFromRequest.get(j).getUser().getId()) {
+        // Solution 2: loop through list time: O(n^2).
+        // Delete : O(1 + 1).
+*//*        for (int i = 0; i < staffsOld.size(); i++) {
+            for (int j = 0; j < staffsNew.size(); j++) {
+                if (staffsOld.get(i).getUser().getId() == staffsNew.get(j).getUser().getId()) {
                     staffsOld.remove(i);
-                    staffsFromRequest.remove(j);
+                    staffsNew.remove(j);
                     i--;
                     break;
                 }
             }
-        }
-    }
+        }*//*
+        // Total = O(n^2 +1) ==> VD: n = 9 ==> 82 iterator numbers
+    }*/
 
     /**
      * those cases which we can guess. If return True ==> done process

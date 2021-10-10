@@ -11,11 +11,10 @@ public interface IAssignmentBuildingService {
     //get Data
     List<StaffBuildingResponse> getStaffsAssignment(Long buildingId);
     List<StaffBuildingResponse> findAllStaff();
-    List<UserEntity> getStaffEntity(List<Long> staffsIdChecked);
 
     //Change Data
     void updateAssignment(StaffBuildingRequest request);
-    void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest);
+    //void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest);
 
 
     // logic

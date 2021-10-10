@@ -11,6 +11,7 @@ import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,9 +80,8 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
      * @return
      */
     public String convertTypeListToString(List<String> typeList){
-        if(typeList == null){
-            throw  new NullPointerException(MessageConstant.NULL103);
-        }
+        if(typeList == null) throw  new NullPointerException(MessageConstant.NULL103);
+
         return typeList.stream().collect(Collectors.joining(","));
     }
 
@@ -91,9 +91,8 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
      * @return
      */
     public List<String> convertTypeStrToTypeList(String typeStr){
-        if (typeStr == null) {
-            throw new NullPointerException(MessageConstant.NULL102);
-        }
+        if (typeStr == null) throw new NullPointerException(MessageConstant.NULL102);
+
         return Arrays.stream(typeStr.split(",")).collect(Collectors.toList());
     }
 
@@ -103,9 +102,8 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
      * @return
      */
     public String convertRentAreaListToStringList(List<RentAreaEntity> rentArea){
-        if(rentArea == null){
-            throw new NullPointerException(MessageConstant.NULL101);
-        }
+        if(rentArea == null) throw new NullPointerException(MessageConstant.NULL101);
+
         List<String> rentAreaList = rentArea.stream()
                 .map(item -> String.valueOf(item.getValue()))
                 .collect(Collectors.toList());
@@ -119,9 +117,8 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
      */
     public static List<RentAreaEntity> convertRentAreaFormatStringToEntities(String rentAreas, BuildingEntity entity){
         List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
-        if(rentAreas == null){
-            throw new NullPointerException(MessageConstant.NULL104);
-        }
+        if(rentAreas == null) throw new NullPointerException(MessageConstant.NULL104);
+
         String[] rentAreaStrs = rentAreas.split(",");
         for (String item : rentAreaStrs) {
             RentAreaEntity rentAreaEntity = new RentAreaEntity();

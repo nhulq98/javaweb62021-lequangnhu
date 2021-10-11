@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.converter.AbstractConverter;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
@@ -104,8 +105,6 @@ public class BuildingService implements IBuildingService {
             List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
                     .collect(Collectors.toList());
 
-            Utils.destroyReference(entities);
-
             return result;
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -113,35 +112,9 @@ public class BuildingService implements IBuildingService {
         }
     }
 
-//    @Override
-//    public void save(BuildingDTO newBuilding) {
-//        // apply cascade
-//        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-//    }
-
-/*    @Override
-    public void save(BuildingDTO newBuilding) {
-        // save building
-        BuildingEntity entity = buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
-
-        // save RentArea
-        String[] rentAreaStrs = newBuilding.getRentAreas().split(",");
-        for (String item : rentAreaStrs) {
-            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if (item.trim().matches(SystemConstant.ISNUMBER)) {
-                rentAreaEntity.setValue(Integer.parseInt(item.trim()));
-                rentAreaEntity.setBuilding(entity);
-
-                rentAreaRepository.save(rentAreaEntity);
-            }
-            Utils.customGC(rentAreaEntity);
-        }
-    }*/
-
     @Override
     @Transactional
     public void updateOrSave(BuildingDTO newBuilding) throws RuntimeException {
-
         // apply cascade
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
     }

@@ -35,7 +35,8 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @Override
     public List<BuildingEntity> findByCondition(Map<String, Object> requestParam) {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
-        StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
+        StringBuilder stringBuilder = this.buildQueryForBuildingSearch(searchBuilder);
+        StringBuilder sql = stringBuilder;
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 
         Utils.destroyReference(sql, searchBuilder);
@@ -50,7 +51,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      */
     @Override
     public StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
-        //SELECT BD.id, BD.name, BD.street, BD.ward, DT.name, BD.managername, BD.managerphone, BD.floorarea, BD.rentprice, BD.servicefee"
         StringBuilder sql = new StringBuilder("SELECT BD.*")
                 .append(" FROM building BD ");
         if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
@@ -98,7 +98,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
             if (!name.equals("buildingTypes")
                     && !name.startsWith("rentArea") && !name.startsWith("rentPrice")) {
                 try {
-                    Object objectValue = item.get(buildingSearch); // reflect chay vo then building va scan cai field do xong no boc tach du lieu ra
+                    Object objectValue = item.get(buildingSearch);// can throw IllegalAccessException
                     if (item.getType().getTypeName().contains("String")
                             && objectValue != null && String.valueOf(objectValue).length() != 0) {
                         sql.append(createConditionForStringByLike(name.toLowerCase(), String.valueOf(objectValue)));
@@ -114,44 +114,51 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 }
             }
         }
-        Utils.destroyReference(fields);
+    }
+
+    /**
+     * Check role of current user logged
+     * @param role
+     * @return
+     */
+    public boolean isRole(String role, MyUserDetail userDetails) {
+        for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
+            if (grantedAuthority.getAuthority().contains(role)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * // This code below to process authorization when user logged search
      * Has 3 Case:
-     *    case 1: current user has role is staff ==> search by userID(current user)
-     *    case 2: current user has role is manager ==> search normal(not by userID(current user))
-     *    case 3: if current user has role is manager and it's searching by staffId ==> search by staffID
+     * case 1: current user has role is staff ==> search by userID(current user)
+     * case 2: current user has role is manager ==> search normal(not by userID(current user))
+     * case 3: if current user has role is manager and it's searching by staffId ==> search by staffID
      *
      * @param sql
      * @param staffId
      */
-    public void authorization(StringBuilder sql, Long staffId){
-
-        boolean temp = false; // user Logged has role: MANAGER
+    public void authorization(StringBuilder sql, Long staffId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetail userDetails = (MyUserDetail) authentication.getPrincipal();
-        //case 1:
-        for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
-            if (grantedAuthority.getAuthority().contains(SystemConstant.ROLE_STAFF)) {// default: search value follow by current logged user
-                sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-                sql.append(" WHERE 1=1 ");
-                sql.append(" AND ASB.staffid =" + userDetails.getId());
-                temp = true; // user Logged has role: STAFF
-            }
-        }
-        //case 2:
-        if (temp == false && staffId != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
+        boolean temp = isRole(SystemConstant.ROLE_STAFF, userDetails);
+
+        if (temp == true) {
             sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
             sql.append(" WHERE 1=1 ");
-        } else if (temp == false) {//case 3: User Logged has role: MANAGER
+            sql.append(" AND ASB.staffid =" + userDetails.getId());
+        } else if (staffId != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
+            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
+            sql.append(" WHERE 1=1 ");
+        } else {
             sql.append(" WHERE 1=1 ");
         }
     }
 
     /**
-     * generic method to create condition clause with values have type is String become like this.
+     * Generic method to create condition clause with values have type is String become like this.
      * Example: " AND name LIKE '%value%' "
      *
      * @param fieldName

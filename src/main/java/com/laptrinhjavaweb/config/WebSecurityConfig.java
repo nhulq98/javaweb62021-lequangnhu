@@ -44,11 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // set nếu đang nhập rồi mới được vô các url khác
                 http.csrf().disable().authorizeRequests()
-                //authorization for building manage
+                        .antMatchers("/admin/**").authenticated()
                 //staff only edit and search building. any else deny all
-                        .antMatchers("/api/building/assignmentbuilding").hasRole("MANAGER")
-                        .antMatchers("/api/building/assignmentbuilding").permitAll()
-                        .antMatchers("/api/building/**").hasRole("MANAGER")//delete function
+                        .antMatchers("/api/building/**").hasRole("MANAGER")
                         .and()
                 .formLogin().loginPage("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll()
                 .loginProcessingUrl("/j_spring_security_check")

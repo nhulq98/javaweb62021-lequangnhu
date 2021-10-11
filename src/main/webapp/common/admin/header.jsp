@@ -17,7 +17,9 @@
             <ul class="nav ace-nav">
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <c:if test="${SecurityUtils.getPrincipal().getFullName() != null}">
                         Xin chào, <%=SecurityUtils.getPrincipal().getFullName()%>
+                        </c:if>
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>
 

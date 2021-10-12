@@ -191,7 +191,7 @@ select
 												value="${item.id}" />
 											<a class="btn btn-info btn-sm" data-toggle="tooltip"
 												title="Edit Customer"
-												href='<c:url value="/admin/building-edit-${item.id}"/>'>
+												href='<c:url value="/admin/customer-edit-${item.id}"/>'>
 												<i class="fa fa-pencil-square-o"></i>
 											</a>
 											<%--&lt;%&ndash;                                        <button onclick="editBuilding(this.value)" value="${item.id}" type="button"&ndash;%&gt;--%>
@@ -270,7 +270,7 @@ select
 
 		function openModalAssingmentCustomer() {
 
-			$('#f').modal();
+			$('#assingmentCustomerModal').modal();
 		}
 
 		function showListStaffById(customerId) {

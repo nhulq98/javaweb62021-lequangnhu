@@ -2,13 +2,17 @@ package com.laptrinhjavaweb.api.admin;
 
 import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
+import com.laptrinhjavaweb.service.IAssignmentCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,7 +20,7 @@ import java.util.List;
 public class AssignmentCustomerAPI {
 
     @Autowired// find bean is created and inject into.
-    private IAssignmentBuildingService assignmentBuildingService;
+    private IAssignmentCustomerService assignmentCustomerService;
 
     /**
      * Get ALl staffs available and staffs is managing building with buildingId from request param.
@@ -28,8 +32,8 @@ public class AssignmentCustomerAPI {
     @GetMapping("/{id}/staffs")
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+        assignmentCustomerService.findAllStaffsByCusId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
 
     }
 
@@ -37,8 +41,9 @@ public class AssignmentCustomerAPI {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffBuildingRequest request) {
 
-        assignmentBuildingService.updateAssignment(request);
-        return ResponseEntity.ok().build();
+//        assignmentBuildingService.updateAssignment(request);
+//        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

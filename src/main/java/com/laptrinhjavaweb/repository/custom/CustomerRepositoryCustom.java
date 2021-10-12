@@ -15,12 +15,6 @@ public interface CustomerRepositoryCustom {
     // Scope for logic
     void authorization(StringBuilder sql, Long staffId);
 
-    /**
-     * buildQueryForCustomerSearch to concat all clauses to complete sql final
-     *
-     * @param request the customer from search form
-     * @return sql String final
-     */
     StringBuilder buildQueryForCustomerSearch(CustomerRequest request);
 
     void buildWhereSQLClause(CustomerRequest conditionSearch, StringBuilder sql);

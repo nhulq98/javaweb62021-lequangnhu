@@ -45,6 +45,12 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
     }
 
+    /**
+     * buildQueryForCustomerSearch to concat all clauses to complete sql final
+     *
+     * @param conditionSearch the customer from search form
+     * @return sql String final
+     */
     @Override
     public StringBuilder buildQueryForCustomerSearch(CustomerRequest conditionSearch) {
         StringBuilder sql = new StringBuilder("SELECT C.*")

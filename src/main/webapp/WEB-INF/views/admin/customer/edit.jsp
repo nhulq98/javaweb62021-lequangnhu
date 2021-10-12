@@ -86,7 +86,6 @@
                             </div>
                         </div>
                         <form:hidden path="id" id="customerid"/>
-                        <div class="clearfix form-actions">
                             <div class="col-md-offset-3 col-md-9">
                                 <c:if test="${not empty customer.id}">
                                     <button class="btn btn-info" type="button" id="btnAddOrUpdateCustomer">
@@ -107,60 +106,57 @@
                                     Destroy
                                 </button>
                             </div>
-                        </div>
                     </form:form> <%-- end form --%>
                 </div>
             </div>
         </div>
 
-        <div class="page-content">
-            <div class="page-header" style="padding: 3px">
-                <h1  style="font-size: 21px;" >${item.value}
-                    <button
-                            class="dt-button buttons-colvis btn btn-white btn-primary btn-bold btnAddTransaction"
-                            data-toggle="tooltip"  title='Thêm hành động' id="${item.key}">
-                        <span><i class="fa fa-plus-circle sbigger-110 purple"></i></span>
-                    </button>
-                </h1>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr style="font-family: VnBlack ; font-weight: bold; color: #000000;">
-                                <td class="col-sm-3">Ngày tạo</td>
-                                <td>Ghi chú</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <%--<c:forEach var="index" items="${customer.transaction}">--%>
-                            <%--<c:if test="${item.key == index.code}">--%>
-                            <%--<tr>--%>
-                            <%--<th>${index.createdDate}</th>--%>
-                            <%--<th>${index.note}</th>--%>
-                            <%--</tr>--%>
-                            <%--</c:if>--%>
-                            <%--</c:forEach>--%>
-                            <tr>
-                                <th></th>
-                                <th>
+        <%-- Transactions --%>
+        <c:forEach  var="item" items="${transactiontype}">
+            <div class="page-content">
+                <div class="page-header" style="padding: 3px">
+                    <h1  style="font-size: 21px;" >${item.name}
+                        <button
+                                class="dt-button buttons-colvis btn btn-white btn-primary btn-bold btnAddTransaction"
+                                data-toggle="tooltip"  title='Thêm hành động' >
+                            <span><i class="fa fa-plus-circle sbigger-110 purple"></i></span>
+                        </button>
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr style="font-family: VnBlack ; font-weight: bold; color: #000000;">
+                                    <td class="col-sm-3">Ngày tạo</td>
+                                    <td>Ghi chú</td>
+                                </tr>
+                                </thead>
+                                    <tbody>
+                                    <%--<c:forEach var="index" items="${customer.transaction}">--%>
+                                    <%--<c:if test="${item.key == index.code}">--%>
+                                    <%--<tr>--%>
+                                    <%--<th>${index.createdDate}</th>--%>
+                                    <%--<th>${index.note}</th>--%>
+                                    <%--</tr>--%>
+                                    <%--</c:if>--%>
+                                    <%--</c:forEach>--%>
+                                    <tr>
+                                    <th></th>
+                                    <th>
                                     <form id="node">
-                                        <input type="text" style="width: 100%" name="node" id="id_${item.key}"/>
+                                    <input type="text" style="width: 100%" name="node" id="id_${item.id}"/>
                                     </form>
-                                </th>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </th>
+                                    </tr>
+                                    </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+
             </div>
-
-        </div>
-
-        <%-- Transactions --%>
-        <c:forEach  var="item" items="${transactions}">
-
         </c:forEach>
     </div>
 </div>

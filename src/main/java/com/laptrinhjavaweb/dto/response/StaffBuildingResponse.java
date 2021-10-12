@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.dto.response;
 
+import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.entity.view.StaffEntity;
 
 import lombok.Getter;
@@ -17,5 +18,11 @@ public class StaffBuildingResponse extends BaseResponse {
     	this.id = entity.getId();
     	this.fullName = entity.getFullName();
     	this.checked = entity.getChecked();
+    }
+
+    public StaffBuildingResponse(UserEntity entity) {
+        this.id = entity.getId();
+        this.fullName = entity.getFullName();
+        this.checked = "NULL";
     }
 }

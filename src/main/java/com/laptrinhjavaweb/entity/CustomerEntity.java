@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -12,13 +14,12 @@ import java.util.List;
 @Entity
 @Table(name = "customer")
 public class CustomerEntity extends BaseEntity {
-
     //=========================relationship================================
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    List<TransactionEntity> transactions = new ArrayList<>();
+    List<TransactionTypeEntity> transactionTypes = new ArrayList<>();
     //============================================================
 
     @Column(name = "fullname")

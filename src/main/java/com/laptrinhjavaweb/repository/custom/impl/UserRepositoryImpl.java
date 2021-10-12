@@ -15,13 +15,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public List<UserEntity> getStaffs() {
-        StringBuilder sql = new StringBuilder("SELECT *")
-                .append(" FROM USER U, USER_ROLE UR ")
-                .append(" WHERE U.id = UR.userid ")
-                .append(" AND UR.roleid = 2 ");
-        Query query = entityManager.createNativeQuery(sql.toString(), UserEntity.class);
-        return query.getResultList();
-    }
+//    @Override
+//    public List<UserEntity> getStaffs() {
+//        StringBuilder sql = new StringBuilder("SELECT *")
+//                .append(" FROM USER U, USER_ROLE UR ")
+//                .append(" WHERE U.id = UR.userid ")
+//                .append(" AND UR.roleid = 2 ");
+//        Query query = entityManager.createNativeQuery(sql.toString(), UserEntity.class);
+//        return query.getResultList();
+//    }
 }

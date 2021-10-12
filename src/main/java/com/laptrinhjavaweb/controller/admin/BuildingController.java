@@ -10,6 +10,7 @@ import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.impl.AssignmentBuildingService;
 import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +62,7 @@ public class BuildingController {
         return mav;
     }
 
+    //@PreAuthorize("")
     @RequestMapping(value = "/admin/building-edit-{id}", method = RequestMethod.GET)
     public ModelAndView update(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
@@ -69,6 +71,7 @@ public class BuildingController {
         mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
 
         List<TypesResponse> types = buildingService.getBuildingTypes(dto.getRentTypes());
+
         //send checked
         mav.addObject(SystemConstant.RENT_TYPE_EDIT, types);
 

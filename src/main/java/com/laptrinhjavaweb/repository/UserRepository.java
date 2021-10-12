@@ -5,6 +5,7 @@ import com.laptrinhjavaweb.repository.custom.UserRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -18,4 +19,9 @@ public interface UserRepository extends UserRepositoryCustom, JpaRepository<User
     UserEntity findOneByUserName(String userName);
 
     List<UserEntity> findByIdIn(List<Long> ids);
+
+    @Query(value = "SELECT U.* FROM USER U, USER_ROLE UR WHERE U.id = UR.userid AND UR.roleid = 2", nativeQuery = true)
+    List<UserEntity> getAllStaffs();
+
+    //List<UserEntity> get();
 }

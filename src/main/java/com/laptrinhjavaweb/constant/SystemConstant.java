@@ -19,6 +19,8 @@ public class SystemConstant {
     public static final String STAFF_BUILDING = "staffbuilding";
     public static final String RENT_TYPE = "renttype";
     public static final String RENT_TYPE_EDIT = "renttypeedit";
+    public static final String TRANSACTION_TYPE = "transactiontype";
+
 
     // Scope for Logic
     public static final String ISNUMBER = "[0-9]+";

@@ -5,9 +5,11 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
+import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.ICustomerService;
+import com.laptrinhjavaweb.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +26,13 @@ public class CustomerController {
     ICustomerService service;
 
     @Autowired
-    CustomerRepository customerRepository;
+    IAssignmentBuildingService assignmentBuildingService;
 
     @Autowired
-    IAssignmentBuildingService assignmentBuildingService;
+    ITransactionService transactionService;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
     CustomerConverter converter;
@@ -52,6 +57,8 @@ public class CustomerController {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
         // add model to view
+        //GET transaction type
+        mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionService.getAllTranSactions());
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
 
         return mav;
@@ -61,9 +68,10 @@ public class CustomerController {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
         CustomerDTO customerDTO = converter.convertEntityToDTO(customerRepository.findOne(id));
-
+        List<TransactionTypeResponse> transactionTypeResponse = transactionService.getAllTranSactions();
         // add model to view
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
+        mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionTypeResponse);
 
         return mav;
     }

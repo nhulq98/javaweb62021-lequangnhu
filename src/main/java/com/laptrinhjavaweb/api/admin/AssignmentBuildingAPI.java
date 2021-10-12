@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/building/assignment")
 public class AssignmentBuildingAPI {
 
-    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    @Autowired
     private IAssignmentBuildingService assignmentBuildingService;
 
     /**

@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
+import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.ICustomerService;
@@ -24,11 +25,9 @@ public class CustomerService implements ICustomerService {
     CustomerConverter converter;
 
     @Override
-    public List<CustomerResponse> findByCondition(Map<String, Object> requestParam) {
-
-        CustomerRequest request = converter.convertMapToRequest(requestParam);
+    public List<CustomerResponse> findByCondition(CustomerRequest customerSearchModel) {
         //mapper.
-        List<CustomerEntity> entities = repository.findByCondition(request);
+        List<CustomerEntity> entities = repository.findByCondition(customerSearchModel);
         List<CustomerResponse> result = new ArrayList<>();
         //entities.stream().map(item -> result.add(converter.convertEntityToResponse(item)));
         for(CustomerEntity item: entities){
@@ -36,6 +35,11 @@ public class CustomerService implements ICustomerService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.repository.custom;
 
 import com.laptrinhjavaweb.builder.BuildingSearch;
+import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface BuildingRepositoryCustom {
     List<BuildingEntity> findByCondition(Map<String, Object> requestParam);
 
     // Logic
+    void authorization(StringBuilder sql, Long staffId);
 
     /**
      * buildQueryForSearchBuilding to concat all clauses to complete sql final
@@ -31,8 +33,4 @@ public interface BuildingRepositoryCustom {
     void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql);
 
     void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql);
-
-    StringBuilder buildBuildingSearchPart1(BuildingSearch buildingSearch);
-
-    StringBuilder buildBuildingSearchPart2(BuildingSearch buildingSearch);
 }

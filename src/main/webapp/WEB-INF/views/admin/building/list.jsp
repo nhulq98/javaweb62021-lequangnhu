@@ -349,10 +349,11 @@ select
 						<div class="modal-footer">
 
 							<button type="button" class="btn btn-default"
-								data-dismiss="modal" onclick="assignmentForStaffs()">Assingment
-								Building</button>
+								data-dismiss="modal" onclick="assignmentForStaffs()">Assingment Building
+							</button>
 							<button type="button" class="btn btn-default"
-								data-dismiss="modal">Close</button>
+								data-dismiss="modal">Close
+							</button>
 						</div>
 					</div>
 				</div>

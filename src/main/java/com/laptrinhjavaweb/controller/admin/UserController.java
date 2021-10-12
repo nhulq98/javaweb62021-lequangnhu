@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.controller.admin;
 
+import com.laptrinhjavaweb.constant.MessageConstant;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
@@ -88,8 +89,8 @@ public class UserController {
 		String message = request.getParameter("message");
 		if (message != null && StringUtils.isNotEmpty(message)) {
 			Map<String, String> messageMap = messageUtil.getMessage(message);
-			mav.addObject(SystemConstant.ALERT, messageMap.get(SystemConstant.ALERT));
-			mav.addObject(SystemConstant.MESSAGE_RESPONSE, messageMap.get(SystemConstant.MESSAGE_RESPONSE));
+			mav.addObject(MessageConstant.ALERT, messageMap.get(MessageConstant.ALERT));
+			mav.addObject(MessageConstant.MESSAGE_RESPONSE, messageMap.get(MessageConstant.MESSAGE_RESPONSE));
 		}
 	}
 }

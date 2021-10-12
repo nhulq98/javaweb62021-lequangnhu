@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.api.admin;
 
-import com.laptrinhjavaweb.constant.SystemConstant;
+import com.laptrinhjavaweb.constant.MessageConstant;
 import com.laptrinhjavaweb.dto.PasswordDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.exception.MyException;
@@ -33,7 +33,7 @@ public class UserAPI {
     public ResponseEntity<String> changePasswordUser(@PathVariable("id") long id, @RequestBody PasswordDTO passwordDTO) {
         try {
             userService.updatePassword(id, passwordDTO);
-            return ResponseEntity.ok(SystemConstant.UPDATE_SUCCESS);
+            return ResponseEntity.ok(MessageConstant.UPDATE_SUCCESS);
         } catch (MyException e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.ok(e.getMessage());

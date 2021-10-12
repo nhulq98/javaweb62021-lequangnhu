@@ -13,13 +13,13 @@ import java.util.List;
 @Table(name = "customer")
 public class CustomerEntity extends BaseEntity {
 
-    //=========================================================
-    // relationship
+    //=========================relationship================================
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
-    // relationship
+
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<TransactionEntity> transactions = new ArrayList<>();
+    //============================================================
 
     @Column(name = "fullname")
     private String fullName;
@@ -29,5 +29,16 @@ public class CustomerEntity extends BaseEntity {
 
     @Column(name = "email", unique = true)
     private String email;
-//============================================================
+
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "demand")
+    private String demand;
+
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "status")
+    private String status;
 }

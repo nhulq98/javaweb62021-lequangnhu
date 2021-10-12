@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.constant.MessageConstant;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.UserConverter;
 import com.laptrinhjavaweb.dto.PasswordDTO;
@@ -123,7 +124,7 @@ public class UserService implements IUserService {
             user.setPassword(passwordEncoder.encode(passwordDTO.getNewPassword()));
             userRepository.save(user);
         } else {
-            throw new MyException(SystemConstant.CHANGE_PASSWORD_FAIL);
+            throw new MyException(MessageConstant.CHANGE_PASSWORD_FAIL);
         }
     }
 

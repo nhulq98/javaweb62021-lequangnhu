@@ -18,7 +18,7 @@ import java.util.Map;
 //@Comp
 public class BuildingAPI {
 
-    @Autowired // là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    @Autowired // find bean is created and inject into.
     private IBuildingService buildingService;
 
     //SCOPE FOR GET DATA

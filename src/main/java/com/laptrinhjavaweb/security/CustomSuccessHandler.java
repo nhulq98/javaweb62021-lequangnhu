@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.security;
 
 import com.laptrinhjavaweb.constant.SystemConstant;
+import com.laptrinhjavaweb.constant.URLConstant;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -33,9 +34,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String url = "";
         List<String> roles = SecurityUtils.getAuthorities();
         if (isUser(roles)) {
-            url = SystemConstant.HOME;
+            url = URLConstant.HOME;
         } else if (isAdmin(roles)) {
-            url = SystemConstant.ADMIN_HOME;
+            url = URLConstant.ADMIN_HOME;
         }
         return url;
     }

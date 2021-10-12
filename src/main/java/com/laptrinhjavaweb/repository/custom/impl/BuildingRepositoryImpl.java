@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
+import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import com.laptrinhjavaweb.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,15 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @Autowired
     private BuildingConverter buildingConverter;
 
-    @PersistenceContext// initializer for EntityManager
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public List<BuildingEntity> findByCondition(Map<String, Object> requestParam) {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
-        StringBuilder stringBuilder = this.buildQueryForBuildingSearch(searchBuilder);
-        StringBuilder sql = stringBuilder;
+        StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 
-        Utils.destroyReference(sql, searchBuilder);
         return query.getResultList();
     }
 
@@ -56,26 +55,10 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
             sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
         }
+        authorization(sql, buildingSearch.getStaffId());
         this.buildWhereSQLClause(buildingSearch, sql);
         sql.append(" GROUP BY BD.id ");
         return sql;
-    }
-
-    @Override
-    public StringBuilder buildBuildingSearchPart1(BuildingSearch buildingSearch) {
-        Field[] fields = BuildingSearch.class.getDeclaredFields();
-
-//        for(Field item: fields){
-//            //if(item.get())
-//            item.getModifiers()
-//        }
-
-        return null;
-    }
-
-    @Override
-    public StringBuilder buildBuildingSearchPart2(BuildingSearch buildingSearch) {
-        return null;
     }
 
     /**
@@ -86,11 +69,12 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      */
     @Override
     public void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
-        authorization(sql, buildingSearch.getStaffId());
-
+        // specials cases
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);
         buildConditionForBuildingType(buildingSearch, sql);
+
+        // another cases
         Field[] fields = BuildingSearch.class.getDeclaredFields();
         for (Field item : fields) {
             item.setAccessible(true);
@@ -117,20 +101,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     /**
-     * Check role of current user logged
-     * @param role
-     * @return
-     */
-    public boolean isRole(String role, MyUserDetail userDetails) {
-        for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
-            if (grantedAuthority.getAuthority().contains(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * // This code below to process authorization when user logged search
      * Has 3 Case:
      * case 1: current user has role is staff ==> search by userID(current user)
@@ -140,11 +110,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param sql
      * @param staffId
      */
+    @Override
     public void authorization(StringBuilder sql, Long staffId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetail userDetails = (MyUserDetail) authentication.getPrincipal();
-        boolean temp = isRole(SystemConstant.ROLE_STAFF, userDetails);
+        MyUserDetail userDetails = SecurityUtils.getMyUserDetail();
 
+        boolean temp = SecurityUtils.isRole(SystemConstant.ROLE_STAFF, userDetails);
         if (temp == true) {
             sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
             sql.append(" WHERE 1=1 ");
@@ -194,7 +164,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                     .append(value).append(" ");
         }
         return new StringBuilder();
-
     }
 
     @Override

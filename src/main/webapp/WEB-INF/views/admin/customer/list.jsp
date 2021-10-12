@@ -3,6 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="formUrl" value="/admin/customer-list" />
+<c:url var="customerAPI" value="/api/customer/assignment" />
 <%--<c:url var="formAjax" value="/api/user"/>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -63,7 +64,7 @@ select
 									<div class="widget-header">
 										<h4 class="widget-title">
 											<%--<spring:message code="label.search"/>--%>
-											Tìm kiếm
+											Search
 										</h4>
 										<div class="widget-toolbar">
 											<a href="#" data-action="collapse"> <i
@@ -120,7 +121,7 @@ select
 															<button id="btnSearch" type="submit"
 																class="btn btn-sm btn-success">
 																<%--spring:message code="label.search"/>--%>
-																Tìm kiếm 
+																Search
 																<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
 															</button>
 														</div>
@@ -138,8 +139,8 @@ select
 												class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
 												data-toggle="tooltip"
 												<%--title='<spring:message code="label.user.add"/>'--%>
-                                           title="Thêm Tòa Nhà"
-												href='<c:url value="/admin/building-edit"/>'> <span>
+                                           title="Add Customer"
+												href='<c:url value="/admin/customer-edit"/>'> <span>
 													<i class="fa fa-plus-circle bigger-110 purple"></i>
 											</span>
 											</a>
@@ -179,17 +180,17 @@ select
 										<display:column headerClass="text-left" property="createdDate" title="Ngày Nhập" />
 										<%--<display:column headerClass="text-left" property="" title="Tình trạng" />--%>
 										<display:column headerClass="col-actions" title="Thao tác">
-											<button onclick="assignmentBuilding(this.value)"
+											<button onclick="assignmentCustomer(this.value)"
 												value="${item.id}" type="button"
 												class="btn btn-succcreateStaffs ess btn-sm popup"
-												data-toggle="tooltip; modal" title="Delevery Buildings!"
-												data-target="#myModal" id="btnAssingmentBuilding">
+												data-toggle="tooltip; modal" title="Delevery Customer!"
+												data-target="#myModal" id="btnAssingmentCustomer">
 												<i class="ace-icon fa fa-tasks"></i>
 											</button>
 											<input type="hidden" id="buildingIdCurrent"
 												value="${item.id}" />
 											<a class="btn btn-info btn-sm" data-toggle="tooltip"
-												title="Cập nhật tòa nhà"
+												title="Edit Customer"
 												href='<c:url value="/admin/building-edit-${item.id}"/>'>
 												<i class="fa fa-pencil-square-o"></i>
 											</a>
@@ -202,7 +203,7 @@ select
 											<button onclick="deleteBuilding(this.value)"
 												value="${item.id}" id="btnDelete" type="button"
 												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-												data-toggle="tooltip" title="Xóa Tòa Nhà">
+												data-toggle="tooltip" title="Delete Customer">
 												<span> <i class="fa fa-trash-o bigger-110 pink"></i>
 												</span>
 											</button>
@@ -220,7 +221,7 @@ select
 		<div class="container">
 
 			<!-- Modal -->
-			<div class="modal fade" id="assingmentBuildingModal" role="dialog">
+			<div class="modal fade" id="assingmentCustomerModal" role="dialog">
 				<div class="modal-dialog modal-lg">
 
 					<!-- Modal content-->
@@ -260,22 +261,22 @@ select
 
 	<!--BEGIN Script dialog -->
 	<script>
-		// functions for assignment building
-		function assignmentBuilding(id) {
-			showListStaffById(id);
-			$('#buildingIdCurrent').val(id); // set value for update staff function
-			openModalAssingmentBuilding();
+		// functions for assignment customer
+		function assignmentCustomer(id) {
+            showListStaffById(id);
+            $('#buildingIdCurrent').val(id); // set value for update staff function
+            openModalAssingmentCustomer();
 		}
 
-		function openModalAssingmentBuilding() {
+		function openModalAssingmentCustomer() {
 
-			$('#assingmentBuildingModal').modal();
+			$('#f').modal();
 		}
 
-		function showListStaffById(buildingId) {
+		function showListStaffById(customerId) {
 			$
 					.ajax({
-						url : '${buildingAPI}/' + buildingId + '/staffs',
+						url : '${CustomerAPI}/' + customerId + '/staffs',
 						type : 'GET',
 						dataType : "json", // define data type for output data from server
 						//data: JSON.stringify(dataArray),

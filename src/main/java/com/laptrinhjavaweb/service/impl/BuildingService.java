@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service // nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất cho nó (singleton)
+@Service // nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất cho nó (singleton pattern)
 public class BuildingService implements IBuildingService {
 
-    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    @Autowired
     private BuildingRepository buildingRepository;
 
-    @Autowired// là tìm module tương ứng (tạo từ trước) và inject vào đó.
+    @Autowired
     private BuildingConverter buildingConverter;
 
     @Override
@@ -99,7 +99,6 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
-        //mapper.
         try {
             List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
             List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)

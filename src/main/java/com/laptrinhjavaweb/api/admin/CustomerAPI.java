@@ -19,8 +19,8 @@ public class CustomerAPI {
 
     @GetMapping
     public ResponseEntity<List<CustomerDTO>> findByCondition(Map<String, Object> requestParam){
-//        List<CustomerDTO> result = service.findByCondition(requestParam);
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
+        //List<CustomerDTO> result = service.findByCondition(requestParam);
+        //return ResponseEntity.status(HttpStatus.OK).body(result);
         return ResponseEntity.ok().build();
     }
 
@@ -38,6 +38,7 @@ public class CustomerAPI {
 
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody CustomerDTO newDto){
+        service.save(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

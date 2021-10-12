@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/customer/assignment")
 public class AssignmentCustomerAPI {
 
-    @Autowired// là tìm module tương ứng (tạo từ trước, nằm trong IOC container) và inject vào đó.
+    @Autowired// find bean is created and inject into.
     private IAssignmentBuildingService assignmentBuildingService;
 
     /**
@@ -27,15 +27,15 @@ public class AssignmentCustomerAPI {
      */
     @GetMapping("/{id}/staffs")
     public @ResponseBody
-    ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+    ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
 
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 
-    @PostMapping("/assignmentbuilding")
+    @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffBuildingRequest request) {
+    public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffBuildingRequest request) {
 
         assignmentBuildingService.updateAssignment(request);
         return ResponseEntity.ok().build();

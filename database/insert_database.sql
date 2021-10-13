@@ -39,8 +39,16 @@ INSERT INTO `role` VALUES (1,NULL,NULL,NULL,NULL,'MANAGER','Quản lý'),(2,NULL
 
 INSERT INTO `user_role` VALUES (1,1),(2,2),(3,2),(4,2);
 
+INSERT INTO `customer` VALUES
+                              (10,'nguyenvana','2021-10-13 16:53:01','nguyenvana','2021-10-13 17:05:23','Nam giới','Thuê nhà','nhule2031998@gmail.com - Unique','Lê Quang Như','','0335206644 - Unique','đang xử lý')
+    ,(11,'nguyenvana','2021-10-13 17:06:32','nguyenvana','2021-10-13 17:06:43','Nam giới','','canh@gmail.com','nguyen huu canh','','01666666','mới tiếp nhận');
 
+INSERT INTO `transactiontype` VALUES
+                                     (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','QUA_TRINH_CSKH',NULL,10)
+    ,(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','DAN_DI_XEM',NULL,10),(3,'nguyenvana','2021-10-13 17:56:25','nguyenvana','2021-10-13 17:56:25','DAN_DI_XEM',NULL,10);
 
+INSERT INTO `transaction` VALUES (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','mới gọi điện hẹn thứ 7 gặp',1),(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','đi xem hết tầng 1',2)
+    ,(3,'nguyenvana','2021-10-13 17:56:25','nguyenvana','2021-10-13 17:56:25','đi xem trên ban công',3);
 
 
 

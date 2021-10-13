@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 @RequestMapping("/api/customer")
 @RestController
 public class CustomerAPI {
@@ -17,12 +14,12 @@ public class CustomerAPI {
     @Autowired
     ICustomerService service;
 
-    @GetMapping
-    public ResponseEntity<List<CustomerDTO>> findByCondition(Map<String, Object> requestParam){
-        //List<CustomerDTO> result = service.findByCondition(requestParam);
-        //return ResponseEntity.status(HttpStatus.OK).body(result);
-        return ResponseEntity.ok().build();
-    }
+//    @GetMapping
+//    public ResponseEntity<List<CustomerDTO>> findByCondition(Map<String, Object> requestParam){
+//        //List<CustomerDTO> result = service.findByCondition(requestParam);
+//        //return ResponseEntity.status(HttpStatus.OK).body(result);
+//        return ResponseEntity.ok().build();
+//    }
 
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){
@@ -32,6 +29,7 @@ public class CustomerAPI {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
+        System.out.println(id);
         service.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -2,7 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="formUrl" value="/admin/customer-list" />
+<c:url var="CustomerList" value="/admin/customer-list" />
+<c:url var="CustomerAPI" value="/api/customer" />
 <c:url var="assignmentCustomerAPI" value="/api/customer/assignment" />
 
 <%--<c:url var="formAjax" value="/api/user"/>--%>
@@ -74,7 +75,7 @@ select
 										</div>
 									</div>
 									<form:form commandName="customerSearchForm"
-										action="${formUrl}" id="listForm" method="GET">
+										action="${CustomerList}" id="listForm" method="GET">
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="form-horizontal">
@@ -153,7 +154,7 @@ select
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="table-responsive">
-									<display:table name="result" requestURI="${formUrl}"
+									<display:table name="result" requestURI="${CustomerList}"
 										id="item"
 										class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
 										style="margin: 3em 0 1.5em;">
@@ -176,10 +177,10 @@ select
 											property="phone" title="Số Điện Thoại" />
 										<display:column headerClass="text-left" property="email"
 											title="Email" />
-										<%--<display:column headerClass="text-left" property="" title="Nhu cầu" />--%>
+										<%--<display:column headerClass="text-left" property="demand" title="Nhu cầu" />--%>
 										<display:column headerClass="text-left" property="createdBy" title="Người Nhập" />
 										<display:column headerClass="text-left" property="createdDate" title="Ngày Nhập" />
-										<%--<display:column headerClass="text-left" property="" title="Tình trạng" />--%>
+										<display:column headerClass="text-left" property="status" title="Tình trạng" />
 										<display:column headerClass="col-actions" title="Thao tác">
 											<button onclick="assignmentCustomer(this.value)"
 												value="${item.id}" type="button"
@@ -201,7 +202,7 @@ select
 											<%--&lt;%&ndash;                                                title="Edit Buildings!">&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                            <i class="ace-icon fa fa-pencil bigger-110"></i>&ndash;%&gt;--%>
 											<%--&lt;%&ndash;                                        </button>&ndash;%&gt;--%>
-											<button onclick="deleteBuilding(this.value)"
+											<button onclick="deleteCustomer(this.value)"
 												value="${item.id}" id="btnDelete" type="button"
 												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
 												data-toggle="tooltip" title="Delete Customer">
@@ -314,16 +315,16 @@ select
 
 		function updateStaff(object) {
 			$.ajax({
-				url : '${assignmentCustomerAPI}',
+				url : '${assignmentCustomerList}',
 				type : 'POST',
 				//dataType: "json", // define data type for output data from server
 				data : JSON.stringify(object),
 				contentType : "application/json", // define data type for input data server
 				success : function(res) {
-					console.log('success');
+                    window.location.href = "<c:url value='${CustomerList}?message=delete_success'/>";
 				},
 				error : function(res) {
-					console.log("Failed!" + res.toString());
+                    window.location.href = "<c:url value='${CustomerList}?message=delete_failed'/>";
 				}
 			});
 		}
@@ -331,19 +332,17 @@ select
 		//==============================================================
 
 		//==================functions for building ===========================
-		function deleteBuilding(buildingId) {
+		function deleteCustomer(customerId) {
 			showAlertBeforeDelete(function() {
 				$
 						.ajax({
-							url : '${buildingAPI}/' + buildingId,
+							url : '${CustomerAPI}/' + customerId,
 							type : 'DELETE',
 							success : function(res) {
-								console.log('success');
-								window.location.href = "<c:url value='/admin/building-list?message=delete_success'/>";
+								window.location.href = "<c:url value='${CustomerList}?message=delete_success'/>";
 							},
 							error : function(res) {
-								window.location.href = "<c:url value='/admin/building-list?message=delete_failed'/>";
-								console.log("Failed!" + res.toString());
+								window.location.href = "<c:url value='${CustomerList}?message=delete_failed'/>";
 							}
 						});
 			});

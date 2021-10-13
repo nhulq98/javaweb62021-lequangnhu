@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@include file="/common/taglib.jsp" %>
 <c:url value="/admin/customer-list" var="customerList" />
+<c:url value="/admin/customer-edit" var="customerEdit" />
 <c:url value="/api/customer" var="customerAPI" />
 <c:url value="/api/customer/transaction" var="transactionURL"/>
 <html>
@@ -187,11 +188,11 @@
             dataType: 'json',
             success: function (result) {
                 console.log(result)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerList}?message=add_success'"
             },
             error: function (error) {
                 console.log(error)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerList}?message=add_failed'"
             }
         });
     }
@@ -204,11 +205,11 @@
             dataType: 'json',
             success: function (result) {
                 console.log(result)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerList}?message=update_success'"
             },
             error: function (error) {
                 console.log(error)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerList}?message=update_faild'"
             }
         });
     }
@@ -232,12 +233,10 @@
             data: JSON.stringify(data),
             dataType: 'json',
             success: function (result) {
-                console.log(result)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerEdit}-" + data['customerId'];
             },
             error: function (error) {
-                console.log(error)
-                window.location.href = "${customerList}"
+                window.location.href = "${customerEdit}-" + data['customerId'];
             }
         })
     }

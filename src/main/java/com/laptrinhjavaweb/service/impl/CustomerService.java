@@ -6,7 +6,6 @@ import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
-import com.laptrinhjavaweb.entity.view.StaffEntity;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService implements ICustomerService {

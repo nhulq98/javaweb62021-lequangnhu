@@ -101,11 +101,10 @@
                                        Add customer
                                   </button>
                                 </c:if>
-
-                                <button class="btn" type="reset">
-                                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                                    Destroy
-                                </button>
+                                <%--<button class="btn" type="reset">--%>
+                                    <%--<i class="ace-icon fa fa-undo bigger-110"></i>--%>
+                                    <%--Destroy--%>
+                                <%--</button>--%>
                             </div>
                     </form:form> <%-- end form --%>
                 </div>

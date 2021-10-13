@@ -19,6 +19,7 @@ public class TransactionAPI {
 
     @PostMapping
     public ResponseEntity<Void> createTransaction(@RequestBody TransactionRequest transactionRequest) {
+
         service.save(transactionRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

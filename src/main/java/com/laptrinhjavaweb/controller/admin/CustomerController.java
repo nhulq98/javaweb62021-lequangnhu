@@ -40,10 +40,10 @@ public class CustomerController {
 
     @GetMapping(value = "/admin/customer-list")
     public ModelAndView getAll(@ModelAttribute(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL)CustomerRequest customerSearchModel) {
+
         ModelAndView mav = new ModelAndView("admin/customer/list");
 
         List<CustomerResponse> result = service.findByCondition(customerSearchModel);
-
         //add model to view
         mav.addObject(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL, customerSearchModel);
         mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
@@ -55,12 +55,12 @@ public class CustomerController {
 
     @GetMapping(value = "/admin/customer-edit")
     public ModelAndView create(@ModelAttribute(SystemConstant.CUSTOMMER_MODEL) CustomerDTO customerDTO) {
+
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
         // add model to view
         //GET transaction type
         //mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionService.getAllTranSactions());
-
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
 
         return mav;

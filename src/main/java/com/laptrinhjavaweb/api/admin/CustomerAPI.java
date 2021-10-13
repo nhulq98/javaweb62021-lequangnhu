@@ -14,13 +14,6 @@ public class CustomerAPI {
     @Autowired
     ICustomerService service;
 
-//    @GetMapping
-//    public ResponseEntity<List<CustomerDTO>> findByCondition(Map<String, Object> requestParam){
-//        //List<CustomerDTO> result = service.findByCondition(requestParam);
-//        //return ResponseEntity.status(HttpStatus.OK).body(result);
-//        return ResponseEntity.ok().build();
-//    }
-
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){
         service.save(newDto);

@@ -5,6 +5,7 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
+import com.laptrinhjavaweb.dto.response.TransactionResponse;
 import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
@@ -58,7 +59,8 @@ public class CustomerController {
 
         // add model to view
         //GET transaction type
-        mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionService.getAllTranSactions());
+        //mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionService.getAllTranSactions());
+
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
 
         return mav;
@@ -70,12 +72,15 @@ public class CustomerController {
         CustomerDTO customerDTO = converter.convertEntityToDTO(customerRepository.findOne(id));
 
         //get all types
+        List<TransactionTypeResponse> allTranSactions = transactionService.getAllTranSactions();
 
-        List<TransactionTypeResponse> transactionTypeResponse = transactionService.getAllTranSactions();
+        //Get Transaction of customer
+        List<TransactionResponse> transactionResponse = transactionService.getTransactionsOfCustomerById(customerDTO.getId());
 
         // add model to view
+        mav.addObject(SystemConstant.CUSTOMMER_TRANSACTION, transactionResponse);
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
-        mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionTypeResponse);
+        mav.addObject(SystemConstant.TRANSACTION_TYPE, allTranSactions);
 
         return mav;
     }

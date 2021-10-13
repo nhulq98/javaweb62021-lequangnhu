@@ -12,6 +12,7 @@ public class SystemConstant {
     public static final String BUILDING_SEARCH_FORM_MODEL = "buildingSearchForm";
     public static final String CUSTOMMER_SEARCH_FORM_MODEL = "customerSearchForm";
     public static final String CUSTOMMER_MODEL = "customer";
+    public static final String CUSTOMMER_TRANSACTION = "transaction";
     public static final String SEARCH_RESULT_MODEL = "result";
     public static final String MODEL = "model";
     public static final String DISTRICT = "district";

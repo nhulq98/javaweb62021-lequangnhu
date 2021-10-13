@@ -3,11 +3,11 @@
 <%@include file="/common/taglib.jsp" %>
 <c:url value="/admin/customer-list" var="customerList" />
 <c:url value="/api/customer" var="customerAPI" />
-<%--<c:url value="/api/customer/transaction" var="transactionURL"/>--%>
+<c:url value="/api/customer/transaction" var="transactionURL"/>
 <html>
 <head>
     <title>Chỉnh sửa khách hàng </title>
-</head>
+</head>btnAddTransaction
 <body>
 <div class="main-content">
     <div class="main-content-inner">
@@ -116,7 +116,7 @@
             <div class="page-content">
                 <div class="page-header" style="padding: 3px">
                     <h1  style="font-size: 21px;" >${item.name}
-                        <button
+                        <button value="${item.code}"
                                 class="dt-button buttons-colvis btn btn-white btn-primary btn-bold btnAddTransaction"
                                 data-toggle="tooltip"  title='Thêm hành động' >
                             <span><i class="fa fa-plus-circle sbigger-110 purple"></i></span>
@@ -133,24 +133,25 @@
                                     <td>Ghi chú</td>
                                 </tr>
                                 </thead>
-                                    <tbody>
-                                    <%--<c:forEach var="index" items="${customer.transaction}">--%>
-                                    <%--<c:if test="${item.key == index.code}">--%>
-                                    <%--<tr>--%>
-                                    <%--<th>${index.createdDate}</th>--%>
-                                    <%--<th>${index.note}</th>--%>
-                                    <%--</tr>--%>
-                                    <%--</c:if>--%>
-                                    <%--</c:forEach>--%>
-                                    <tr>
+                                <tbody>
+                                <c:forEach var="index" items="${transaction}">
+                                    <c:if test="${item.code.equals(index.code)}">
+                                        <tr>
+                                            <%--<input type="hidden" id="type_${index.typeId}"/>--%>
+                                            <th>${index.createdDate}</th>
+                                            <th>${index.note}</th>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                <tr>
                                     <th></th>
                                     <th>
-                                    <form id="node">
-                                    <input type="text" style="width: 100%" name="node" id="id_${item.id}"/>
-                                    </form>
+
+                                        <input type="text" style="width: 100%" name="node" id="${item.code}"/>
+
                                     </th>
-                                    </tr>
-                                    </tbody>
+                                </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -215,14 +216,11 @@
 
 
     $('.btnAddTransaction').click(function () {
-        var idNoteForm = 'id_'+this.id;
-        var note = document.getElementById(idNoteForm).value;
-        var code = this.id;
-        var customerId = $('#customerid').val();
         var data ={};
-        data['note'] = note;
-        data['code'] = code;
-        data['customerId'] = customerId;
+        let noteObject = document.getElementById(this.value);
+        data['note'] = noteObject.value;
+        data['customerId'] = $('#customerid').val();
+        data['code'] = this.value;
         addTransaction(data);
     })
 

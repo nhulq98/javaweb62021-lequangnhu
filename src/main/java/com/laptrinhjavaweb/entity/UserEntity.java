@@ -25,7 +25,11 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    // khai báo mappedBy phải trùng tên với biến của bên RoleEntity
+    // khai báo mappedBy phải trùng tên với biến của bên CustomerEntity
+    @ManyToMany(mappedBy = "staffs", fetch = FetchType.LAZY)
+    private List<CustomerEntity> customers = new ArrayList<>();
+
+    // khai báo mappedBy phải trùng tên với biến của bên BuildingEntity
     @ManyToMany(mappedBy = "staffs", fetch = FetchType.LAZY)
     private List<BuildingEntity> buildings = new ArrayList<>();
 

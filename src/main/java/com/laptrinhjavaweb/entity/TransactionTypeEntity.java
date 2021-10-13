@@ -24,4 +24,7 @@ public class TransactionTypeEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "transactionType", fetch = FetchType.LAZY)
     private List<TransactionEntity> transaction = new ArrayList<>();
+
+    @Column(name = "note")
+    private String note;
 }

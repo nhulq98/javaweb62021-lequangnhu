@@ -25,7 +25,7 @@ public abstract class BaseEntity {
     @CreatedDate
     private Date createdDate;
 
-    @Column(name = "modifieddate", insertable = false)
+    @Column(name = "modifieddate")
     @LastModifiedDate
     private Date modifiedDate;
 
@@ -33,7 +33,7 @@ public abstract class BaseEntity {
     @CreatedBy
     private String createdBy;
 
-    @Column(name = "modifiedby", insertable = false)
+    @Column(name = "modifiedby")
     @LastModifiedBy
     private String modifiedBy;
 }

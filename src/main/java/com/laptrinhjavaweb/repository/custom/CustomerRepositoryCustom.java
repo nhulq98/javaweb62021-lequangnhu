@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.builder.BuildingSearch;
 import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.entity.CustomerEntity;
+import com.laptrinhjavaweb.entity.view.StaffEntity;
 
 import java.util.List;
 

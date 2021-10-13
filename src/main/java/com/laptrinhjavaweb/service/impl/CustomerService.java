@@ -23,8 +23,6 @@ public class CustomerService implements ICustomerService {
     @Autowired
     CustomerRepository repository;
 
-
-
     @Autowired
     CustomerConverter converter;
 

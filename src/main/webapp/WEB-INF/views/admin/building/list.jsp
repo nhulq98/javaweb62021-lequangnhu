@@ -409,7 +409,7 @@ select
 						return this.value;
 					}).get();
 			var object = {};
-			object.buildingId = $('#buildingIdCurrent').val();//get value
+			object.id = $('#buildingIdCurrent').val();//get value
 			object.staffIds = idArray;
 			updateStaff(object);
 		}

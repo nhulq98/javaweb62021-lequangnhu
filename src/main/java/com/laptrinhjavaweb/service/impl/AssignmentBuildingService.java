@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
-import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
+import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.BuildingEntity;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,11 +52,16 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
      */
     @Override
     public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
-        List<StaffEntity> staffsAll = assignmentBuildingRepository.findAllCustom(buildingId);
-        List<StaffBuildingResponse> result = staffsAll.stream()
-                .map(StaffBuildingResponse::new).collect(Collectors.toList());
+        try{
+            List<StaffEntity> staffsAll = assignmentBuildingRepository.findAllCustom(buildingId);
+            List<StaffBuildingResponse> result = staffsAll.stream()
+                    .map(StaffBuildingResponse::new).collect(Collectors.toList());
 
-        return result;
+            return result;
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return new ArrayList<> ();
+        }
     }
 
     @Override
@@ -95,9 +101,9 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
      */
     @Override
     @Transactional
-    public void updateAssignment(StaffBuildingRequest request) {
+    public void updateAssignment(StaffRequest request) {
         // apply cascade
-        BuildingEntity buildingEntity = buildingRepository.findOne(request.getBuildingId());
+        BuildingEntity buildingEntity = buildingRepository.findOne(request.getId());
         buildingEntity.setStaffs(userRepository.findByIdIn(request.getStaffIds()));
 
         buildingRepository.save(buildingEntity);
@@ -105,12 +111,12 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 
     /*@Override
     @Transactional
-    public void updateAssignment(StaffBuildingRequest request) {
+    public void updateAssignment(StaffRequest request) {
         List<Long> staffsIdChecked = request.getStaffIds();
         List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
         List<AssignmentBuildingEntity> staffsOld = assignmentBuildingRepository
                 .findByBuildingId(request.getBuildingId());
-        //if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
+        if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
 
         //another cases
         removeDuplicate(staffsOld, staffsFromRequest);

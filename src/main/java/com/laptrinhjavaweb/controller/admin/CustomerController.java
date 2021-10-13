@@ -68,7 +68,11 @@ public class CustomerController {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
         CustomerDTO customerDTO = converter.convertEntityToDTO(customerRepository.findOne(id));
+
+        //get all types
+
         List<TransactionTypeResponse> transactionTypeResponse = transactionService.getAllTranSactions();
+
         // add model to view
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
         mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionTypeResponse);

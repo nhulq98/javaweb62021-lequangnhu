@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.api.admin;
 
-import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
+import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
@@ -32,16 +32,14 @@ public class AssignmentCustomerAPI {
     @GetMapping("/{id}/staffs")
     public @ResponseBody
     ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
-        assignmentCustomerService.findAllStaffsByCusId(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
-
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffBuildingRequest request) {
+    public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffRequest request) {
 
-//        assignmentBuildingService.updateAssignment(request);
+        assignmentCustomerService.updateAssignment(request);
 //        return ResponseEntity.ok().build();
         return ResponseEntity.status(HttpStatus.OK).build();
     }

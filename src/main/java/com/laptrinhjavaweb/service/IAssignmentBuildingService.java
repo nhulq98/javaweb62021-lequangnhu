@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.service;
 
-import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
+import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
@@ -13,7 +13,7 @@ public interface IAssignmentBuildingService {
     List<StaffBuildingResponse> findAllStaff();
 
     //Change Data
-    void updateAssignment(StaffBuildingRequest request);
+    void updateAssignment(StaffRequest request);
     //void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsFromRequest);
 
 

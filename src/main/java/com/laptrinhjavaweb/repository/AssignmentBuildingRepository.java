@@ -1,13 +1,17 @@
 package com.laptrinhjavaweb.repository;
 
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
+import com.laptrinhjavaweb.entity.view.StaffEntity;
 import com.laptrinhjavaweb.repository.custom.AssignmentBuildingRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface AssignmentBuildingRepository extends AssignmentBuildingRepositoryCustom, JpaRepository<AssignmentBuildingEntity, Long> {
-    void deleteByBuildingId(Long id);
-
-    List<AssignmentBuildingEntity> findByBuildingId(Long id);
+//    @Query(value = "SELECT US.id, US.fullname, US.createdby, US.createddate, US.modifiedby, US.modifieddate" +
+//            ",(case WHEN USR.userid in(select SB.staffid FROM staff_building SB WHERE SB.buildingid = ?1" +
+//            ") THEN 'checked' ELSE 'NULL' END) AS checked " +
+//            " FROM user US, user_role USR WHERE US.id = USR.userid AND USR.roleid = 2 ", nativeQuery = true)
+//    List<StaffEntity> findAllCustom(Long buildingId);
 }

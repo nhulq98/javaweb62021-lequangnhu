@@ -15,8 +15,13 @@ import java.util.List;
 @Table(name = "customer")
 public class CustomerEntity extends BaseEntity {
     //=========================relationship================================
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
+//    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+//    List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "staff_customer",
+            joinColumns = @JoinColumn(name = "customerid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> staffs = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<TransactionTypeEntity> transactionTypes = new ArrayList<>();

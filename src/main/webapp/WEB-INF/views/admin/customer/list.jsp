@@ -3,7 +3,8 @@
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="formUrl" value="/admin/customer-list" />
-<c:url var="customerAPI" value="/api/customer/assignment" />
+<c:url var="assignmentCustomerAPI" value="/api/customer/assignment" />
+
 <%--<c:url var="formAjax" value="/api/user"/>--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -187,7 +188,7 @@ select
 												data-target="#myModal" id="btnAssingmentCustomer">
 												<i class="ace-icon fa fa-tasks"></i>
 											</button>
-											<input type="hidden" id="buildingIdCurrent"
+											<input type="hidden" id="customerIdCurrent"
 												value="${item.id}" />
 											<a class="btn btn-info btn-sm" data-toggle="tooltip"
 												title="Edit Customer"
@@ -264,7 +265,7 @@ select
 		// functions for assignment customer
 		function assignmentCustomer(id) {
             showListStaffById(id);
-            $('#buildingIdCurrent').val(id); // set value for update staff function
+            $('#customerIdCurrent').val(id); // set value for update staff function
             openModalAssingmentCustomer();
 		}
 
@@ -276,13 +277,13 @@ select
 		function showListStaffById(customerId) {
 			$
 					.ajax({
-						url : '${CustomerAPI}/' + customerId + '/staffs',
+						url : '/api/customer/assignment/' + customerId + '/staffs',
 						type : 'GET',
 						dataType : "json", // define data type for output data from server
 						//data: JSON.stringify(dataArray),
 						//contentType: "text/plain", // define data type for input data server
 						success : function(res) {
-							var row = '';
+							let row = '';
 							$.each(res, function(index, item) {
 												row += '<tr>';
 												row += '<td class="text-center"> <input type="checkbox" name="checkList" value=' + item.id + ' id="checkbox_' + item.id + '" class="check-box-element"' + item.checked + '/></td>';
@@ -301,19 +302,19 @@ select
 		}
 
 		function assignmentForStaffs() {
-			var idArray = $('.check-box-element:checkbox:checked').map(
+			let idArray = $('.check-box-element:checkbox:checked').map(
 					function() {
 						return this.value;
 					}).get();
-			var object = {};
-			object.buildingId = $('#buildingIdCurrent').val();//get value
+			let object = {};
+			object.id = $('#customerIdCurrent').val();//get value
 			object.staffIds = idArray;
 			updateStaff(object);
 		}
 
 		function updateStaff(object) {
 			$.ajax({
-				url : '${updateAssignmentAPI}',
+				url : '${assignmentCustomerAPI}',
 				type : 'POST',
 				//dataType: "json", // define data type for output data from server
 				data : JSON.stringify(object),

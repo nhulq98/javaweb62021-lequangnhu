@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.api.admin;
 
-import com.laptrinhjavaweb.dto.request.StaffBuildingRequest;
+import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class AssignmentBuildingAPI {
 
     @PostMapping("/assignmentbuilding")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffBuildingRequest request) {
+    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffRequest request) {
         assignmentBuildingService.updateAssignment(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

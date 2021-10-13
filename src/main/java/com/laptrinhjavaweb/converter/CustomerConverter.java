@@ -38,8 +38,8 @@ public class CustomerConverter extends AbstractConverter<CustomerDTO, CustomerEn
 
     public CustomerResponse convertEntityToResponse(CustomerEntity entity) {
         CustomerResponse response = modelMapper.map(entity, CustomerResponse.class);
-        if(entity.getAssignmentCustomers().size() > 0){
-            response.setManagerName(entity.getAssignmentCustomers().get(0).getUser().getFullName());
+        if(entity.getStaffs().size() > 0){
+            response.setManagerName(entity.getStaffs().get(0).getFullName());
         }
         return response;
     }

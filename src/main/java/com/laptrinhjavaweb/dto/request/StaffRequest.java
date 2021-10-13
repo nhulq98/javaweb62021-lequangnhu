@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 @Getter
 @Setter
-public class StaffBuildingRequest {
+public class StaffRequest {
     private LinkedList<Long> staffIds;
-    private Long buildingId;
+    private Long id;
 
 }

@@ -53,9 +53,7 @@ public class TransactionService implements ITransactionService {
         //1 transactionType ==> has many transaction
         List<TransactionEntity> transactions = new ArrayList<>();
         for(TransactionTypeEntity item: transactionTypes){
-            for(TransactionEntity t: item.getTransaction()){
-                transactions.add(t);
-            }
+            transactions.addAll(item.getTransaction().stream().collect(Collectors.toList()));
         }
 
         List<TransactionResponse> result = transactions.stream().map(TransactionResponse::new)
@@ -71,7 +69,6 @@ public class TransactionService implements ITransactionService {
         TransactionTypeEntity transactionTypes = new TransactionTypeEntity();
         transactionTypes.setCode(transactionRequest.getCode());
         transactionTypes.setCustomer(customerEntity);
-
         transactionTypeRepository.save(transactionTypes);
 
         TransactionEntity transaction = new TransactionEntity();

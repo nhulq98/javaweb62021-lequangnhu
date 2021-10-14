@@ -52,28 +52,27 @@ public class TransactionService implements ITransactionService {
         // output: list transaction ==> have to get list transaction from TransactionType
         //1 transactionType ==> has many transaction
         List<TransactionEntity> transactions = new ArrayList<>();
-        for(TransactionTypeEntity item: transactionTypes){
-            transactions.addAll(item.getTransaction().stream().collect(Collectors.toList()));
-        }
-
+        transactionTypes.forEach(
+                item -> transactions.addAll(item.getTransaction().stream().collect(Collectors.toList()))
+        );
         List<TransactionResponse> result = transactions.stream().map(TransactionResponse::new)
                 .collect(Collectors.toList());
+
         return result;
     }
 
     @Override
     @Transactional
     public void save(TransactionRequest transactionRequest) {
-        CustomerEntity customerEntity = customerRepository.findOne(transactionRequest.getCustomerId());
-
         TransactionTypeEntity transactionTypes = new TransactionTypeEntity();
         transactionTypes.setCode(transactionRequest.getCode());
-        transactionTypes.setCustomer(customerEntity);
+        transactionTypes.setCustomer(customerRepository.findOne(transactionRequest.getCustomerId()));
         transactionTypeRepository.save(transactionTypes);
 
         TransactionEntity transaction = new TransactionEntity();
         transaction.setTransactionType(transactionTypes);
         transaction.setNote(transactionRequest.getNote());
         transationRepository.save(transaction);
+
     }
 }

@@ -1,7 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.dto.MyUserDetail;
-import com.laptrinhjavaweb.dto.RoleDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.service.IUserService;
 import org.springframework.beans.BeanUtils;
@@ -29,9 +28,7 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("Username not found");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(RoleDTO role: userDTO.getRoles()){
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getCode()));
-        }
+        userDTO.getRoles().forEach(i->authorities.add(new SimpleGrantedAuthority("ROLE_"+i.getCode())));
         MyUserDetail myUserDetail = new MyUserDetail(name,userDTO.getPassword(),true,true,true,true,authorities);
         BeanUtils.copyProperties(userDTO, myUserDetail);
         return myUserDetail;

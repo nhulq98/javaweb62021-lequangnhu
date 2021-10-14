@@ -1,6 +1,5 @@
 package com.laptrinhjavaweb.service.impl;
 
-import com.laptrinhjavaweb.converter.AbstractConverter;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
@@ -11,7 +10,6 @@ import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
-import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +38,6 @@ public class BuildingService implements IBuildingService {
                 districtResponse.setValue(item.getDistrictValue());
 
                 listDistrict.add(districtResponse);
-                Utils.destroyReference(districtResponse);
             }
             return listDistrict;
         } catch (RuntimeException e) {
@@ -59,7 +56,6 @@ public class BuildingService implements IBuildingService {
                 typesResponse.setValue(item.getBuildingTypeValue());
 
                 listTypes.add(typesResponse);
-                Utils.destroyReference(typesResponse);
             }
             return listTypes;
         } catch (RuntimeException e) {

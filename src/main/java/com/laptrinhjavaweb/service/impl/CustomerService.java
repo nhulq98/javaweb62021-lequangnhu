@@ -4,7 +4,6 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
-import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.ICustomerService;
@@ -28,24 +27,9 @@ public class CustomerService implements ICustomerService {
         //mapper.
         List<CustomerEntity> entities = repository.findByCondition(customerSearchModel);
         List<CustomerResponse> result = new ArrayList<>();
-        //entities.stream().map(item -> result.add(converter.convertEntityToResponse(item)));
-        for(CustomerEntity item: entities){
-            result.add(converter.convertEntityToResponse(item));
-        }
+        entities.forEach(item -> result.add(converter.convertEntityToResponse(item)));
 
         return result;
-    }
-
-    @Override
-    public List<StaffBuildingResponse> getStaffsAssignment(Long customerId) {
-//        List<StaffEntity> staffsAll = repository.find(customerId);
-//
-//
-//        List<StaffBuildingResponse> result = staffsAll.stream()
-//                .map(StaffBuildingResponse::new).collect(Collectors.toList());
-//
-//        return result;
-        return new ArrayList<>();
     }
 
     @Override

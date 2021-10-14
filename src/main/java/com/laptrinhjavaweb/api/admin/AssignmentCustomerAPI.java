@@ -31,10 +31,9 @@ public class AssignmentCustomerAPI {
         return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
     }
 
-    @PostMapping
+    @PutMapping
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffRequest request) {
-
         assignmentCustomerService.updateAssignment(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -147,6 +147,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void delete(long[] ids) {
+        //List<Long> arr = Arrays.stream(ids).boxed().collect(Collectors.toList());
         for (Long item : ids) {
             UserEntity userEntity = userRepository.findOne(item);
             userEntity.setStatus(0);

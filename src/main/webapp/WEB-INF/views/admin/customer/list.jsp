@@ -278,7 +278,7 @@ select
 		function showListStaffById(customerId) {
 			$
 					.ajax({
-						url : '/api/customer/assignment/' + customerId + '/staffs',
+						url : '${assignmentCustomerAPI}/' + customerId + '/staffs',
 						type : 'GET',
 						dataType : "json", // define data type for output data from server
 						//data: JSON.stringify(dataArray),
@@ -315,8 +315,8 @@ select
 
 		function updateStaff(object) {
 			$.ajax({
-				url : '${assignmentCustomerList}',
-				type : 'POST',
+				url : '${assignmentCustomerAPI}',
+				type : 'PUT',
 				//dataType: "json", // define data type for output data from server
 				data : JSON.stringify(object),
 				contentType : "application/json", // define data type for input data server

@@ -4,7 +4,6 @@ import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.entity.CustomerEntity;
-import com.laptrinhjavaweb.entity.view.StaffEntity;
 import com.laptrinhjavaweb.repository.custom.CustomerRepositoryCustom;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import org.springframework.stereotype.Repository;
@@ -33,12 +32,12 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
         boolean temp = SecurityUtils.isRole(SystemConstant.ROLE_STAFF, userDetails);
         if (temp == true) {
-            sql.append(" JOIN assignmentcustomer AC on AC.customerid = C.id");
+            sql.append(" JOIN staff_customer AC on AC.customerid = C.id");
             //sql.append(" JOIN user US on AC.staffid = US.id");
             sql.append(" WHERE 1=1 ");
             sql.append(" AND AC.staffid =" + userDetails.getId());
         } else if (staffId != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
-            sql.append(" JOIN assignmentcustomer AC on AC.customerid = C.id ");
+            sql.append(" JOIN staff_customer AC on AC.customerid = C.id ");
             sql.append(" WHERE 1=1 ");
         } else {
             sql.append(" WHERE 1=1 ");

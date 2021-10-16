@@ -1,9 +1,14 @@
 package com.laptrinhjavaweb.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class UserEntity extends BaseEntity {
@@ -12,7 +17,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "username", nullable = false, unique = true)
     private String userName;
-
+Us
     @Column(name = "fullname", nullable = false)
     private String fullName;
 

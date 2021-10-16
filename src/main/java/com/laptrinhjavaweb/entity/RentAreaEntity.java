@@ -14,9 +14,8 @@ public class RentAreaEntity extends BaseEntity {
     @Column(name = "value")
     private Integer value;
 
-    //relationship
+// ==============Relationship==============
     @ManyToOne
     @JoinColumn(name = "buildingid")
     private BuildingEntity building = new BuildingEntity();
-
 }

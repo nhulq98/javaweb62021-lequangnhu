@@ -11,12 +11,11 @@ import javax.persistence.*;
 @Table(name = "assignmentbuilding")
 public class AssignmentBuildingEntity extends BaseEntity {
 
-    //relationship
-    @ManyToOne(fetch = FetchType.LAZY)// khai báo kiểu quan hệ
-    @JoinColumn(name = "buildingid")// Khai báo TÊN khóa ngoại của bảng này sẽ liên kết với đối tượng bên dưới
-    private BuildingEntity building = new BuildingEntity(); // khai báo đối tượng quan hệ
+    @ManyToOne(fetch = FetchType.LAZY)// declare relationship type
+    @JoinColumn(name = "buildingid")// declare the foreign key name of this table to link with below Object
+    private BuildingEntity building = new BuildingEntity(); // declare relationship object
 
-    @ManyToOne(fetch = FetchType.LAZY)// khai báo kiểu quan hệ
-    @JoinColumn(name = "staffid")// Khai báo TÊN khóa ngoại của bảng này sẽ liên kết với đối tượng bên dưới
-    private UserEntity user = new UserEntity(); // khai báo đối tượng quan hệ
+    @ManyToOne(fetch = FetchType.LAZY)// declare relationship type
+    @JoinColumn(name = "staffid")// declare the foreign key name of this table to link with below Object
+    private UserEntity user = new UserEntity(); // declare relationship object
 }

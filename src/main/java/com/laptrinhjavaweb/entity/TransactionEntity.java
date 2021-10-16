@@ -14,6 +14,7 @@ public class TransactionEntity extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    // ==============Relationship==============
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "typeid")
     private TransactionTypeEntity transactionType = new TransactionTypeEntity();

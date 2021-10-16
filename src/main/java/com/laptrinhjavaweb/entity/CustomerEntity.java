@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -14,18 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "customer")
 public class CustomerEntity extends BaseEntity {
-    //=========================relationship================================
-//    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-//    List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "staff_customer",
-            joinColumns = @JoinColumn(name = "customerid", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
-    private List<UserEntity> staffs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    List<TransactionTypeEntity> transactionTypes = new ArrayList<>();
-    //============================================================
 
     @Column(name = "fullname")
     private String fullName;
@@ -47,4 +33,16 @@ public class CustomerEntity extends BaseEntity {
 
     @Column(name = "status")
     private String status;
+
+    //=========================relationship================================
+//    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+//    List<AssignmentCustomerEntity> assignmentCustomers = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "staff_customer",
+            joinColumns = @JoinColumn(name = "customerid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> staffs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    List<TransactionTypeEntity> transactionTypes = new ArrayList<>();
 }

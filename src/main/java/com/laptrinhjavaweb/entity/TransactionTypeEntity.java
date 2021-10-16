@@ -19,9 +19,11 @@ public class TransactionTypeEntity extends BaseEntity {
     @Column(name = "code")
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)// khai báo kiểu quan hệ
-    @JoinColumn(name = "customerid")// Khai báo TÊN khóa ngoại của bảng này sẽ liên kết với đối tượng bên dưới
-    private CustomerEntity customer = new CustomerEntity(); // khai báo đối tượng quan hệ
+
+    // ==============Relationship==============
+    @ManyToOne(fetch = FetchType.LAZY)// declare relationship type(@OneToMany, @ManyToMany)
+    @JoinColumn(name = "customerid")// declare the foreign key name of this table to link with below Object
+    private CustomerEntity customer = new CustomerEntity(); // declare relationship object
 
     @OneToMany(mappedBy = "transactionType", fetch = FetchType.LAZY)
     private List<TransactionEntity> transaction = new ArrayList<>();

@@ -7,12 +7,8 @@ import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
-import com.laptrinhjavaweb.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository// nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất (singleton)
+@Repository// it understands this is a module and tells the IOC container to create a single object (singleton)
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 
     @Autowired
@@ -42,6 +38,15 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         return query.getResultList();
     }
 
+    public StringBuilder buildFromSQLClause(BuildingSearch buildingSearch){
+        StringBuilder sql = new StringBuilder("SELECT BD.*")
+                .append(" FROM building BD ");
+        if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
+            sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
+        }
+        return sql;
+    }
+
     /**
      * buildQueryForSearchBuilding to concat all clauses to complete sql final
      *
@@ -50,14 +55,9 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      */
     @Override
     public StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
-        StringBuilder sql = new StringBuilder("SELECT BD.*")
-                .append(" FROM building BD ");
-        if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
-            sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
-        }
+        StringBuilder sql = buildFromSQLClause(buildingSearch);
         authorization(sql, buildingSearch.getStaffId());
         this.buildWhereSQLClause(buildingSearch, sql);
-        sql.append(" GROUP BY BD.id ");
         return sql;
     }
 
@@ -74,7 +74,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);
         buildConditionForBuildingType(buildingSearch, sql);
 
-        // another cases
+        // common cases
         Field[] fields = BuildingSearch.class.getDeclaredFields();
         for (Field item : fields) {
             item.setAccessible(true);
@@ -98,14 +98,15 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 }
             }
         }
+        sql.append(" GROUP BY BD.id ");
     }
 
     /**
-     * // This code below to process authorization when user logged search
+     * // this code below handles authorization when users log in and use search
      * Has 3 Case:
-     * case 1: current user has role is staff ==> search by userID(current user)
-     * case 2: current user has role is manager ==> search normal(not by userID(current user))
-     * case 3: if current user has role is manager and it's searching by staffId ==> search by staffID
+     * case 1: Current user has role is staff ==> search by userID(current user). the mean show only the buildings it's managing
+     * case 2: Current user has role is manager ==> search normal(not by userID(current user)).the mean can see full building
+     * case 3: If current user has role is manager and it's searching by staffId ==> search by staffID
      *
      * @param sql
      * @param staffId
@@ -128,7 +129,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     /**
-     * Generic method to create condition clause with values have type is String become like this.
+     * Generic method to create condition clause with values have typed is String become like this.
      * Example: " AND name LIKE '%value%' "
      *
      * @param fieldName
@@ -148,7 +149,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     /**
-     * Generic method to create condition with values have type is Integer become like this.
+     * Generic method to create a condition with values have typed is Integer become like this.
      * Example: " AND age = 23 "
      *
      * @param fieldName
@@ -180,8 +181,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     /**
-     * solution 1: AND RT.code = 'tang-tret' OR RT.code = 'nguyen-can'
-     * solution 2: AND (RT)
+     * final result: AND RT.code = 'tang-tret' OR RT.code = 'nguyen-can'
      *
      * @param buildingSearch
      * @param sql
@@ -193,16 +193,15 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
             sql.append(" AND (");
             // java 7
         /*
-        List<String> buildingTypes = buildingSearch.getBuildingTypes();
-        for(int i = 0; i < buildingTypes.size(); i++){
-            buildingTypes.set(i, " BD.code LIKE '%" +buildingTypes.get(i)+"%'");
+        for(int i = 0; i < types.size(); i++){
+            types.set(i, " BD.code LIKE '%" +types.get(i)+"%'");
         }
-        String typesSQL = String.join(" or ", buildingTypes);
+        String typesSQL = String.join(" or ", types);
         sql.append(typesSQL);
 */
             // java 8
-            String typeStr = Arrays.stream(buildingSearch.getRentTypes().toArray())
-                    .map((item) -> "BD.type LIKE '%" + item + "%'") // dùng lambda để thực hiện hành động cộng chuỗi và trả về giá trị
+            String typeStr = Arrays.stream(types.toArray())
+                    .map((item) -> "BD.type LIKE '%" + item + "%'")
                     .collect(Collectors.joining(" or "));
             sql.append(typeStr);
 

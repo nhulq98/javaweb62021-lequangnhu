@@ -26,8 +26,7 @@ public class AssignmentCustomerAPI {
      * @return Staff List
      */
     @GetMapping("/{id}/staffs")
-    public @ResponseBody
-    ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
+    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
     }
 

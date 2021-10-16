@@ -11,7 +11,6 @@ import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,7 +97,7 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
 
     /**
      * Convert from List<RentAreaEntity> to rentAreaStrs with format: 200,300,400...
-     * @param rentArea
+     *  @param rentArea
      * @return
      */
     public String convertRentAreaListToStringList(List<RentAreaEntity> rentArea){
@@ -107,6 +106,7 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
         List<String> rentAreaList = rentArea.stream()
                 .map(item -> String.valueOf(item.getValue()))
                 .collect(Collectors.toList());
+
         return String.join(", ", rentAreaList);
     }
 

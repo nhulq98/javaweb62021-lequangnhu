@@ -29,8 +29,7 @@ public class BuildingAPI {
     }
 
     @GetMapping
-    public @ResponseBody
-    ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
+    public ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
                                                            @RequestParam(value = "listType", required = false) List<String> listType) {
         requestParam.put("buildingTypes", listType);
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
@@ -47,8 +46,7 @@ public class BuildingAPI {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public @ResponseBody
-    ResponseEntity<List<StaffBuildingResponse>> deleteBuilding(@PathVariable Long id) {
+    public ResponseEntity<List<StaffBuildingResponse>> deleteBuilding(@PathVariable Long id) {
 
         buildingService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();

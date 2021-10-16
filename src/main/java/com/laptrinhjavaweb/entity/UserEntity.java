@@ -17,7 +17,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "username", nullable = false, unique = true)
     private String userName;
-Us
+
     @Column(name = "fullname", nullable = false)
     private String fullName;
 

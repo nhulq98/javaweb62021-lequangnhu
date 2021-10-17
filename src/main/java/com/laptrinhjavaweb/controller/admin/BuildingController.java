@@ -10,7 +10,6 @@ import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.impl.AssignmentBuildingService;
 import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +40,12 @@ public class BuildingController {
         ModelAndView mav = new ModelAndView("admin/building/list");
         List<BuildingResponse> result = buildingService.findByCondition(buildingConverter.convertRequestToMap(buildingSearchModel));
 
-        //add model to view
         mav.addObject(SystemConstant.BUILDING_SEARCH_FORM_MODEL, buildingSearchModel);
         mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
         mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
         mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
-
-        //result for search function
         mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
+
         return mav;
     }
 
@@ -66,16 +63,14 @@ public class BuildingController {
     @RequestMapping(value = "/admin/building-edit-{id}", method = RequestMethod.GET)
     public ModelAndView update(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
-        BuildingDTO dto = buildingService.getOne(id);
-        // get building by Id and return for front-end
-        mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
 
+        BuildingDTO dto = buildingService.getOne(id);
         List<TypesResponse> types = buildingService.getBuildingTypes(dto.getRentTypes());
 
-        //send checked
         mav.addObject(SystemConstant.RENT_TYPE_EDIT, types);
-
+        mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
         mav.addObject(SystemConstant.MODEL, dto);
+
         return mav;
     }
 }

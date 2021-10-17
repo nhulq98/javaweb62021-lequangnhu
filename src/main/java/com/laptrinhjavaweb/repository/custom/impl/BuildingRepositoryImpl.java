@@ -40,7 +40,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         return query.getResultList();
     }
 
-    public StringBuilder buildFromSQLClause(BuildingSearch buildingSearch){
+    public StringBuilder buildFromSQLClause(BuildingSearch buildingSearch) {
         StringBuilder sql = new StringBuilder("SELECT BD.*")
                 .append(" FROM building BD ");
 
@@ -196,7 +196,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         List<String> types = buildingSearch.getRentTypes();
         if (types != null && types.size() > 0) {
             sql.append(" AND (");
-            
+
             // java 8
             String typeStr = Arrays.stream(types.toArray())
                     .map(item -> "BD.type LIKE '%" + item + "%'")

@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.exception.controlleradvice;
 
 import com.laptrinhjavaweb.dto.response.ResponseErrorData;
 import com.laptrinhjavaweb.exception.BindException;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,17 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         body.setStatus("Failure!");
         body.setData(ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleNodataFoundException(NotFoundException ex, WebRequest request) {
+        logger.error("Runtime error: "+ ex.getMessage());
+
+        ResponseErrorData body = new ResponseErrorData();
+        body.setStatus("Failure!");
+        body.setData(ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }

@@ -7,6 +7,9 @@ public class MessageConstant {
     public static final String NULL103 = "typeList is Null at convertTypeListToString()";
     public static final String NULL104 = "rentAreas is Null at convertRentAreaFormatStringToEntities()";
 
+    public static final String NORESULT = "0 result";
+
+
 
     public static final String CHANGE_PASSWORD_FAIL = "change_password_fail";
     public static final String INSERT_SUCCESS = "insert_success";

@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // set nếu đang nhập rồi mới được vô các url khác
                 http.csrf().disable().authorizeRequests()
                         .antMatchers("/admin/**").authenticated()
-                //staff only edit and search building. any else deny all
+                        //staff only edit and search building. any else deny all
                         .antMatchers("/api/building/**").hasRole("MANAGER")
                         .and()
                 .formLogin().loginPage("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll()

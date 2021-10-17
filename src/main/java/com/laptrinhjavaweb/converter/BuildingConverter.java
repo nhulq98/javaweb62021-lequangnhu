@@ -10,6 +10,7 @@ import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,90 +19,103 @@ import java.util.stream.Collectors;
 //@Qualifier("BuildingConverter") ==> the same with component("BuildingConverter")
 public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEntity> {
 
+    public StringBuilder getAddress(BuildingEntity entity) {
+        StringBuilder address = new StringBuilder("");
+        String district = DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue();
+
+        if (!StringUtils.isEmpty(entity.getStreet()))
+            address.append(entity.getStreet());
+        if (!StringUtils.isEmpty(entity.getWard()))
+            address.append("," + entity.getStreet());
+        if (!StringUtils.isEmpty(district))
+            address.append("," + district);
+
+        return address;
+    }
+
     @Override
     public BuildingDTO convertEntityToDTO(BuildingEntity entity) {
-        try {
-            BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new NullPointerException("BuildingEntity null!"));
 
-            dto.setAddress(entity.getStreet() + ", " + entity.getWard() + ", " + DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue());
-            dto.setRentAreas(convertRentAreaListToStringList(entity.getRentAreas()));
-            dto.setRentTypes(convertTypeStrToTypeList(entity.getRentType()));
+        BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
 
-            return dto;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new BuildingDTO();
-        }
+        dto.setAddress(getAddress(entity).toString());
+        dto.setRentAreas(convertRentAreaListToStringList(entity.getRentAreas()));
+        dto.setRentTypes(convertTypeStrToTypeList(entity.getRentType()));
+
+        return dto;
+
     }
 
     @Override
     public BuildingEntity convertDTOToEntity(BuildingDTO buildingDTO) {
-        try {
-            BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
+        Optional.ofNullable(buildingDTO)
+                .orElseThrow(() -> new NullPointerException("BuildingDTO null!"));
 
-            entity.setRentAreas(convertRentAreaFormatStringToEntities(buildingDTO.getRentAreas(), entity));
-            entity.setRentType(convertTypeListToString(buildingDTO.getRentTypes()));
+        BuildingEntity entity = modelMapper.map(buildingDTO, BuildingEntity.class);
 
-            return entity;
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            return new BuildingEntity();
-        }
+        entity.setRentAreas(convertRentAreaFormatStringToEntities(buildingDTO.getRentAreas(), entity));
+        entity.setRentType(convertTypeListToString(buildingDTO.getRentTypes()));
 
+        return entity;
     }
 
     public BuildingSearch convertMapToBuider(Map<String, Object> map) {
-        try{
-            ObjectMapper mapper = new ObjectMapper();
-            BuildingSearch.Builder result = mapper.convertValue(map, BuildingSearch.Builder.class);
+        Optional.ofNullable(map)
+                .orElseThrow(() -> new NullPointerException("map null!"));
 
-            return new BuildingSearch(result);
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            return new BuildingSearch(new BuildingSearch.Builder());
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        BuildingSearch.Builder result = mapper.convertValue(map, BuildingSearch.Builder.class);
+
+        return new BuildingSearch(result);
     }
 
     public Map<String, Object> convertRequestToMap(BuildingRequest request) {
-        try{
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> result = mapper.convertValue(request, Map.class);
-            return result;
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            return new HashMap<>();
-        }
+        Optional.ofNullable(request)
+                .orElseThrow(() -> new NullPointerException("BuildingRequest null!"));
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> result = mapper.convertValue(request, Map.class);
+
+        return result;
     }
 
     /**
      * convert with format:[tang_tret, nguyen_can] to String tang_tret, nguyen_can
+     *
      * @param typeList
      * @return
      */
-    public String convertTypeListToString(List<String> typeList){
-        if(typeList == null) throw  new NullPointerException(MessageConstant.NULL103);
+    public String convertTypeListToString (List<String> typeList) {
+        Optional.ofNullable(typeList)
+                .orElseThrow(() -> new NullPointerException("typeList null!"));
 
         return typeList.stream().collect(Collectors.joining(","));
     }
 
     /**
      * Convert from rentType(String) with format: TANG_TRET,NGUYEN_CAN become to List<String>
+     *
      * @param typeStr
      * @return
      */
-    public List<String> convertTypeStrToTypeList(String typeStr){
-        if (typeStr == null) throw new NullPointerException(MessageConstant.NULL102);
+    public List<String> convertTypeStrToTypeList(String typeStr) {
+        Optional.ofNullable(typeStr)
+                .orElseThrow(() -> new NullPointerException("typeStr null"));
 
         return Arrays.stream(typeStr.split(",")).collect(Collectors.toList());
     }
 
     /**
      * Convert from List<RentAreaEntity> to rentAreaStrs with format: 200,300,400...
-     *  @param rentArea
+     *
+     * @param rentArea
      * @return
      */
-    public String convertRentAreaListToStringList(List<RentAreaEntity> rentArea){
-        if(rentArea == null) throw new NullPointerException(MessageConstant.NULL101);
+    public String convertRentAreaListToStringList(List<RentAreaEntity> rentArea) {
+        Optional.ofNullable(rentArea)
+                .orElseThrow(() -> new NullPointerException("List rentArea null!"));
 
         List<String> rentAreaList = rentArea.stream()
                 .map(item -> String.valueOf(item.getValue()))
@@ -112,23 +126,27 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
 
     /**
      * convert String with format: 100, 200 to List<RentAreaEntity>
+     *
      * @param rentAreas
      * @return List<RentAreaEntity>
      */
-    public static List<RentAreaEntity> convertRentAreaFormatStringToEntities(String rentAreas, BuildingEntity entity){
+    public static List<RentAreaEntity> convertRentAreaFormatStringToEntities(String rentAreas, BuildingEntity entity) {
+        Optional.ofNullable(rentAreas)
+                .orElseThrow(() -> new NullPointerException(MessageConstant.NULL104));
+
         List<RentAreaEntity> rentAreaFromRequest = new LinkedList<>();
-        if(rentAreas == null) throw new NullPointerException(MessageConstant.NULL104);
 
         String[] rentAreaStrs = rentAreas.split(",");
         for (String item : rentAreaStrs) {
             RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            if(item.trim().matches(SystemConstant.ISNUMBER)){// is number
+            if (item.trim().matches(SystemConstant.ISNUMBER)) {// is number
                 rentAreaEntity.setValue(Integer.parseInt(item.trim()));
                 rentAreaEntity.setBuilding(entity);
 
                 rentAreaFromRequest.add(rentAreaEntity);
             }
         }
+
         return rentAreaFromRequest;
     }
 }

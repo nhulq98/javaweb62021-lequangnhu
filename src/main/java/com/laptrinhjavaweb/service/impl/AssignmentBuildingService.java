@@ -114,61 +114,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         buildingRepository.save(buildingEntity);
     }
 
-    /*@Override
-    @Transactional
-    public void updateAssignment(StaffRequest request) {
-        List<Long> staffsIdChecked = request.getStaffIds();
-        List<AssignmentBuildingEntity> staffsFromRequest = createStaffs(request.getBuildingId(), staffsIdChecked);
-        List<AssignmentBuildingEntity> staffsOld = assignmentBuildingRepository
-                .findByBuildingId(request.getBuildingId());
-        if(testSpecialCases(staffsFromRequest, staffsOld)){return;}
-
-        //another cases
-        removeDuplicate(staffsOld, staffsFromRequest);
-        assignmentBuildingRepository.delete(staffsOld);
-        assignmentBuildingRepository.save(staffsFromRequest);
-
-        //Utils.destroyReference(staffsOld, staffsIdChecked, staffsFromRequest);
-    }*/
-
-    /*@Override
-    public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsNew){
-        int lenghtNew = staffsNew.size();
-        int lenghtOld = staffsOld.size();
-        //==============solution 1: iterator numbers: 2n==================
-        Map<Long, Object> map = new HashMap<>();
-        //loop through list time: O(n)
-        for(AssignmentBuildingEntity a: staffsOld){
-            map.put(a.getId(), a);
-        }
-        //iterator numbers: O(n)
-        for (int i = 0; i < lenghtNew; i++) {
-            if (map.get(staffsNew.get(i).getId()) != null) {
-                map.remove(staffsNew.get(i).getId());
-                staffsNew.remove(i);
-
-                lenghtNew--;
-            }
-        }
-        // Solution 1: Total: O(n + n).
-        // VD: n = 9 ==> 18 iterator numbers
-
-
-        // ======Solution 2: iterator numbers: O(n^2).=============
-*//*        for (int i = 0; i < lenghtOld; i++) {
-            for (int j = 0; j < lenghtNew; j++) {
-                if (staffsOld.get(i).getUser().getId() == staffsNew.get(j).getUser().getId()) {
-                    staffsOld.remove(i);
-                    staffsNew.remove(j);
-
-                    i--, lenghtOld--, lenghtNew--;
-                    break;
-                }
-            }
-        }*//*
-        // Total = O(n^2) ==> VD: n = 9 ==> 82 iterator numbers
-    }*/
-
     /**
      * those cases which we can guess. If return True ==> done process
      * @param rentAreaFromView

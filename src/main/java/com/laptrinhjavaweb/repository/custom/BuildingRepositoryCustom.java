@@ -19,10 +19,6 @@ public interface BuildingRepositoryCustom {
 
     void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql);
 
-    StringBuilder createConditionForStringByLike(String fieldName, String value);
-
-    StringBuilder createConditionForNumber(String fieldName, Number value);
-
     void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql);
 
     void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql);

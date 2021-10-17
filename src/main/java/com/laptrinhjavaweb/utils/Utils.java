@@ -1,9 +1,6 @@
 package com.laptrinhjavaweb.utils;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 // =============not apply design pattern================
 interface Duck1{
@@ -105,7 +102,7 @@ class MallardDuck extends Duck{
 
 //==================================================
 
-public class Utils implements Comparator<Utils> {
+public class Utils{
 
     /**
      * make for object đủ đk để Garbage collection bằng cách hủy tham chiếu đến đối tượng
@@ -120,68 +117,54 @@ public class Utils implements Comparator<Utils> {
         //System.gc();// call Garbage collection
     }
 
-    static String[] listSongs = {"Pink Moon", "Somersault",
-            "Shiva Moon", "Circles",
-            "Deep Channel", "Passenger",
-            "Listen", "Listen", "Listen", "Listen", "Listen", "Somersault"};
-    static int[] listInts = {66, 9, 22, 35, 8, 66, 233, 432, 33};
-
-    public static void main(String[] args) {
-
-        long then = System.currentTimeMillis();
-        long now = System.currentTimeMillis();
-        System.out.println("Elapsed time: " + (now - then));
-        Map<String, String> hashtable = new Hashtable<>();
-        int  i = 0;
-        while (true){
-            Map a = new HashMap(300);
-            hashtable.put("nhu", "sadsa"+ i++);
-
+    /**
+     * Generic method to create condition clause with values have typed is String become like this.
+     * Example: " AND name LIKE '%value%' "
+     *
+     * @param fieldName
+     * @param value
+     * @return
+     */
+    public static StringBuilder createConditionForStringByLike(String fieldName, String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            return new StringBuilder(" AND ")
+                    .append(fieldName)
+                    .append(" LIKE '%")
+                    .append(value)
+                    .append("%' ");
         }
-
-
-//        System.out.println(map1.size());
-        //Map<String, String> map2 = new LinkedHashMap<>();
-
-//        Map<String, String> map4 = new TreeMap<>();
-//
-//        Set<String> set = new HashSet<>();
-//        Set<String> set2 = new TreeSet<>();
-//        Set<Person> set3 = new LinkedHashSet<>();
-//        //List<String> list = new ArrayList<>();
-//        Person a = new Person();
-//        set3.add(new Person("le quang B"));
-//        set3.add(new Person("le quang A"));
-//        Iterator iterator = set2.iterator();
-//        while (iterator.hasNext()){
-//            System.out.println(iterator.next().toString());
-//        }
-
-//        int n = 1000;
-//
-//        List<Song> list1 = new ArrayList<>();
-//        //Collections.sort(list1);
-//        long start1 = System. currentTimeMillis();
-//        for(int i = 0; i < n; i++){
-//            list1.add(new Song());
-//        }
-//        long end1 = System. currentTimeMillis();
-//        System.out.println("Thêm Xong" + TimeUnit.MILLISECONDS.toSeconds(end1 - start1));
-//        long start = System. currentTimeMillis();
-//        list1.add(3, "hehe");
-//        long end = System. currentTimeMillis();
-//        System.out.println("Time: "+ TimeUnit.MILLISECONDS.toSeconds(end - start));
-//        Utils a = new Utils();
-//        String str = "le quang nhu";
-//        a = null;
-//        str = null;
-//        System.gc();
-//        System.out.println(str);
+        return new StringBuilder();
     }
 
-
-    @Override
-    public int compare(Utils o1, Utils o2) {
-        return 0;
+    /**
+     * Generic method to create a condition with values have typed is Integer become like this.
+     * Example: " AND age = 23 "
+     *
+     * @param fieldName
+     * @param value
+     * @return
+     */
+    public static StringBuilder createConditionForNumber(String fieldName, Number value) {
+        if (value != null) {
+            return new StringBuilder(" AND ")
+                    .append(fieldName)
+                    .append("=")
+                    .append(value).append(" ");
+        }
+        return new StringBuilder();
     }
+
+//    public static void main(String[] args) {
+//
+//        long then = System.currentTimeMillis();
+//        long now = System.currentTimeMillis();
+//        System.out.println("Elapsed time: " + (now - then));
+//        Map<String, String> hashtable = new Hashtable<>();
+//        int  i = 0;
+//        while (true){
+//            Map a = new HashMap(300);
+//            hashtable.put("nhu", "sadsa"+ i++);
+//
+//        }
+//    }
 }

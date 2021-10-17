@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.repository.custom.CustomerRepositoryCustom;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -64,17 +65,11 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
     @Override
     public void buildWhereSQLClause(CustomerRequest conditionSearch, StringBuilder sql) {
-        if (conditionSearch.getStaffId() != null) {
-            sql.append(" and AC.staffid = " + conditionSearch.getStaffId());
-        }
-        if (conditionSearch.getFullName() != null && conditionSearch.getFullName().trim() != "") {
-            sql.append(" and C.fullname LIKE '%" + conditionSearch.getFullName() + "%'");
-        }
-        if (conditionSearch.getPhone() != null && conditionSearch.getPhone().trim() != "") {
-            sql.append(" and C.phone = " + conditionSearch.getPhone());
-        }
-        if (conditionSearch.getEmail() != null && conditionSearch.getEmail().trim() != "") {
-            sql.append(" and C.email LIKE '%" + conditionSearch.getEmail() +"%'");
-        }
+
+        sql.append(Utils.createConditionForNumber("AC.staffid", conditionSearch.getStaffId()));
+        sql.append(Utils.createConditionForNumber("C.phone", conditionSearch.getStaffId()));
+
+        sql.append(Utils.createConditionForStringByLike("C.fullname", conditionSearch.getFullName()));
+        sql.append(Utils.createConditionForStringByLike("C.email", conditionSearch.getEmail()));
     }
 }

@@ -7,7 +7,7 @@ import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
-import org.apache.commons.lang.StringUtils;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -90,11 +90,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                     Object objectValue = item.get(buildingSearch);// can throw IllegalAccessException
                     if (item.getType().getTypeName().contains("String")
                             && objectValue != null && String.valueOf(objectValue).length() != 0) {
-                        sql.append(createConditionForStringByLike(name.toLowerCase(), String.valueOf(objectValue)));
+                        sql.append(Utils.createConditionForStringByLike(name.toLowerCase(), String.valueOf(objectValue)));
 
                     } else if ((item.getType().getTypeName().contains("Integer")
                             || item.getType().getTypeName().contains("Long")) && objectValue != null) {
-                        sql.append(createConditionForNumber(name.toLowerCase(), (Number) objectValue));
+                        sql.append(Utils.createConditionForNumber(name.toLowerCase(), (Number) objectValue));
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -131,45 +131,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         } else {
             sql.append(" WHERE 1=1 ");
         }
-    }
-
-    /**
-     * Generic method to create condition clause with values have typed is String become like this.
-     * Example: " AND name LIKE '%value%' "
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
-    @Override
-    public StringBuilder createConditionForStringByLike(String fieldName, String value) {
-        if (StringUtils.isNotEmpty(value)) {
-            return new StringBuilder(" AND ")
-                    .append(fieldName)
-                    .append(" LIKE '%")
-                    .append(value)
-                    .append("%' ");
-        }
-        return new StringBuilder();
-    }
-
-    /**
-     * Generic method to create a condition with values have typed is Integer become like this.
-     * Example: " AND age = 23 "
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
-    @Override
-    public StringBuilder createConditionForNumber(String fieldName, Number value) {
-        if (value != null) {
-            return new StringBuilder(" AND ")
-                    .append(fieldName)
-                    .append("=")
-                    .append(value).append(" ");
-        }
-        return new StringBuilder();
     }
 
     @Override

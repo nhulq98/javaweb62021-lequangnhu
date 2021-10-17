@@ -33,7 +33,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNodataFoundException(NotFoundException ex, WebRequest request) {
-        logger.error("Runtime error: "+ ex.getMessage());
+        logger.error(ex.getMessage());
 
         ResponseErrorData body = new ResponseErrorData();
         body.setStatus("Failure!");

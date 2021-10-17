@@ -23,5 +23,5 @@ public interface UserRepository extends UserRepositoryCustom, JpaRepository<User
     @Query(value = "SELECT U.* FROM USER U, USER_ROLE UR WHERE U.id = UR.userid AND UR.roleid = 2", nativeQuery = true)
     List<UserEntity> getAllStaffs();
 
-    //List<UserEntity> get();
+    List<UserEntity> findByRolesIsLike(String roleCode);
 }

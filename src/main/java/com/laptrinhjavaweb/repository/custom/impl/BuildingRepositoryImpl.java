@@ -32,7 +32,9 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @Override
     public List<BuildingEntity> findByCondition(Map<String, Object> requestParam) {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
+
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
+
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 
         return query.getResultList();
@@ -41,6 +43,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     public StringBuilder buildFromSQLClause(BuildingSearch buildingSearch){
         StringBuilder sql = new StringBuilder("SELECT BD.*")
                 .append(" FROM building BD ");
+
         if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
             sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
         }
@@ -84,11 +87,13 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 try {
                     Object objectValue = item.get(buildingSearch);// can throw IllegalAccessException
                     if (item.getType().getTypeName().contains("String")
-                            && objectValue != null && String.valueOf(objectValue).length() != 0) {
+                            && StringUtils.isNotBlank(String.valueOf(objectValue))) {
+
                         sql.append(createConditionForStringByLike(name.toLowerCase(), String.valueOf(objectValue)));
 
                     } else if ((item.getType().getTypeName().contains("Integer")
                             || item.getType().getTypeName().contains("Long")) && objectValue != null) {
+
                         sql.append(createConditionForNumber(name.toLowerCase(), (Number) objectValue));
                     }
                 } catch (IllegalAccessException e) {

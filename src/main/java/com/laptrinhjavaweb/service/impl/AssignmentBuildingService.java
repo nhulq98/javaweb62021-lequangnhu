@@ -14,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,10 +55,14 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
         try{
             List<StaffEntity> staffsAll = assignmentBuildingRepository.findAllCustom(buildingId);
-            List<StaffBuildingResponse> result = staffsAll.stream()
-                    .map(StaffBuildingResponse::new).collect(Collectors.toList());
+            if(staffsAll != null && staffsAll.size() > 0){
+                List<StaffBuildingResponse> result = staffsAll.stream()
+                        .map(StaffBuildingResponse::new).collect(Collectors.toList());
+                return result;
+            }
 
-            return result;
+            return new ArrayList<>();
+
         }catch (RuntimeException e){
             e.printStackTrace();
             return new ArrayList<> ();
@@ -128,36 +133,40 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 
     /*@Override
     public void removeDuplicate(List<AssignmentBuildingEntity> staffsOld, List<AssignmentBuildingEntity> staffsNew){
-        //solution 1
+        int lenghtNew = staffsNew.size();
+        int lenghtOld = staffsOld.size();
+        //==============solution 1: iterator numbers: 2n==================
         Map<Long, Object> map = new HashMap<>();
         //loop through list time: O(n)
         for(AssignmentBuildingEntity a: staffsOld){
             map.put(a.getId(), a);
         }
-        //loop through list time: O(n), delete take the time: O(1)
-        for (int i = 0; i < staffsNew.size(); i++) {
+        //iterator numbers: O(n)
+        for (int i = 0; i < lenghtNew; i++) {
             if (map.get(staffsNew.get(i).getId()) != null) {
                 map.remove(staffsNew.get(i).getId());
                 staffsNew.remove(i);
+
+                lenghtNew--;
             }
         }
-        // Solution 1: Total: O(n + n + 1).
-        // VD: n = 9 ==> 19 iterator numbers
+        // Solution 1: Total: O(n + n).
+        // VD: n = 9 ==> 18 iterator numbers
 
 
-        // Solution 2: loop through list time: O(n^2).
-        // Delete : O(1 + 1).
-*//*        for (int i = 0; i < staffsOld.size(); i++) {
-            for (int j = 0; j < staffsNew.size(); j++) {
+        // ======Solution 2: iterator numbers: O(n^2).=============
+*//*        for (int i = 0; i < lenghtOld; i++) {
+            for (int j = 0; j < lenghtNew; j++) {
                 if (staffsOld.get(i).getUser().getId() == staffsNew.get(j).getUser().getId()) {
                     staffsOld.remove(i);
                     staffsNew.remove(j);
-                    i--;
+
+                    i--, lenghtOld--, lenghtNew--;
                     break;
                 }
             }
         }*//*
-        // Total = O(n^2 +1) ==> VD: n = 9 ==> 82 iterator numbers
+        // Total = O(n^2) ==> VD: n = 9 ==> 82 iterator numbers
     }*/
 
     /**

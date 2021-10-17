@@ -8,8 +8,10 @@ import com.laptrinhjavaweb.dto.response.TypesResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.enums.BuildingTypesEnum;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
+import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service // nó hiểu đây là 1 module. và bảo IoC container tạo một object duy nhất cho nó (singleton pattern)
+@Service // declare module. and said IoC container you have to create 1 only object for this module (singleton pattern)
 public class BuildingService implements IBuildingService {
 
     @Autowired
@@ -30,87 +33,82 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public List<DistrictResponse> getDistricts() {
-        try {
-            List<DistrictResponse> listDistrict = new ArrayList<>();
-            for (DistrictsEnum item : DistrictsEnum.values()) {
-                DistrictResponse districtResponse = new DistrictResponse();
-                districtResponse.setCode(item.toString());
-                districtResponse.setValue(item.getDistrictValue());
+        List<DistrictResponse> listDistrict = new ArrayList<>();
+        for (DistrictsEnum item : DistrictsEnum.values()) {
+            DistrictResponse districtResponse = new DistrictResponse();
+            districtResponse.setCode(item.toString());
+            districtResponse.setValue(item.getDistrictValue());
 
-                listDistrict.add(districtResponse);
-            }
-            return listDistrict;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            listDistrict.add(districtResponse);
         }
+        return listDistrict;
     }
 
     @Override
     public List<TypesResponse> getBuildingTypes() {
-        try {
-            List<TypesResponse> listTypes = new ArrayList<>();
-            for (BuildingTypesEnum item : BuildingTypesEnum.values()) {
-                TypesResponse typesResponse = new TypesResponse();
-                typesResponse.setCode(item.toString());
-                typesResponse.setValue(item.getBuildingTypeValue());
+        List<TypesResponse> listTypes = new ArrayList<>();
+        for (BuildingTypesEnum item : BuildingTypesEnum.values()) {
+            TypesResponse typesResponse = new TypesResponse();
+            typesResponse.setCode(item.toString());
+            typesResponse.setValue(item.getBuildingTypeValue());
 
-                listTypes.add(typesResponse);
-            }
-            return listTypes;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            listTypes.add(typesResponse);
         }
+        return listTypes;
     }
 
     @Override
     public List<TypesResponse> getBuildingTypes(List<String> rentypes) {
-        try {
-            List<TypesResponse> typeList = getBuildingTypes();
-            if (rentypes == null) return typeList;
-            for (TypesResponse item : typeList) {
-                for (String item2 : rentypes) {
-                    if (item.getCode().equals(item2)) {
-                        item.setChecked("checked");
-                    }
+        List<TypesResponse> typeList = getBuildingTypes();
+
+        if (rentypes == null) return typeList;
+
+        for (TypesResponse item : typeList) {
+            for (String item2 : rentypes) {
+                if (item.getCode().equals(item2)) {
+                    item.setChecked("checked");
                 }
             }
-            return typeList;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
         }
+
+        return typeList;
     }
 
     @Override
     public BuildingDTO getOne(Long id) {
-        try {
-            BuildingEntity entity = buildingRepository.findById(id);
-            return buildingConverter.convertEntityToDTO(entity);
-        } catch (RuntimeException e) {
-            return new BuildingDTO();
-        }
+        BuildingEntity entity = buildingRepository.findOne(id);
+
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
+
+        return buildingConverter.convertEntityToDTO(entity);
     }
 
     @Override
     public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
-        try {
-            List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
-            List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
-                    .collect(Collectors.toList());
+        List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
 
-            return result;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+        if (entities == null || entities.size() == 0) {
+            throw new NotFoundException(MessageUtils.getMSNotFound("building"));
         }
+
+        List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
+                .collect(Collectors.toList());
+
+        return result;
     }
 
     @Override
     @Transactional
     public void updateOrSave(BuildingDTO newBuilding) throws RuntimeException {
         // apply cascade
+        Long buildingId = newBuilding.getId();
+
+        if (buildingId != null && buildingId > 0) {
+            Optional.ofNullable(buildingRepository.getOne(buildingId))
+                    .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
+        }
+
         buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
     }
 

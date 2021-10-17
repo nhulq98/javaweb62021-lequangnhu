@@ -20,9 +20,6 @@ public interface IBuildingService {
 
     BuildingDTO getOne(Long id);
 
-    //Change Data
-    //void save(BuildingDTO newBuilding);
-
     void updateOrSave(BuildingDTO newBuilding);
 
     void deleteById(Long id);

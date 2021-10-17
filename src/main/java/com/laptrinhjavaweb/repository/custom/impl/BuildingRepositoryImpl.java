@@ -201,7 +201,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 */
             // java 8
             String typeStr = Arrays.stream(types.toArray())
-                    .map((item) -> "BD.type LIKE '%" + item + "%'")
+                    .map(item -> "BD.type LIKE '%" + item + "%'")
                     .collect(Collectors.joining(" or "));
             sql.append(typeStr);
 

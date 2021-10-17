@@ -8,6 +8,10 @@ import java.util.Map;
 @Component
 public class MessageUtils {
 
+	public static String getMSNotFound(String name){
+		return new StringBuilder(name + " not found!").toString();
+	}
+
 	public Map<String, String> getMessage(String message) {
 		Map<String, String> result = new HashMap<>();
 		if (message.equals("update_success")) {

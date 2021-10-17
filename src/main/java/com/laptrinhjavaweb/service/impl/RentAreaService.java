@@ -64,13 +64,16 @@ public class RentAreaService implements IRentAreaService {
 
     @Override
     public void removeDuplicate(List<RentAreaEntity> rentAreasOld, List<RentAreaEntity> rentAreaFromView){
-        for (int i = 0; i < rentAreasOld.size(); i++) {
-            for (int j = 0; j < rentAreaFromView.size(); j++) {
-                if (rentAreasOld.get(i).getValue()
-                        == rentAreaFromView.get(j).getValue()) {
+        int lenghtOld = rentAreasOld.size();
+        int lenghtNew = rentAreaFromView.size();
+
+        for (int i = 0; i < lenghtOld; i++) {
+            for (int j = 0; j < lenghtNew; j++) {
+                if (rentAreasOld.get(i).getValue().equals(rentAreaFromView.get(j).getValue())) {
                     rentAreasOld.remove(i);
                     rentAreaFromView.remove(j);
-                    i--;
+
+                    i--; lenghtOld--; lenghtNew--;
                     break;
                 }
             }

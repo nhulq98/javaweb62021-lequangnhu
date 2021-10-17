@@ -47,6 +47,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         if (buildingSearch.getRentAreaFrom() != null || buildingSearch.getRentAreaTo() != null) {
             sql.append(" JOIN rentarea RE ON RE.buildingid = BD.id ");
         }
+
         return sql;
     }
 
@@ -61,6 +62,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         StringBuilder sql = buildFromSQLClause(buildingSearch);
         authorization(sql, buildingSearch.getStaffId());
         this.buildWhereSQLClause(buildingSearch, sql);
+
         return sql;
     }
 
@@ -87,13 +89,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 try {
                     Object objectValue = item.get(buildingSearch);// can throw IllegalAccessException
                     if (item.getType().getTypeName().contains("String")
-                            && StringUtils.isNotBlank(String.valueOf(objectValue))) {
-
+                            && objectValue != null && String.valueOf(objectValue).length() != 0) {
                         sql.append(createConditionForStringByLike(name.toLowerCase(), String.valueOf(objectValue)));
 
                     } else if ((item.getType().getTypeName().contains("Integer")
                             || item.getType().getTypeName().contains("Long")) && objectValue != null) {
-
                         sql.append(createConditionForNumber(name.toLowerCase(), (Number) objectValue));
                     }
                 } catch (IllegalAccessException e) {
@@ -196,14 +196,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         List<String> types = buildingSearch.getRentTypes();
         if (types != null && types.size() > 0) {
             sql.append(" AND (");
-            // java 7
-        /*
-        for(int i = 0; i < types.size(); i++){
-            types.set(i, " BD.code LIKE '%" +types.get(i)+"%'");
-        }
-        String typesSQL = String.join(" or ", types);
-        sql.append(typesSQL);
-*/
+            
             // java 8
             String typeStr = Arrays.stream(types.toArray())
                     .map(item -> "BD.type LIKE '%" + item + "%'")

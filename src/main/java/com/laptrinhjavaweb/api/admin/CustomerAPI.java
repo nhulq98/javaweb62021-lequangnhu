@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.api.admin;
 
 import com.laptrinhjavaweb.dto.CustomerDTO;
+import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,15 @@ public class CustomerAPI {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        service.deleteById(id);
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> delete(@PathVariable Long id){
+//        service.deleteById(id);
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestBody CustomerRequest customerRequest){
+        service.deleteByListId(customerRequest.getCustomerIds());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

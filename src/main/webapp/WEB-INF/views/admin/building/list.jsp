@@ -464,7 +464,7 @@ select
                     return this.value;
                 }).get();
             let idArray = {};
-            idArray.buildingIds = ids;
+            idArray.ids = ids;
 
             showAlertBeforeDelete(function () {
                 $

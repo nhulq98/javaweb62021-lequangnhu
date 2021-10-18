@@ -27,4 +27,5 @@ public class BuildingRequest extends AbstractDTO<BuildingResponse> {
     private String managerPhone;
     private Long staffId;
     private Long userId;
+    private List<Long> ids;
 }

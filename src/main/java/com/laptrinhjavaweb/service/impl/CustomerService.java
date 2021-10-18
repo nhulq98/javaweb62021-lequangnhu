@@ -11,6 +11,7 @@ import com.laptrinhjavaweb.service.ICustomerService;
 import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    @Transactional
     public void save(CustomerDTO customer) {
         Long cusId = customer.getId();
 
@@ -53,11 +55,18 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
 
         Optional.ofNullable(customerRepository.findOne(id))
                 .orElseThrow(()-> new NotFoundException(MessageUtils.getMSNotFound("customer")));
 
         customerRepository.delete(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByListId(List<Long> ids) {
+        customerRepository.deleteByIdIn(ids);
     }
 }

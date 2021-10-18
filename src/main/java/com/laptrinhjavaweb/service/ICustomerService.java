@@ -14,4 +14,6 @@ public interface ICustomerService {
     void save(CustomerDTO customer);
 
     void deleteById(Long id);
+
+    void deleteByListId(List<Long> ids);
 }

@@ -6,8 +6,8 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.dto.response.TypesResponse;
+import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.IBuildingService;
-import com.laptrinhjavaweb.service.impl.AssignmentBuildingService;
 import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class BuildingController {
     private IBuildingService buildingService;
 
     @Autowired
-    private AssignmentBuildingService assignmentBuildingService;
+    private IAssignmentBuildingService assignmentBuildingService;
 
     @Autowired
     private BuildingConverter buildingConverter;

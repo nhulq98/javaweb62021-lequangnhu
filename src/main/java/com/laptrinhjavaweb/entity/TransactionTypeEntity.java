@@ -25,6 +25,6 @@ public class TransactionTypeEntity extends BaseEntity {
     @JoinColumn(name = "customerid")// declare the foreign key name of this table to link with below Object
     private CustomerEntity customer = new CustomerEntity(); // declare relationship object
 
-    @OneToMany(mappedBy = "transactionType", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "transactionType", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TransactionEntity> transaction = new ArrayList<>();
 }

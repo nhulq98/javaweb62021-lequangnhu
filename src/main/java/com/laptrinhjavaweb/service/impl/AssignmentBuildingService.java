@@ -34,6 +34,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Override
     public List<StaffBuildingResponse> findAllStaff() {
         List<UserEntity> entities = userRepository.getAllStaffs();
+
         List<StaffBuildingResponse> result = new ArrayList<>();
 
         for (UserEntity item : entities) {

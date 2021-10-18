@@ -117,4 +117,10 @@ public class BuildingService implements IBuildingService {
     public void deleteById(Long id) {
         buildingRepository.delete(id);
     }
+
+    @Override
+    @Transactional
+    public void deleteByListId(List<Long> ids) {
+        buildingRepository.deleteByIdIn(ids);
+    }
 }

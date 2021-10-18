@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class AbstractDTO<T> implements Serializable {
     private Long id;
+    private List<Long> ids;
     private Date createdDate;
     private String createdBy;
     private Date modifiedDate;

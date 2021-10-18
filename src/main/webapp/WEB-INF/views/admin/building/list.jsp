@@ -241,6 +241,13 @@ select
 											</span>
 											</a>
 										</div>
+										<button onclick="deleteMutipleBuilding()"
+												id="btnDeleteMutiple" type="button"
+												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
+												data-toggle="tooltip" title="Delete Mutiple Customer">
+												<span> <i class="fa fa-trash-o bigger-110 pink"></i>
+												</span>
+										</button>
 									</div>
 								</div>
 							</div>
@@ -257,10 +264,10 @@ select
 												        <input type='checkbox' id='checkAll' class='check-box-element'>
 												        </fieldset>"
 											class="center select-cell" headerClass="center select-cell">
-											<%--                                        <fieldset>--%>
-											<%--                                            <input type="checkbox" name="checkList" value="${item.id}"--%>
-											<%--                                                   id="checkbox_${item.id}" class="check-box-element"/>--%>
-											<%--                                        </fieldset>--%>
+											<fieldset>
+												<input type="checkbox" name="checkList" value="${item.id}"
+													   id="checkbox_${item.id}" class="check-box-element"/>
+											</fieldset>
 										</display:column>
 
 										<display:column headerClass="text-left" property="createdDate"
@@ -302,13 +309,13 @@ select
 											<%--                                                title="Edit Buildings!">--%>
 											<%--                                            <i class="ace-icon fa fa-pencil bigger-110"></i>--%>
 											<%--                                        </button>--%>
-											<button onclick="deleteBuilding(this.value)"
-												value="${item.id}" id="btnDelete" type="button"
-												class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-												data-toggle="tooltip" title="Xóa Tòa Nhà">
-												<span> <i class="fa fa-trash-o bigger-110 pink"></i>
-												</span>
-											</button>
+											<%--<button onclick="deleteBuilding(this.value)"--%>
+												<%--value="${item.id}" id="btnDelete" type="button"--%>
+												<%--class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"--%>
+												<%--data-toggle="tooltip" title="Xóa Tòa Nhà">--%>
+												<%--<span> <i class="fa fa-trash-o bigger-110 pink"></i>--%>
+												<%--</span>--%>
+											<%--</button>--%>
 										</display:column>
 									</display:table>
 								</div>
@@ -449,6 +456,33 @@ select
 						});
 			});
 		}
+
+        function deleteMutipleBuilding(){
+            // get all checked
+            let ids = $('.check-box-element:checkbox:checked').map(
+                function () {
+                    return this.value;
+                }).get();
+            let idArray = {};
+            idArray.buildingIds = ids;
+
+            showAlertBeforeDelete(function () {
+                $
+                    .ajax({
+                        url: '${buildingAPI}',
+                        type: 'DELETE',
+                        contentType: 'application/json',
+                        data: JSON.stringify(idArray),
+                        dataType: 'json',
+                        success: function (res) {
+                            window.location.href = "<c:url value='${formUrl}?message=delete_success'/>";
+                        },
+                        error: function (res) {
+                            window.location.href = "<c:url value='${formUrl}?message=delete_failed'/>";
+                        }
+                    });
+            });
+        }
 		
 	</script>
 	<!--END Script dialog -->

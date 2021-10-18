@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.api.admin;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.request.BuildingRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,10 @@ public class BuildingAPI {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBuilding(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<Void> deleteBuilding(@RequestBody BuildingRequest buildingRequest) {
 
-        buildingService.deleteById(id);
+        buildingService.deleteByListId(buildingRequest.getIds());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

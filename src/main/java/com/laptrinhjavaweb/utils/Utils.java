@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 public class Utils{
 
     /**
-     * make for object đủ đk để Garbage collection bằng cách hủy tham chiếu đến đối tượng
+     * make the object eligible for garbage collection by de-referencing the object
      *
      * @param param
      * @param <T>

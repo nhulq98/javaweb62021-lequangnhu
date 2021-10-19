@@ -40,16 +40,14 @@ public class CustomerController {
 
     @GetMapping(value = "/admin/customer-list")
     public ModelAndView getAll(@ModelAttribute(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL)CustomerRequest customerSearchModel) {
-
         ModelAndView mav = new ModelAndView("admin/customer/list");
 
         List<CustomerResponse> result = service.findByCondition(customerSearchModel);
-        //add model to view
+
         mav.addObject(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL, customerSearchModel);
         mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
-
-        //result for search function
         mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
+        
         return mav;
     }
 
@@ -58,7 +56,6 @@ public class CustomerController {
 
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
-        // add model to view
         //GET transaction type
         //mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionService.getAllTranSactions());
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
@@ -70,14 +67,9 @@ public class CustomerController {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
         CustomerDTO customerDTO = converter.convertEntityToDTO(customerRepository.findOne(id));
-
-        //get all types
         List<TransactionTypeResponse> allTranSactions = transactionService.getAllTranSactions();
-
-        //Get Transaction of customer
         List<TransactionResponse> transactionResponse = transactionService.getTransactionsOfCustomerById(customerDTO.getId());
 
-        // add model to view
         mav.addObject(SystemConstant.CUSTOMMER_TRANSACTION, transactionResponse);
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
         mav.addObject(SystemConstant.TRANSACTION_TYPE, allTranSactions);

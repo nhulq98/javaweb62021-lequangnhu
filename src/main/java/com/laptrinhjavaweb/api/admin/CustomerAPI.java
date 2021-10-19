@@ -35,6 +35,7 @@ public class CustomerAPI {
 
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody CustomerDTO newDto){
+
         service.save(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

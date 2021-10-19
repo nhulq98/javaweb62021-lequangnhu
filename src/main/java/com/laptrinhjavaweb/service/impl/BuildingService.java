@@ -105,11 +105,19 @@ public class BuildingService implements IBuildingService {
         Long buildingId = newBuilding.getId();
 
         if (buildingId != null && buildingId > 0) {
-            Optional.ofNullable(buildingRepository.getOne(buildingId))
-                    .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
-        }
+            BuildingEntity entity = buildingRepository.getOne(buildingId);
 
-        buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+            Optional.ofNullable(entity)
+                    .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
+
+            BuildingEntity buildingNew = buildingConverter.convertDTOToEntity(newBuilding);
+            buildingNew.setStaffs(entity.getStaffs());
+
+            buildingRepository.save(buildingNew);
+        }else{
+
+            buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+        }
     }
 
     @Override

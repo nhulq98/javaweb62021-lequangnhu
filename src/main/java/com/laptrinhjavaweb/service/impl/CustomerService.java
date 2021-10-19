@@ -47,11 +47,18 @@ public class CustomerService implements ICustomerService {
         Long cusId = customer.getId();
 
         if(cusId != null && cusId > 0){
+            CustomerEntity entity = customerRepository.getOne(cusId);
+
             Optional.ofNullable(customerRepository.findOne(cusId))
                     .orElseThrow(()-> new NotFoundException(MessageUtils.getMSNotFound("customer")));
-        }
 
-        customerRepository.save(converter.convertDTOToEntity(customer));
+            CustomerEntity customerUpdate = converter.convertDTOToEntity(customer);
+            customerUpdate.setStaffs(entity.getStaffs());
+
+            customerRepository.save(customerUpdate);
+        }else{
+            customerRepository.save(converter.convertDTOToEntity(customer));
+        }
     }
 
     @Override

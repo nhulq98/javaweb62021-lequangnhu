@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEntity> {
 
     public StringBuilder getAddress(BuildingEntity entity) {
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new NullPointerException("BuildingEntity null!"));
+
         StringBuilder address = new StringBuilder("");
         String district = DistrictsEnum.valueOf(entity.getDistrict()).getDistrictValue();
 
@@ -43,7 +46,6 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
         dto.setAddress(getAddress(entity).toString());
         dto.setRentAreas(convertRentAreaListToStringList(entity.getRentAreas()));
         dto.setRentTypes(convertTypeStrToTypeList(entity.getRentType()));
-
         return dto;
 
     }
@@ -57,7 +59,6 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
 
         entity.setRentAreas(convertRentAreaFormatStringToEntities(buildingDTO.getRentAreas(), entity));
         entity.setRentType(convertTypeListToString(buildingDTO.getRentTypes()));
-
         return entity;
     }
 
@@ -67,7 +68,6 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
 
         ObjectMapper mapper = new ObjectMapper();
         BuildingSearch.Builder result = mapper.convertValue(map, BuildingSearch.Builder.class);
-
         return new BuildingSearch(result);
     }
 

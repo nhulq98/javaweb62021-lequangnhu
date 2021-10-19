@@ -6,6 +6,8 @@ import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component// là bảo IoC container tạo một object duy nhất (singleton)
 public class AssignmentBuildingConverter extends AbstractConverter<AssignmentBuildingDTO, AssignmentBuildingEntity> {
     /**
@@ -29,6 +31,9 @@ public class AssignmentBuildingConverter extends AbstractConverter<AssignmentBui
     }
 
     public StaffBuildingResponse convertEntityToResponse(AssignmentBuildingEntity entity) {
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new NullPointerException("AssignmentBuildingEntity null!"));
+
         StaffBuildingResponse dto = new StaffBuildingResponse();
         UserEntity userEntity = entity.getUser();
         dto.setId(userEntity.getId());

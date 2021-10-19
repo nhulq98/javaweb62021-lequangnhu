@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 
 /**
@@ -24,6 +25,8 @@ public abstract class AbstractConverter<DTO, Entity> {
      * Converts {@code source} to an instance of type {@code D}.
      */
     public final <D, S> D convertSpecial(S source, D dest) {
+        Optional.ofNullable(source)
+                .orElseThrow(() -> new NullPointerException("source null!"));
         //get Type of class
         String className = dest.getClass().getTypeName();
         try {

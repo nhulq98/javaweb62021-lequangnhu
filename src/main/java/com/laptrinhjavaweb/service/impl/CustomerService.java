@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.builder.CustomerSearch;
 import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
@@ -29,7 +30,10 @@ public class CustomerService implements ICustomerService {
     @Override
     public List<CustomerResponse> findByCondition(CustomerRequest customerSearchModel) {
         //mapper.
-        List<CustomerEntity> entities = customerRepository.findByCondition(customerSearchModel);
+        // convert dto -> builder
+        CustomerSearch builder = converter.convertDTOToBuilder(customerSearchModel);
+
+        List<CustomerEntity> entities = customerRepository.findByCondition(builder);
 
         if(entities != null && entities.size() > 0){
             Optional.ofNullable(entities)

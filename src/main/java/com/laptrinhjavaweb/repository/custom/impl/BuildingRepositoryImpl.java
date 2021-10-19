@@ -57,7 +57,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch the building from search form
      * @return sql String final
      */
-    @Override
     public StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
         StringBuilder sql = buildFromSQLClause(buildingSearch);
         authorization(sql, buildingSearch.getStaffId());
@@ -72,7 +71,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch
      * @return Where statement String
      */
-    @Override
     public void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
         // specials cases
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
@@ -116,7 +114,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param sql
      * @param staffId
      */
-    @Override
     public void authorization(StringBuilder sql, Long staffId) {
         MyUserDetail userDetails = SecurityUtils.getMyUserDetail();
 
@@ -133,7 +130,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         }
     }
 
-    @Override
     public void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql) {
         if (from != null || to != null) {
             if (from != null && to != null) {
@@ -152,7 +148,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch
      * @param sql
      */
-    @Override
     public void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql) {
         List<String> types = buildingSearch.getRentTypes();
         if (types != null && types.size() > 0) {

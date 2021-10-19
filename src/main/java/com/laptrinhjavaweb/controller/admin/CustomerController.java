@@ -47,7 +47,7 @@ public class CustomerController {
         mav.addObject(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL, customerSearchModel);
         mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
         mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
-        
+
         return mav;
     }
 

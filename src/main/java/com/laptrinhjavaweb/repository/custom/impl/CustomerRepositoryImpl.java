@@ -24,6 +24,15 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
         return query.getResultList();
     }
 
+    public StringBuilder buildFromClause(Long staffId){
+        StringBuilder sql = new StringBuilder("SELECT C.*")
+                .append(" FROM customer C ");
+        if(staffId != null){
+            sql.append(" JOIN staff_customer AC on AC.customerid = C.id");
+        }
+        return sql;
+    }
+
     /**
      * buildQueryForCustomerSearch to concat all clauses to complete sql final
      *
@@ -31,14 +40,10 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
      * @return sql String final
      */
     public StringBuilder buildQueryForCustomerSearch(CustomerSearch customerSearch) {
-        StringBuilder sql = new StringBuilder("SELECT C.*")
-                .append(" FROM customer C ");
-        if(customerSearch.getStaffId() != null){
-            sql.append(" JOIN staff_customer AC on AC.customerid = C.id");
-        }
+        StringBuilder sql = buildFromClause(customerSearch.getStaffId());
+
         buildWhereSQLClause(customerSearch, sql);
 
-        sql.append(" GROUP BY C.id ");
         return sql;
     }
 
@@ -48,5 +53,6 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
         sql.append(Utils.createConditionForStringByLike("C.phone", customerSearch.getPhone()));
         sql.append(Utils.createConditionForStringByLike("C.fullname", customerSearch.getFullName()));
         sql.append(Utils.createConditionForStringByLike("C.email", customerSearch.getEmail()));
+        sql.append(" GROUP BY C.id ");
     }
 }

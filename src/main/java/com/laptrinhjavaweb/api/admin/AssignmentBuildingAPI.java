@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.OptionPaneUI;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ public class AssignmentBuildingAPI {
      */
     @GetMapping("/{id}/staffs")
     public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+
         List<StaffBuildingResponse> result = Optional.ofNullable(assignmentBuildingService.getStaffsAssignment(id))
                 .orElseThrow(()-> new NotFoundException("Staff not found!"));
 
@@ -39,7 +39,7 @@ public class AssignmentBuildingAPI {
     @PostMapping("/assignmentbuilding")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffRequest request) {
-        //Optional.ofNullable(request).orElseThrow(()-> new NullPointerException("staffReque"))
+
         assignmentBuildingService.updateAssignment(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

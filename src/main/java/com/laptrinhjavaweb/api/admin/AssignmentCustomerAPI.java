@@ -27,12 +27,14 @@ public class AssignmentCustomerAPI {
      */
     @GetMapping("/{id}/staffs")
     public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
+
         return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
     }
 
     @PutMapping
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffRequest request) {
+
         assignmentCustomerService.updateAssignment(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

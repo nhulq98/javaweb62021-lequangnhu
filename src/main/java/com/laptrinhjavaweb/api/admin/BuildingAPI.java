@@ -45,6 +45,7 @@ public class BuildingAPI {
 
     @DeleteMapping
     public ResponseEntity<Void> deleteBuilding(@RequestBody BuildingRequest buildingRequest) {
+
         buildingService.deleteByListId(buildingRequest.getIds());
         return ResponseEntity.status(HttpStatus.OK).build();
     }

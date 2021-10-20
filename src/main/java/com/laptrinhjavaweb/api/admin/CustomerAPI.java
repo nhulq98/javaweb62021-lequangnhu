@@ -17,12 +17,14 @@ public class CustomerAPI {
 
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){
+
         service.save(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> delete(@RequestBody CustomerRequest customerRequest){
+
         service.deleteByListId(customerRequest.getCustomerIds());
         return ResponseEntity.status(HttpStatus.OK).build();
     }

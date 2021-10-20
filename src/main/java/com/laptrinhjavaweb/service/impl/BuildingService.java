@@ -11,7 +11,6 @@ import com.laptrinhjavaweb.enums.DistrictsEnum;
 import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
-import com.laptrinhjavaweb.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,21 +75,18 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public BuildingDTO getOne(Long id) {
-        BuildingEntity entity = buildingRepository.findOne(id);
+        if(id == null) throw new NullPointerException("BuildingID is NULL!");
 
-        Optional.ofNullable(entity)
-                .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
+        BuildingEntity entity = Optional.ofNullable(buildingRepository.findOne(id))
+                .orElseThrow(()-> new NotFoundException("Building not found!"));
 
         return buildingConverter.convertEntityToDTO(entity);
     }
 
     @Override
     public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
-        List<BuildingEntity> entities = buildingRepository.findByCondition(requestParam);
-
-        if (entities == null || entities.size() == 0) {
-            throw new NotFoundException(MessageUtils.getMSNotFound("building"));
-        }
+        List<BuildingEntity> entities = Optional.ofNullable(buildingRepository.findByCondition(requestParam))
+                .orElseThrow(() -> new NotFoundException("Buildings not found"));
 
         List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
                 .collect(Collectors.toList());
@@ -105,10 +101,8 @@ public class BuildingService implements IBuildingService {
         Long buildingId = newBuilding.getId();
 
         if (buildingId != null && buildingId > 0) {
-            BuildingEntity entity = buildingRepository.getOne(buildingId);
-
-            Optional.ofNullable(entity)
-                    .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("building")));
+            BuildingEntity entity = Optional.ofNullable(buildingRepository.getOne(buildingId))
+                    .orElseThrow(()-> new NotFoundException("Building not FOUND!"));
 
             BuildingEntity buildingNew = buildingConverter.convertDTOToEntity(newBuilding);
             buildingNew.setStaffs(entity.getStaffs());
@@ -123,12 +117,14 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void deleteById(Long id) {
+        if(id == null) throw new NullPointerException("BuildingID is NULL!");
         buildingRepository.delete(id);
     }
 
     @Override
     @Transactional
     public void deleteByListId(List<Long> ids) {
+        if(ids == null) throw new NullPointerException("BuildingIDs is NULL!");
         buildingRepository.deleteByIdIn(ids);
     }
 }

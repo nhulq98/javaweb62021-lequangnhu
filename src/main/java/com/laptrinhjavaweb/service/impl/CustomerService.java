@@ -68,7 +68,7 @@ public class CustomerService implements ICustomerService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-
+        if(id == null) throw new NullPointerException("CustomerID is null!");
         Optional.ofNullable(customerRepository.findOne(id))
                 .orElseThrow(()-> new NotFoundException(MessageUtils.getMSNotFound("customer")));
 
@@ -78,6 +78,7 @@ public class CustomerService implements ICustomerService {
     @Override
     @Transactional
     public void deleteByListId(List<Long> ids) {
+        if(ids == null) throw new NullPointerException("CustomerIDs is null!");
         customerRepository.deleteByIdIn(ids);
     }
 }

@@ -21,12 +21,6 @@ public class CustomerAPI {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable Long id){
-//        service.deleteById(id);
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
-
     @DeleteMapping
     public ResponseEntity<Void> delete(@RequestBody CustomerRequest customerRequest){
         service.deleteByListId(customerRequest.getCustomerIds());

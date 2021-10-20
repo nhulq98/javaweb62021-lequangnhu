@@ -11,11 +11,14 @@ import javax.persistence.*;
 @Table(name = "transaction")
 public class TransactionEntity extends BaseEntity {
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "note")
     private String note;
 
     // ==============Relationship==============
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "typeid")
-    private TransactionTypeEntity transactionType = new TransactionTypeEntity();
+    @ManyToOne(fetch = FetchType.LAZY)// declare relationship type(@OneToMany, @ManyToMany)
+    @JoinColumn(name = "customerid")// declare the foreign key name of this table to link with below Object
+    private CustomerEntity customer = new CustomerEntity(); // declare relationship object
 }

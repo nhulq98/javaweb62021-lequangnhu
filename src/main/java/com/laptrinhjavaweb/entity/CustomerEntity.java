@@ -44,20 +44,5 @@ public class CustomerEntity extends BaseEntity {
     private List<UserEntity> staffs = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    List<TransactionTypeEntity> transactionTypes = new ArrayList<>();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    List<TransactionEntity> transactions = new ArrayList<>();
 }

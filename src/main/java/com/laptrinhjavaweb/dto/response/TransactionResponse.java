@@ -12,9 +12,8 @@ public class TransactionResponse extends BaseResponse{
     private String code;
 
     public TransactionResponse(TransactionEntity entity) {
-        this.typeId = entity.getTransactionType().getId();
         this.note = entity.getNote();
         this.setCreatedDate(entity.getCreatedDate());
-        this.code = entity.getTransactionType().getCode();
+        this.code = entity.getCode();
     }
 }

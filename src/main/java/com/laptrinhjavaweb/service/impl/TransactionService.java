@@ -5,11 +5,9 @@ import com.laptrinhjavaweb.dto.response.TransactionResponse;
 import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.entity.TransactionEntity;
-import com.laptrinhjavaweb.entity.TransactionTypeEntity;
 import com.laptrinhjavaweb.enums.TransactionTypeEnum;
 import com.laptrinhjavaweb.repository.CustomerRepository;
-import com.laptrinhjavaweb.repository.TransactionTypeRepository;
-import com.laptrinhjavaweb.repository.TransationRepository;
+import com.laptrinhjavaweb.repository.TransactionRepository;
 import com.laptrinhjavaweb.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +24,7 @@ public class TransactionService implements ITransactionService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private TransationRepository transationRepository;
-
-    @Autowired
-    private TransactionTypeRepository transactionTypeRepository;
+    private TransactionRepository transationRepository;
 
     @Override
     public List<TransactionTypeResponse> getAllTranSactions() {
@@ -40,21 +35,16 @@ public class TransactionService implements ITransactionService {
             transactionTypeResponse.setCode(item.toString());
             result.add(transactionTypeResponse);
         }
+        String a = "";
         return result;
     }
 
     @Override
     public List<TransactionResponse> getTransactionsOfCustomerById(Long id) {
         CustomerEntity customerEntity = customerRepository.findOne(id);
-        List<TransactionTypeEntity> transactionTypes = customerEntity.getTransactionTypes();
 
-        // TransactionType has Transaction list
-        // output: list transaction ==> have to get list transaction from TransactionType
-        //1 transactionType ==> has many transaction
-        List<TransactionEntity> transactions = new ArrayList<>();
-        transactionTypes.forEach(
-                item -> transactions.addAll(item.getTransaction().stream().collect(Collectors.toList()))
-        );
+        List<TransactionEntity> transactions = customerEntity.getTransactions();
+
         List<TransactionResponse> result = transactions.stream().map(TransactionResponse::new)
                 .collect(Collectors.toList());
 
@@ -64,15 +54,12 @@ public class TransactionService implements ITransactionService {
     @Override
     @Transactional
     public void save(TransactionRequest transactionRequest) {
-        TransactionTypeEntity transactionTypes = new TransactionTypeEntity();
-        transactionTypes.setCode(transactionRequest.getCode());
-        transactionTypes.setCustomer(customerRepository.findOne(transactionRequest.getCustomerId()));
-        transactionTypeRepository.save(transactionTypes);
-
         TransactionEntity transaction = new TransactionEntity();
-        transaction.setTransactionType(transactionTypes);
-        transaction.setNote(transactionRequest.getNote());
-        transationRepository.save(transaction);
 
+        transaction.setCustomer(customerRepository.findOne(transactionRequest.getCustomerId()));
+        transaction.setCode(transactionRequest.getCode());
+        transaction.setNote(transactionRequest.getNote());
+
+        transationRepository.save(transaction);
     }
 }

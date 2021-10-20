@@ -5,8 +5,9 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
-import com.laptrinhjavaweb.dto.response.TransactionResponse;
 import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
+import com.laptrinhjavaweb.entity.CustomerEntity;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.ICustomerService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CustomerController {
@@ -51,7 +53,7 @@ public class CustomerController {
         return mav;
     }
 
-    @GetMapping(value = "/admin/customer-edit")
+    @GetMapping(value = "/admin/customer-new")
     public ModelAndView create(@ModelAttribute(SystemConstant.CUSTOMMER_MODEL) CustomerDTO customerDTO) {
 
         ModelAndView mav = new ModelAndView("admin/customer/edit");
@@ -66,13 +68,15 @@ public class CustomerController {
     public ModelAndView edit(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
 
-        CustomerDTO customerDTO = converter.convertEntityToDTO(customerRepository.findOne(id));
-        List<TransactionTypeResponse> allTranSactions = transactionService.getAllTranSactions();
-        List<TransactionResponse> transactionResponse = transactionService.getTransactionsOfCustomerById(customerDTO.getId());
+        CustomerEntity entity = Optional.ofNullable(customerRepository.findOne(id))
+                .orElseThrow(()-> new NotFoundException("customer not found!"));
 
-        mav.addObject(SystemConstant.CUSTOMMER_TRANSACTION, transactionResponse);
+        CustomerDTO customerDTO = converter.convertEntityToDTO(entity);
+        List<TransactionTypeResponse> transactionType = transactionService.getAllTranSactions();
+
+        mav.addObject(SystemConstant.CUSTOMMER_TRANSACTION, customerDTO.getTransactionlist());
         mav.addObject(SystemConstant.CUSTOMMER_MODEL, customerDTO);
-        mav.addObject(SystemConstant.TRANSACTION_TYPE, allTranSactions);
+        mav.addObject(SystemConstant.TRANSACTION_TYPE, transactionType);
 
         return mav;
     }

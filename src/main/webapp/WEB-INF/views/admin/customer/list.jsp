@@ -141,7 +141,7 @@
                                            data-toggle="tooltip"
                                         <%--title='<spring:message code="label.user.add"/>'--%>
                                            title="Add Customer"
-                                           href='<c:url value="/admin/customer-edit"/>'> <span>
+                                           href='<c:url value="/admin/customer-new"/>'> <span>
 													<i class="fa fa-plus-circle bigger-110 purple"></i>
 											</span>
                                         </a>

@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.entity.view.StaffEntity;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +35,8 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 
     @Override
     public List<StaffBuildingResponse> findAllStaff() {
-        List<UserEntity> entities = userRepository.findByStatusAndRoles_Code(1, "STAFF");
+        List<UserEntity> entities = Optional.ofNullable(userRepository.findByStatusAndRoles_Code(1, "STAFF"))
+                .orElseThrow(() -> new NotFoundException("Staffs not found!"));
 
         List<StaffBuildingResponse> result = new ArrayList<>();
 
@@ -55,7 +58,9 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Override
     public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
         try{
-            List<StaffEntity> staffsAll = assignmentBuildingRepository.findAllCustom(buildingId);
+            List<StaffEntity> staffsAll = Optional.ofNullable(assignmentBuildingRepository.findAllCustom(buildingId))
+                    .orElseThrow(()-> new NotFoundException("Staff not found"));
+
             if(staffsAll != null && staffsAll.size() > 0){
                 List<StaffBuildingResponse> result = staffsAll.stream()
                         .map(StaffBuildingResponse::new).collect(Collectors.toList());
@@ -109,8 +114,13 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Transactional
     public void updateAssignment(StaffRequest request) {
         // apply cascade
-        BuildingEntity buildingEntity = buildingRepository.findOne(request.getId());
-        buildingEntity.setStaffs(userRepository.findByIdIn(request.getStaffIds()));
+        BuildingEntity buildingEntity = Optional.ofNullable(buildingRepository.findOne(request.getId()))
+                .orElseThrow(() -> new NotFoundException("Building not found!"));
+
+        List<UserEntity> staffs = Optional.ofNullable(userRepository.findByIdIn(request.getStaffIds()))
+                .orElseThrow(()-> new NotFoundException("staff not found!"));
+
+        buildingEntity.setStaffs(staffs);
 
         buildingRepository.save(buildingEntity);
     }

@@ -9,7 +9,5 @@ import java.util.List;
 public interface ITransactionService {
     List<TransactionTypeResponse> getAllTranSactions();
 
-    List<TransactionResponse> getTransactionsOfCustomerById(Long id);
-
     void save(TransactionRequest transactionRequest);
 }

@@ -6,12 +6,16 @@ import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.request.CustomerRequest;
 import com.laptrinhjavaweb.dto.response.CustomerResponse;
+import com.laptrinhjavaweb.dto.response.TransactionResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
+import com.laptrinhjavaweb.entity.TransactionEntity;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomerConverter extends AbstractConverter<CustomerDTO, CustomerEntity> {
@@ -22,6 +26,9 @@ public class CustomerConverter extends AbstractConverter<CustomerDTO, CustomerEn
                 .orElseThrow(() -> new NullPointerException("customerEntity null!"));
 
         CustomerDTO dto = modelMapper.map(entity, CustomerDTO.class);
+        List<TransactionResponse> transactionlist = entity.getTransactions().stream().map(TransactionResponse::new).collect(Collectors.toList());
+        dto.setTransactionlist(transactionlist);
+
         return dto;
     }
 

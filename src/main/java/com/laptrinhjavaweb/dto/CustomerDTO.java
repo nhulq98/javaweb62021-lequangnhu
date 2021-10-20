@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.dto;
 
+import com.laptrinhjavaweb.dto.response.TransactionResponse;
 import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,5 @@ public class CustomerDTO extends AbstractDTO<CustomerDTO> {
     private String demand;
     private String note;
     private String status;
-    List<TransactionTypeResponse> transactionTypelist = new ArrayList<>();
+    List<TransactionResponse> transactionlist = new ArrayList<>();
 }

@@ -6,15 +6,18 @@ import com.laptrinhjavaweb.dto.response.TransactionTypeResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.entity.TransactionEntity;
 import com.laptrinhjavaweb.enums.TransactionTypeEnum;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.repository.TransactionRepository;
 import com.laptrinhjavaweb.service.ITransactionService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,25 +43,21 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public List<TransactionResponse> getTransactionsOfCustomerById(Long id) {
-        CustomerEntity customerEntity = customerRepository.findOne(id);
-
-        List<TransactionEntity> transactions = customerEntity.getTransactions();
-
-        List<TransactionResponse> result = transactions.stream().map(TransactionResponse::new)
-                .collect(Collectors.toList());
-
-        return result;
-    }
-
-    @Override
     @Transactional
     public void save(TransactionRequest transactionRequest) {
         TransactionEntity transaction = new TransactionEntity();
 
-        transaction.setCustomer(customerRepository.findOne(transactionRequest.getCustomerId()));
-        transaction.setCode(transactionRequest.getCode());
-        transaction.setNote(transactionRequest.getNote());
+        String code = transactionRequest.getCode();
+        String note = transactionRequest.getNote();
+        CustomerEntity customer = Optional.ofNullable(customerRepository.findOne(transactionRequest.getCustomerId()))
+                .orElseThrow(() -> new NotFoundException("Customer not found!"));
+
+        transaction.setCustomer(customer);
+
+        if(StringUtils.isNotBlank(code))
+            transaction.setCode(code);
+        if(StringUtils.isNotBlank(note))
+            transaction.setNote(note);
 
         transationRepository.save(transaction);
     }

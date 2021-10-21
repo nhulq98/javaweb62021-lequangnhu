@@ -42,11 +42,39 @@ ELSE 'NULL'
 END) AS CHECKED
 FROM user US, user_role USR -- select user has role is STAFF
 WHERE US.id = USR.userid
-AND USR.roleid = 2 -- role staff (default)
+AND USR.roleid = 2; -- role staff (default)
 
--- gửi ds uer từ front end về để lưu vào đb
+-- Gửi ds uer từ front end về để lưu vào đb
 -- b1: Lấy ds id staff từ front-end : listIdFromFontend
 -- B2: Lấy ds id staff đang quản lý tòa nhà theo buildingId: listIdFromDB
 -- B3: Lấy 
 -- if this list1 
 
+
+-- bài 2
+--    ============cách 2 chỉ dùng SQL==============
+-- gửi ds uer từ front end về để lưu vào đb
+-- b1: Lấy ds id staff từ front-end : listIdFromFontend
+-- B2: Lấy ds id staff đang quản lý tòa nhà theo buildingId: listIdFromDB
+-- B3: Tìm và xóa những phần tử của listIdFromDB ko tồn tai ở listIdFromFontend
+-- B4: tim và thêm nhung ptu cua listIdFromFontend ko tồn tại ở listIdFromDB
+
+
+-- GIAI------
+-- B3: Tìm và xóa những phần tử của listIdFromDB ko tồn tai ở listIdFrom Fontend
+DELETE FROM assignmentbuilding ASB
+WHERE ASB.staffid NOT in (2, 3, 4)# danh sách listIdFrom Fontend
+  AND ASB.buildingid = 1; -- by pass paramter
+
+-- B4: tìm và thêm những ptu cua listIdFromFront-end ko tồn tại ở listIdFromDB of 1 specife building
+-- B4.1: FIND staffs(listIdFromFront-end) not exists in listIdFromDB(list staff is managing building) with buildingId = 10;
+INSERT INTO assignmentbuilding(buildingid, staffid)
+SELECT temp.buildingid, temp.staffid
+FROM (SELECT 10 as buildingid, US.id as staffid # truyền buildingid vào select
+      FROM USER US
+      WHERE 1=1 IN (US.id = 2, US.id = 3) # danh sách listIdFrom Fontend
+     ) temp
+WHERE temp.staffid
+      NOT IN (SELECT ASB.staffid FROM assignmentbuilding ASB WHERE ASB.buildingid = 10); # truyền buildingid vào
+
+-- Lưu ý: khi dùng cách này ta phải áp dụng stored produced

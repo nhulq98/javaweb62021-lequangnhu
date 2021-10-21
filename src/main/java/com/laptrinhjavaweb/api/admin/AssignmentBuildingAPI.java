@@ -2,7 +2,6 @@ package com.laptrinhjavaweb.api.admin;
 
 import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
-import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/building/assignment")
@@ -29,11 +27,8 @@ public class AssignmentBuildingAPI {
      */
     @GetMapping("/{id}/staffs")
     public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
-
-        List<StaffBuildingResponse> result = Optional.ofNullable(assignmentBuildingService.getStaffsAssignment(id))
-                .orElseThrow(()-> new NotFoundException("Staff not found!"));
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        if(id == null) throw new NullPointerException("buildingID null");
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
     }
 
     @PostMapping("/assignmentbuilding")

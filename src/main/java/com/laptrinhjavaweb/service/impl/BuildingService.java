@@ -100,7 +100,9 @@ public class BuildingService implements IBuildingService {
         // apply cascade
         Long buildingId = newBuilding.getId();
 
-        if (buildingId != null && buildingId > 0) {
+        if(buildingId == null) throw new NullPointerException("BuildingID is NULL");
+
+        if (buildingId > 0) {
             BuildingEntity entity = Optional.ofNullable(buildingRepository.getOne(buildingId))
                     .orElseThrow(()-> new NotFoundException("Building not FOUND!"));
 

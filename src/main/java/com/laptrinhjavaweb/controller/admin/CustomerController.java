@@ -26,19 +26,19 @@ import java.util.Optional;
 public class CustomerController {
 
     @Autowired
-    ICustomerService service;
+    private ICustomerService service;
 
     @Autowired
-    IAssignmentBuildingService assignmentBuildingService;
+    private IAssignmentBuildingService assignmentBuildingService;
 
     @Autowired
-    ITransactionService transactionService;
+    private ITransactionService transactionService;
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    CustomerConverter converter;
+    private CustomerConverter converter;
 
     @GetMapping(value = "/admin/customer-list")
     public ModelAndView getAll(@ModelAttribute(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL)CustomerRequest customerSearchModel) {

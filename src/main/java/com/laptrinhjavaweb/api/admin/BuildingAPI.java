@@ -28,8 +28,8 @@ public class BuildingAPI {
     }
 
     @GetMapping
-    public ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam,
-                                                           @RequestParam(value = "listType", required = false) List<String> listType) {
+    public ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam
+                                                           ,@RequestParam(value = "listType", required = false) List<String> listType) {
         requestParam.put("buildingTypes", listType);
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
     }

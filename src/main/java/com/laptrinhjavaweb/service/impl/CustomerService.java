@@ -22,10 +22,10 @@ import java.util.Optional;
 public class CustomerService implements ICustomerService {
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    CustomerConverter converter;
+    private CustomerConverter converter;
 
     @Override
     public List<CustomerResponse> findByCondition(CustomerRequest customerSearchModel) {

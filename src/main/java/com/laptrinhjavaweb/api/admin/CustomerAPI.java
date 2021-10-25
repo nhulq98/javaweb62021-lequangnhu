@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI {
 
     @Autowired
-    ICustomerService service;
+    private ICustomerService service;
 
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){

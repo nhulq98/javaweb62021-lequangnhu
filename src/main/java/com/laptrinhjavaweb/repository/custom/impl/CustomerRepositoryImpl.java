@@ -15,7 +15,7 @@ import java.util.List;
 public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<CustomerEntity> findByCondition(CustomerSearch customerSearch) {

@@ -18,7 +18,7 @@ public class CustomerAPI {
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){
 
-        service.save(newDto);
+        service.createOrUpdate(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -32,7 +32,7 @@ public class CustomerAPI {
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody CustomerDTO newDto){
 
-        service.save(newDto);
+        service.createOrUpdate(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

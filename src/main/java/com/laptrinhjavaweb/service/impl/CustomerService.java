@@ -29,8 +29,6 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<CustomerResponse> findByCondition(CustomerRequest customerSearchModel) {
-        //mapper.
-        // convert dto -> builder
         CustomerSearch builder = converter.convertDTOToBuilder(customerSearchModel);
 
         List<CustomerEntity> entities = customerRepository.findByCondition(builder);
@@ -47,22 +45,18 @@ public class CustomerService implements ICustomerService {
 
     @Override
     @Transactional
-    public void save(CustomerDTO customer) {
+    public void createOrUpdate(CustomerDTO customer) {
         Long cusId = customer.getId();
 
-        if(cusId != null && cusId > 0){
-            CustomerEntity entity = customerRepository.getOne(cusId);
+        CustomerEntity customerEntity = converter.convertDTOToEntity(customer);
 
-            Optional.ofNullable(customerRepository.findOne(cusId))
+        if(cusId != null && cusId > 0){// is update
+            CustomerEntity entity = Optional.ofNullable(customerRepository.getOne(cusId))
                     .orElseThrow(()-> new NotFoundException(MessageUtils.getMSNotFound("customer")));
 
-            CustomerEntity customerUpdate = converter.convertDTOToEntity(customer);
-            customerUpdate.setStaffs(entity.getStaffs());
-
-            customerRepository.save(customerUpdate);
-        }else{
-            customerRepository.save(converter.convertDTOToEntity(customer));
+            customerEntity.setStaffs(entity.getStaffs());
         }
+        customerRepository.save(customerEntity);
     }
 
     @Override

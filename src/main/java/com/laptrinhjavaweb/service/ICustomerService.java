@@ -11,7 +11,7 @@ public interface ICustomerService {
     List<CustomerResponse> findByCondition(CustomerRequest customerSearchModel);
 
     //Change Data
-    void save(CustomerDTO customer);
+    void createOrUpdate(CustomerDTO customer);
 
     void deleteByListId(List<Long> ids);
 }

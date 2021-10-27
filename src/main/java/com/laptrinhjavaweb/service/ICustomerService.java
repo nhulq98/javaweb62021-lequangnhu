@@ -13,7 +13,5 @@ public interface ICustomerService {
     //Change Data
     void save(CustomerDTO customer);
 
-    void deleteById(Long id);
-
     void deleteByListId(List<Long> ids);
 }

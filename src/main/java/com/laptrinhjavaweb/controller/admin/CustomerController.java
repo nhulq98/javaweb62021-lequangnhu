@@ -47,7 +47,7 @@ public class CustomerController {
         List<CustomerResponse> result = service.findByCondition(customerSearchModel);
 
         mav.addObject(SystemConstant.CUSTOMMER_SEARCH_FORM_MODEL, customerSearchModel);
-        mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
+        mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaffs());
         mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
 
         return mav;

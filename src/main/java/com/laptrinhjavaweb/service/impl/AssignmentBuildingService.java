@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentBuildingService implements IAssignmentBuildingService {
@@ -27,18 +27,13 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     private UserRepository userRepository;
 
     @Override
-    public List<StaffBuildingResponse> findAllStaff() {
+    public List<StaffBuildingResponse> findAllStaffs() {
         List<UserEntity> entities = Optional.ofNullable(userRepository.findByStatusAndRoles_Code(1, "STAFF"))
                 .orElseThrow(() -> new NotFoundException("Staffs not found!"));
 
-        List<StaffBuildingResponse> result = new ArrayList<>();
+        List<StaffBuildingResponse> result = entities.stream().map(StaffBuildingResponse::new)
+                .collect(Collectors.toList());
 
-        for (UserEntity item : entities) {
-            StaffBuildingResponse response = new StaffBuildingResponse();
-            response.setId(item.getId());
-            response.setFullName(item.getFullName());
-            result.add(response);
-        }
         return result;
     }
 

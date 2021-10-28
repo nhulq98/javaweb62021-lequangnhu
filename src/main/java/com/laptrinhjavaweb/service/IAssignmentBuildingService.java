@@ -8,7 +8,7 @@ import java.util.List;
 public interface IAssignmentBuildingService {
     //get Data
     List<StaffBuildingResponse> findAllStaffsByBuildingId(Long buildingId);
-    List<StaffBuildingResponse> findAllStaff();
+    List<StaffBuildingResponse> findAllStaffs();
 
     //Change Data
     void updateBuildingManagementStaffs(StaffRequest request);

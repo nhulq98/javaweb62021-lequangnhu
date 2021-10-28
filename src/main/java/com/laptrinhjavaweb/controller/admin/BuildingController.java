@@ -43,7 +43,7 @@ public class BuildingController {
         mav.addObject(SystemConstant.BUILDING_SEARCH_FORM_MODEL, buildingSearchModel);
         mav.addObject(SystemConstant.DISTRICT, buildingService.getDistricts());
         mav.addObject(SystemConstant.RENT_TYPE, buildingService.getBuildingTypes());
-        mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaff());
+        mav.addObject(SystemConstant.STAFF, assignmentBuildingService.findAllStaffs());
         mav.addObject(SystemConstant.SEARCH_RESULT_MODEL, result);
 
         return mav;

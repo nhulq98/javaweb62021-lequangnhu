@@ -21,8 +21,8 @@ public class SystemConstant {
     public static final String RENT_TYPE = "renttype";
     public static final String RENT_TYPE_EDIT = "renttypeedit";
     public static final String TRANSACTION_TYPE = "transactiontype";
-
-
+    public static final int ACTIVE_STATUS = 1;
+    public static final String EMPTY_STRING = "";
     // Scope for Logic
     public static final String ISNUMBER = "[0-9]+";
     public static final String IDMODEL = "IDMODEL";

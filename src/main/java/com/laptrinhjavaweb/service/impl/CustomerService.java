@@ -37,6 +37,7 @@ public class CustomerService implements ICustomerService {
             Optional.ofNullable(entities)
                     .orElseThrow(() -> new NotFoundException(MessageUtils.getMSNotFound("customer")));
         }
+
         List<CustomerResponse> result = new ArrayList<>();
         entities.forEach(item -> result.add(converter.convertEntityToResponse(item)));
 

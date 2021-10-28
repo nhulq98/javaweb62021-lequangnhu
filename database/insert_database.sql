@@ -14,9 +14,19 @@ INSERT INTO user_role(user_id,role_id) VALUES (2,2);
 
 -- ===================for database advance=======================
 INSERT INTO `building` VALUES
-                              (1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_1',NULL,500,NULL,NULL,NULL,NULL,NULL,NULL,'Nam Giao Building Tower',NULL,2,NULL,NULL,15,'15 triệu/m2',NULL,'TANG_TRET,NGUYEN_CAN',NULL,'59 phan xích long',NULL,'Phường 2',NULL)
+     (1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_1',NULL,500,NULL,NULL,NULL,NULL,NULL,NULL,'Nam Giao Building Tower',NULL,2,NULL,NULL,15,'15 triệu/m2',NULL,'TANG_TRET,NGUYEN_CAN',NULL,'59 phan xích long',NULL,'Phường 2',NULL)
     ,(2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_2',NULL,650,NULL,NULL,NULL,NULL,NULL,NULL,'ACM Tower',NULL,2,NULL,NULL,18,'18 triệu/m2',NULL,'NGUYEN_CAN',NULL,'96 cao thắng',NULL,'Phường 4',NULL)
-    ,(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_1',NULL,200,NULL,NULL,NULL,NULL,NULL,NULL,'Alpha 2 Building Tower',NULL,1,NULL,NULL,20,'20 triệu/m2',NULL,'NOI_THAT',NULL,'153 nguyễn đình chiểu',NULL,'Phường 6',NULL),(4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_4',NULL,200,NULL,NULL,NULL,NULL,NULL,NULL,'IDD 1 Building',NULL,1,NULL,NULL,12,'12 triệu/m2',NULL,'TANG_TRET,NGUYEN_CAN,NOI_THAT',NULL,'111 Lý Chính Thắng',NULL,'Phường 7',NULL),(14,'nguyenvana','2021-09-28 15:56:19','nguyenvana','2021-09-28 15:56:19',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'demo rent 100','',NULL,'','',NULL,'','',NULL,'','','','',''),(15,'nguyenvana','2021-09-28 16:00:00','nguyenvana','2021-09-28 16:00:00',NULL,'','',NULL,'',NULL,'QUAN_3','',NULL,'',NULL,'','',NULL,NULL,'demo 200','',NULL,'','',NULL,'','',NULL,'','','','',''),(16,'nguyenvana','2021-09-28 16:19:36','nguyenvana','2021-09-28 16:19:36',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'đasa','',NULL,'','',NULL,'','',NULL,'','','','',''),(17,'nguyenvana','2021-09-28 16:33:21','nguyenvana','2021-09-28 16:33:21',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'23433','',NULL,'','',NULL,'','',NULL,'','','','',''),(18,NULL,NULL,'nguyenvana','2021-09-28 20:29:54',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'Lê Quang Như','',NULL,'','',NULL,'','',NULL,'','20','','',''),(19,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','232',NULL,NULL,'Lê Quang Như','',NULL,'','',NULL,'','',NULL,'','20','','',''),(20,'nguyenvana','2021-09-28 21:23:34','nguyenvana','2021-09-28 21:23:34',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'','',NULL,'','',NULL,'','',NULL,'','','','',''),(21,'nguyenvana','2021-09-28 21:29:58','nguyenvana','2021-09-28 21:29:58',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'demoFi','',NULL,'','',NULL,'','','TANG_TRET,NGUYEN_CAN','','','','',''),(23,'nguyenvana','2021-09-28 22:23:17','nguyenvana','2021-09-28 22:23:17',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'demoGiaoToaNha','',NULL,'','',NULL,'','','','','','','','');
+    ,(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_1',NULL,200,NULL,NULL,NULL,NULL,NULL,NULL,'Alpha 2 Building Tower',NULL,1,NULL,NULL,20,'20 triệu/m2',NULL,'NOI_THAT',NULL,'153 nguyễn đình chiểu',NULL,'Phường 6',NULL)
+    ,(4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'QUAN_4',NULL,200,NULL,NULL,NULL,NULL,NULL,NULL,'IDD 1 Building',NULL,1,NULL,NULL,12,'12 triệu/m2',NULL,'TANG_TRET,NGUYEN_CAN,NOI_THAT',NULL,'111 Lý Chính Thắng',NULL,'Phường 7',NULL)
+    ,(14,'nguyenvana','2021-09-28 15:56:19','nguyenvana','2021-09-28 15:56:19',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'demo rent 100','',NULL,'','',NULL,'','',NULL,'','','','','')
+    ,(15,'nguyenvana','2021-09-28 16:00:00','nguyenvana','2021-09-28 16:00:00',NULL,'','',NULL,'',NULL,'QUAN_3','',NULL,'',NULL,'','',NULL,NULL,'demo 200','',NULL,'','',NULL,'','',NULL,'','','','','')
+    ,(16,'nguyenvana','2021-09-28 16:19:36','nguyenvana','2021-09-28 16:19:36',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'đasa','',NULL,'','',NULL,'','',NULL,'','','','','')
+    ,(17,'nguyenvana','2021-09-28 16:33:21','nguyenvana','2021-09-28 16:33:21',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'23433','',NULL,'','',NULL,'','',NULL,'','','','','')
+    ,(18,NULL,NULL,'nguyenvana','2021-09-28 20:29:54',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'Lê Quang Như','',NULL,'','',NULL,'','',NULL,'','20','','','')
+    ,(19,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','232',NULL,NULL,'Lê Quang Như','',NULL,'','',NULL,'','',NULL,'','20','','','')
+    ,(20,'nguyenvana','2021-09-28 21:23:34','nguyenvana','2021-09-28 21:23:34',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'','',NULL,'','',NULL,'','',NULL,'','','','','')
+    ,(21,'nguyenvana','2021-09-28 21:29:58','nguyenvana','2021-09-28 21:29:58',NULL,'','',NULL,'',NULL,'QUAN_2','',NULL,'',NULL,'','',NULL,NULL,'demoFi','',NULL,'','',NULL,'','','TANG_TRET,NGUYEN_CAN','','','','','')
+    ,(23,'nguyenvana','2021-09-28 22:23:17','nguyenvana','2021-09-28 22:23:17',NULL,'','',NULL,'',NULL,'QUAN_1','',NULL,'',NULL,'','',NULL,NULL,'demoGiaoToaNha','',NULL,'','',NULL,'','','','','','','','');
 
 INSERT INTO `user` VALUES
                           (1,NULL,NULL,NULL,NULL,NULL,'nguyen van a','$2a$10$/RUbuT9KIqk6f8enaTQiLOXzhnUkiwEJRdtzdrMXXwU7dgnLKTCYG',1,'nguyenvana')
@@ -24,8 +34,14 @@ INSERT INTO `user` VALUES
     ,(3,NULL,NULL,NULL,NULL,NULL,'nguyen van c','$2a$10$/RUbuT9KIqk6f8enaTQiLOXzhnUkiwEJRdtzdrMXXwU7dgnLKTCYG',1,'nguyenvanc')
     ,(4,NULL,NULL,NULL,NULL,NULL,'nguyen van d','$2a$10$/RUbuT9KIqk6f8enaTQiLOXzhnUkiwEJRdtzdrMXXwU7dgnLKTCYG',1,'nguyenvand');
 
+INSERT INTO `role` VALUES
+     (1,NULL,NULL,NULL,NULL,'MANAGER','Quản lý')
+    ,(2,NULL,NULL,NULL,NULL,'STAFF','Nhân viên');
+
+INSERT INTO `user_role` VALUES (1,1),(2,2),(3,2),(4,2);
+
 INSERT INTO `assignmentbuilding` VALUES
-                                        (39,NULL,NULL,NULL,NULL,4,3)
+    (39,NULL,NULL,NULL,NULL,4,3)
     ,(40,NULL,NULL,NULL,NULL,3,3)
     ,(41,NULL,NULL,NULL,NULL,4,4)
     ,(45,'nguyenvana','2021-09-23 17:12:17','nguyenvana','2021-09-23 17:12:17',2,4)
@@ -33,21 +49,36 @@ INSERT INTO `assignmentbuilding` VALUES
     ,(52,NULL,NULL,NULL,NULL,1,3);
 
 
-INSERT INTO `rentarea` VALUES (1,NULL,NULL,NULL,NULL,100,1),(2,NULL,NULL,NULL,NULL,200,1),(4,NULL,NULL,NULL,NULL,300,2),(5,NULL,NULL,NULL,NULL,400,2),(6,NULL,NULL,NULL,NULL,300,3),(7,NULL,NULL,NULL,NULL,400,3),(8,NULL,NULL,NULL,NULL,500,3),(9,NULL,NULL,NULL,NULL,100,4),(10,NULL,NULL,NULL,NULL,400,4),(11,NULL,NULL,NULL,NULL,250,4),(25,'nguyenvana','2021-09-28 16:46:51','nguyenvana','2021-09-28 16:46:51',100,18),(32,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',200,18),(33,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',500,18),(34,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',600,18),(35,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',100,19),(36,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',200,19);
-
-INSERT INTO `role` VALUES (1,NULL,NULL,NULL,NULL,'MANAGER','Quản lý'),(2,NULL,NULL,NULL,NULL,'STAFF','Nhân viên');
-
-INSERT INTO `user_role` VALUES (1,1),(2,2),(3,2),(4,2);
+INSERT INTO `rentarea` VALUES
+    (1,NULL,NULL,NULL,NULL,100,1)
+    ,(2,NULL,NULL,NULL,NULL,200,1)
+    ,(4,NULL,NULL,NULL,NULL,300,2)
+    ,(5,NULL,NULL,NULL,NULL,400,2)
+    ,(6,NULL,NULL,NULL,NULL,300,3)
+    ,(7,NULL,NULL,NULL,NULL,400,3)
+    ,(8,NULL,NULL,NULL,NULL,500,3)
+    ,(9,NULL,NULL,NULL,NULL,100,4)
+    ,(10,NULL,NULL,NULL,NULL,400,4)
+    ,(11,NULL,NULL,NULL,NULL,250,4)
+    ,(25,'nguyenvana','2021-09-28 16:46:51','nguyenvana','2021-09-28 16:46:51',100,18)
+    ,(32,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',200,18)
+    ,(33,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',500,18)
+    ,(34,'nguyenvana','2021-09-28 20:32:09','nguyenvana','2021-09-28 20:32:09',600,18)
+    ,(35,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',100,19)
+    ,(36,'nguyenvana','2021-09-28 21:22:08','nguyenvana','2021-09-28 21:22:08',200,19);
 
 INSERT INTO `customer` VALUES
-                              (10,'nguyenvana','2021-10-13 16:53:01','nguyenvana','2021-10-13 17:05:23','Nam giới','Thuê nhà','nhule2031998@gmail.com - Unique','Lê Quang Như','','0335206644 - Unique','đang xử lý')
+    (10,'nguyenvana','2021-10-13 16:53:01','nguyenvana','2021-10-13 17:05:23','Nam giới','Thuê nhà','nhule2031998@gmail.com - Unique','Lê Quang Như','','0335206644 - Unique','đang xử lý')
     ,(11,'nguyenvana','2021-10-13 17:06:32','nguyenvana','2021-10-13 17:06:43','Nam giới','','canh@gmail.com','nguyen huu canh','','01666666','mới tiếp nhận');
 
 INSERT INTO `transactiontype` VALUES
-                                     (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','QUA_TRINH_CSKH',NULL,10)
-    ,(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','DAN_DI_XEM',NULL,10),(3,'nguyenvana','2021-10-13 17:56:25','nguyenvana','2021-10-13 17:56:25','DAN_DI_XEM',NULL,10);
+    (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','QUA_TRINH_CSKH',NULL,10)
+    ,(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','DAN_DI_XEM',NULL,10)
+    ,(3,'nguyenvana','2021-10-13 17:56:25','nguyenvana','2021-10-13 17:56:25','DAN_DI_XEM',NULL,10);
 
-INSERT INTO `transaction` VALUES (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','mới gọi điện hẹn thứ 7 gặp',1),(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','đi xem hết tầng 1',2)
+INSERT INTO `transaction` VALUES
+     (1,'nguyenvana','2021-10-13 17:55:51','nguyenvana','2021-10-13 17:55:51','mới gọi điện hẹn thứ 7 gặp',1)
+    ,(2,'nguyenvana','2021-10-13 17:56:06','nguyenvana','2021-10-13 17:56:06','đi xem hết tầng 1',2)
     ,(3,'nguyenvana','2021-10-13 17:56:25','nguyenvana','2021-10-13 17:56:25','đi xem trên ban công',3);
 
 

@@ -100,20 +100,15 @@ public class BuildingService implements IBuildingService {
         // apply cascade
         Long buildingId = newBuilding.getId();
 
-        if(buildingId == null) throw new NullPointerException("BuildingID is NULL");
+        BuildingEntity buildingEntity = buildingConverter.convertDTOToEntity(newBuilding);
 
-        if (buildingId > 0) {
+        if (buildingId != null && buildingId > 0) {
             BuildingEntity entity = Optional.ofNullable(buildingRepository.getOne(buildingId))
                     .orElseThrow(()-> new NotFoundException("Building not FOUND!"));
 
-            BuildingEntity buildingNew = buildingConverter.convertDTOToEntity(newBuilding);
-            buildingNew.setStaffs(entity.getStaffs());
-
-            buildingRepository.save(buildingNew);
-        }else{
-
-            buildingRepository.save(buildingConverter.convertDTOToEntity(newBuilding));
+            buildingEntity.setStaffs(entity.getStaffs());
         }
+        buildingRepository.save(buildingEntity);
     }
 
     @Override

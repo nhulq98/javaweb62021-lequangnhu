@@ -4,12 +4,12 @@ import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
-import com.laptrinhjavaweb.entity.view.StaffEntity;
 import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
+import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AssignmentBuildingService implements IAssignmentBuildingService {
@@ -54,23 +53,14 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
      * @return all staff available
      */
     @Override
-    public List<StaffBuildingResponse> getStaffsAssignment(Long buildingId) {
-        try{
-            List<StaffEntity> staffsAll = Optional.ofNullable(assignmentBuildingRepository.findAllCustom(buildingId))
-                    .orElseThrow(()-> new NotFoundException("Staff not found"));
+    public List<StaffBuildingResponse> findAllStaffsByBuildingId(Long buildingId) {
 
-            if(staffsAll != null && staffsAll.size() > 0){
-                List<StaffBuildingResponse> result = staffsAll.stream()
-                        .map(StaffBuildingResponse::new).collect(Collectors.toList());
-                return result;
-            }
+        BuildingEntity buildingEntity = Optional.ofNullable(buildingRepository.findOne(buildingId))
+                .orElseThrow(() -> new NotFoundException("Building not found!"));
 
-            return new ArrayList<>();
+        List<UserEntity> buildingManagementStaffs = buildingEntity.getStaffs();
 
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            return new ArrayList<> ();
-        }
+        return Utils.setCheckedForStaffs(buildingManagementStaffs);
     }
 
     // For change data
@@ -91,14 +81,18 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
     @Override
     @Transactional
     public void updateBuildingManagementStaffs(StaffRequest request) {
+        List<Long> listId = request.getStaffIds();
+        int size = userRepository.countByIdIn(listId);
+
         // apply cascade
         BuildingEntity buildingEntity = Optional.ofNullable(buildingRepository.findOne(request.getId()))
                 .orElseThrow(() -> new NotFoundException("Building not found!"));
 
-        List<UserEntity> staffs = Optional.ofNullable(userRepository.findByIdIn(request.getStaffIds()))
-                .orElseThrow(()-> new NotFoundException("staff not found!"));
+        if(size != listId.size()){
+            throw new NotFoundException("staff not found!");
+        }
 
-        buildingEntity.setStaffs(staffs);
+        buildingEntity.setStaffs(userRepository.findByIdIn(listId));
 
         buildingRepository.save(buildingEntity);
     }

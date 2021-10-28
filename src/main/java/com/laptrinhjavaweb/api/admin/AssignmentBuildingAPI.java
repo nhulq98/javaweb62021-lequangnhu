@@ -28,7 +28,7 @@ public class AssignmentBuildingAPI {
     @GetMapping("/{id}/staffs")
     public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
         if(id == null) throw new NullPointerException("buildingID null");
-        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.getStaffsAssignment(id));
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.findAllStaffsByBuildingId(id));
     }
 
     @PostMapping("/assignmentbuilding")

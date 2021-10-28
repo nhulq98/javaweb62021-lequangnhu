@@ -27,6 +27,11 @@ public class BuildingAPI {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.getOne(id));
     }
 
+    /**
+     * @param requestParam map with (name='building', rentprice=2, ....)
+     * @param listType
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<BuildingResponse>> findByCondition(@RequestParam Map<String, Object> requestParam
                                                            ,@RequestParam(value = "listType", required = false) List<String> listType) {

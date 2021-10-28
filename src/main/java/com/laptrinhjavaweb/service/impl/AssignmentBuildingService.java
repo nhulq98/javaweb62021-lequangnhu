@@ -5,7 +5,6 @@ import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.NotFoundException;
-import com.laptrinhjavaweb.repository.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IAssignmentBuildingService;
@@ -20,9 +19,6 @@ import java.util.Optional;
 
 @Service
 public class AssignmentBuildingService implements IAssignmentBuildingService {
-
-    @Autowired
-    private AssignmentBuildingRepository assignmentBuildingRepository;
 
     @Autowired
     private BuildingRepository buildingRepository;

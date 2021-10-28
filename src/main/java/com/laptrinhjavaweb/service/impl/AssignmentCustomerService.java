@@ -5,7 +5,6 @@ import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.NotFoundException;
-import com.laptrinhjavaweb.repository.AssignmentCustomerRepository;
 import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IAssignmentCustomerService;
@@ -20,9 +19,6 @@ import java.util.Optional;
 
 @Service
 public class AssignmentCustomerService implements IAssignmentCustomerService {
-
-    @Autowired
-    private AssignmentCustomerRepository repository;
 
     @Autowired
     private CustomerRepository customerRepository;

@@ -118,13 +118,6 @@ public class BuildingService implements IBuildingService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        if(id == null) throw new NullPointerException("BuildingID is NULL!");
-        buildingRepository.delete(id);
-    }
-
-    @Override
-    @Transactional
     public void deleteByListId(List<Long> ids) {
         if(ids == null) throw new NullPointerException("BuildingIDs is NULL!");
         buildingRepository.deleteByIdIn(ids);

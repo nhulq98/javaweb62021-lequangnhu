@@ -33,9 +33,9 @@ public class AssignmentBuildingAPI {
 
     @PostMapping("/assignmentbuilding")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> updateAssignmentBuilding(@RequestBody StaffRequest request) {
+    public ResponseEntity<Void> updateBuildingManagementStaffs(@RequestBody StaffRequest request) {
 
-        assignmentBuildingService.updateAssignment(request);
+        assignmentBuildingService.updateBuildingManagementStaffs(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

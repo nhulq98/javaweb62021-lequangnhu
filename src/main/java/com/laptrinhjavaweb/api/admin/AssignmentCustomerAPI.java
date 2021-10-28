@@ -33,9 +33,9 @@ public class AssignmentCustomerAPI {
 
     @PutMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffRequest request) {
+    public ResponseEntity<Void> updateCustomerManagementStaffs(@RequestBody StaffRequest request) {
 
-        assignmentCustomerService.updateAssignmentStaffs(request);
+        assignmentCustomerService.updateCustomerManagementStaffs(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

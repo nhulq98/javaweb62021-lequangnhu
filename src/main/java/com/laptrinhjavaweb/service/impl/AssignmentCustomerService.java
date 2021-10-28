@@ -54,7 +54,7 @@ public class AssignmentCustomerService implements IAssignmentCustomerService {
 
     @Override
     @Transactional
-    public void updateAssignmentStaffs(StaffRequest request) {
+    public void updateCustomerManagementStaffs(StaffRequest request) {
         // apply cascade
         Long cusId = request.getId();
         LinkedList<Long> staffIds = request.getStaffIds();

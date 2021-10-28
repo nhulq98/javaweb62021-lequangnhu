@@ -2,7 +2,6 @@ package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
-import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.entity.view.StaffEntity;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,26 +73,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         }
     }
 
-    @Override
-    public List<AssignmentBuildingEntity> createStaffs(Long buildingId, List<Long> idStaffs) {
-        List<AssignmentBuildingEntity> result = new LinkedList<>();
-        for (Long item : idStaffs) {
-            AssignmentBuildingEntity entity = new AssignmentBuildingEntity();
-            UserEntity userEntity = new UserEntity();
-            BuildingEntity buildingEntity = new BuildingEntity();
-
-            userEntity.setId(item);
-            buildingEntity.setId(buildingId);
-
-            entity.setUser(userEntity);
-            entity.setBuilding(buildingEntity);
-
-            result.add(entity);
-        }
-
-        return result;
-    }
-
     // For change data
 
     /**
@@ -112,7 +90,7 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
      */
     @Override
     @Transactional
-    public void updateAssignment(StaffRequest request) {
+    public void updateBuildingManagementStaffs(StaffRequest request) {
         // apply cascade
         BuildingEntity buildingEntity = Optional.ofNullable(buildingRepository.findOne(request.getId()))
                 .orElseThrow(() -> new NotFoundException("Building not found!"));
@@ -123,19 +101,5 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
         buildingEntity.setStaffs(staffs);
 
         buildingRepository.save(buildingEntity);
-    }
-
-    /**
-     * those cases which we can guess. If return True ==> done process
-     * @param rentAreaFromView
-     * @param rentAreasOld
-     * @return
-     */
-    @Override
-    public boolean testSpecialCases(List<AssignmentBuildingEntity> rentAreaFromView, List<AssignmentBuildingEntity> rentAreasOld){
-        if(rentAreasOld.size() == 0 &&(rentAreaFromView.size() == 0 || rentAreaFromView == null)) { return true;}
-        if(rentAreasOld.size() == 0 && rentAreaFromView.size() != 0){assignmentBuildingRepository.save(rentAreaFromView); return true;}
-        if(rentAreasOld.size() != 0 && rentAreaFromView.size() == 0){assignmentBuildingRepository.delete(rentAreasOld);; return true;}
-        return false;
     }
 }

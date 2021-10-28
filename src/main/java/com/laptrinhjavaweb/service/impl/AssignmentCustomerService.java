@@ -42,23 +42,27 @@ public class AssignmentCustomerService implements IAssignmentCustomerService {
         return result;
     }
 
+    private void setStaffsForCustomer(CustomerEntity customerEntity, LinkedList<Long> staffIds){
+        int size = customerRepository.countByIdIn(staffIds);
+        if(size != staffIds.size()){
+            throw new NotFoundException("Staffs not found!");
+        }
+
+        List<UserEntity> staffs = userRepository.findByIdIn(staffIds);
+        customerEntity.setStaffs(staffs);
+    }
+
     @Override
     @Transactional
-    public void updateAssignment(StaffRequest request) {
+    public void updateAssignmentStaffs(StaffRequest request) {
         // apply cascade
         Long cusId = request.getId();
         LinkedList<Long> staffIds = request.getStaffIds();
-        CustomerEntity customerEntity = new CustomerEntity();
 
-        Optional.ofNullable(cusId).orElseThrow(()-> new NullPointerException("CustomerID null!"));
-        customerEntity = Optional.ofNullable(customerRepository.findOne(cusId))
+        CustomerEntity customerEntity = Optional.ofNullable(customerRepository.findOne(cusId))
                     .orElseThrow(()-> new NotFoundException("customer not found!"));
 
-        Optional.ofNullable(staffIds).orElseThrow(()-> new NullPointerException("staffsId null!"));
-        List<UserEntity> staffs = Optional.ofNullable(userRepository.findByIdIn(staffIds))
-                    .orElseThrow(()-> new NotFoundException("Staffs not found!"));
-
-        customerEntity.setStaffs(staffs);
+        setStaffsForCustomer(customerEntity, staffIds);
 
         customerRepository.save(customerEntity);
     }

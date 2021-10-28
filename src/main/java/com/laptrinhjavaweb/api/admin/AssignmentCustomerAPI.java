@@ -35,7 +35,7 @@ public class AssignmentCustomerAPI {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> updateAssignmentCustomer(@RequestBody StaffRequest request) {
 
-        assignmentCustomerService.updateAssignment(request);
+        assignmentCustomerService.updateAssignmentStaffs(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IAssignmentCustomerService {
     List<StaffBuildingResponse> findAllStaffsByCusId(Long customerId);
-    void updateAssignment(StaffRequest request);
+    void updateAssignmentStaffs(StaffRequest request);
 }

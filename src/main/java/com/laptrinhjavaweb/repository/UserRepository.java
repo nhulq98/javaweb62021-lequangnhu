@@ -24,6 +24,8 @@ public interface UserRepository extends UserRepositoryCustom, JpaRepository<User
     List<UserEntity> getAllStaffs();
 
     List<UserEntity> findByStatusAndRoles_Code(Integer status, String RoleCode);
+
+    int countByIdIn(List<Long> ids);
 //
 //    List<UserEntity> findByRolesIsLike(String roleCode);
 }

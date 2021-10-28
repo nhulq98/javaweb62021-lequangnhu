@@ -40,7 +40,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         return query.getResultList();
     }
 
-    public StringBuilder buildFromSQLClause(BuildingSearch buildingSearch) {
+    private StringBuilder buildFromSQLClause(BuildingSearch buildingSearch) {
         StringBuilder sql = new StringBuilder("SELECT BD.*")
                 .append(" FROM building BD ");
 
@@ -57,7 +57,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch the building from search form
      * @return sql String final
      */
-    public StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
+    private StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
         StringBuilder sql = buildFromSQLClause(buildingSearch);
         authorization(sql, buildingSearch.getStaffId());
         this.buildWhereSQLClause(buildingSearch, sql);
@@ -71,7 +71,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch
      * @return Where statement String
      */
-    public void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
+    private void buildWhereSQLClause(BuildingSearch buildingSearch, StringBuilder sql) {
         // specials cases
         buildBetweenStatement("RE.value", buildingSearch.getRentAreaFrom(), buildingSearch.getRentAreaTo(), sql);
         buildBetweenStatement("rentprice", buildingSearch.getRentPriceFrom(), buildingSearch.getRentPriceTo(), sql);
@@ -114,7 +114,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param sql
      * @param staffId
      */
-    public void authorization(StringBuilder sql, Long staffId) {
+    private void authorization(StringBuilder sql, Long staffId) {
         MyUserDetail userDetails = SecurityUtils.getMyUserDetail();
 
         boolean temp = SecurityUtils.isRole(SystemConstant.ROLE_STAFF, userDetails);
@@ -130,7 +130,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         }
     }
 
-    public void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql) {
+    private void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql) {
         if (from != null || to != null) {
             if (from != null && to != null) {
                 sql.append(" AND " + fieldName + " BETWEEN " + from + " AND " + to + " ");
@@ -148,7 +148,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      * @param buildingSearch
      * @param sql
      */
-    public void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql) {
+    private void buildConditionForBuildingType(BuildingSearch buildingSearch, StringBuilder sql) {
         List<String> types = buildingSearch.getRentTypes();
         if (types != null && types.size() > 0) {
             sql.append(" AND (");

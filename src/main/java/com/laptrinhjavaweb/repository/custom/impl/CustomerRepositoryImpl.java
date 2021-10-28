@@ -24,7 +24,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
         return query.getResultList();
     }
 
-    public StringBuilder buildFromClause(Long staffId){
+    private StringBuilder buildFromClause(Long staffId){
         StringBuilder sql = new StringBuilder("SELECT C.*")
                 .append(" FROM customer C ");
         if(staffId != null){
@@ -39,7 +39,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
      * @param customerSearch the customer from search form
      * @return sql String final
      */
-    public StringBuilder buildQueryForCustomerSearch(CustomerSearch customerSearch) {
+    private StringBuilder buildQueryForCustomerSearch(CustomerSearch customerSearch) {
         StringBuilder sql = buildFromClause(customerSearch.getStaffId());
 
         buildWhereSQLClause(customerSearch, sql);
@@ -47,7 +47,7 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
         return sql;
     }
 
-    public void buildWhereSQLClause(CustomerSearch customerSearch, StringBuilder sql) {
+    private void buildWhereSQLClause(CustomerSearch customerSearch, StringBuilder sql) {
         sql.append(" WHERE 1=1 ");
         sql.append(Utils.createConditionForNumber("AC.staffid", customerSearch.getStaffId()));
         sql.append(Utils.createConditionForStringByLike("C.phone", customerSearch.getPhone()));

@@ -1,6 +1,15 @@
 package com.laptrinhjavaweb.utils;
 
+import com.laptrinhjavaweb.config.ApplicationContextHolder;
+import com.laptrinhjavaweb.constant.SystemConstant;
+import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.repository.UserRepository;
 import org.apache.commons.lang.StringUtils;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils{
 
@@ -52,5 +61,39 @@ public class Utils{
                     .append(value).append(" ");
         }
         return new StringBuilder();
+    }
+
+    public static <T> List<StaffBuildingResponse> setCheckedForStaffs(List<T> list){
+        List<StaffBuildingResponse> result = new ArrayList<>();
+        UserRepository userRepository = ApplicationContextHolder.getContext().getBean(UserRepository.class);
+
+        List<UserEntity> allStaffs = userRepository.findByStatusAndRoles_Code(SystemConstant.ACTIVE_STATUS, SystemConstant.ROLE_STAFF.split("_")[1]);
+
+        allStaffs.forEach(
+                item -> {
+                    String checked = SystemConstant.EMPTY_STRING;
+                    if (list.contains(item)) {
+                        checked = "checked";
+                    }
+                    try {
+
+                        Field field = item.getClass().getSuperclass().getDeclaredField("id");
+                        Field field2 = item.getClass().getDeclaredField("fullName");
+                        field.setAccessible(true);
+                        field2.setAccessible(true);
+
+                        Object id = field.get(item);
+                        Object fullName = field2.get(item);
+
+                        result.add(new StaffBuildingResponse(Long.parseLong(String.valueOf(id)), String.valueOf(fullName), checked));
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        );
+        return result;
     }
 }

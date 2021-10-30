@@ -2,7 +2,10 @@ package com.laptrinhjavaweb.api.admin;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.BuildingRequest;
+import com.laptrinhjavaweb.dto.request.StaffRequest;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.StaffBuildingResponse;
+import com.laptrinhjavaweb.service.IAssignmentBuildingService;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,9 @@ public class BuildingAPI {
 
     @Autowired // find bean is created and inject into.
     private IBuildingService buildingService;
+
+    @Autowired
+    private IAssignmentBuildingService assignmentBuildingService;
 
     //SCOPE FOR GET DATA
 
@@ -59,6 +65,26 @@ public class BuildingAPI {
     public ResponseEntity<Void> updateBuilding(@RequestBody BuildingDTO dto) {
 
         buildingService.updateOrSave(dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * Get ALl staffs available and staffs is managing building with buildingId from request param.
+     * If staffs is managing building ==> set value "status"="checked" for those staffs
+     *
+     * @param id
+     * @return Staff List
+     */
+    @GetMapping("/assignment/{id}/staffs")
+    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+        if(id == null) throw new NullPointerException("buildingID null");
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.findAllStaffsByBuildingId(id));
+    }
+
+    @PutMapping("/assignment")
+    public ResponseEntity<Void> updateBuildingManagementStaffs(@RequestBody StaffRequest request) {
+
+        assignmentBuildingService.updateBuildingManagementStaffs(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

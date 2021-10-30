@@ -423,8 +423,8 @@ select
 
 		function updateStaff(object) {
 			$.ajax({
-				url : '${assignmentBuildingAPI}/assignmentbuilding',
-				type : 'POST',
+				url : '${assignmentBuildingAPI}',
+				type : 'PUT',
 				//dataType: "json", // define data type for output data from server
 				data : JSON.stringify(object),
 				contentType : "application/json", // define data type for input data server

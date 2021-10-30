@@ -56,19 +56,6 @@ public class AssignmentBuildingService implements IAssignmentBuildingService {
 
     // For change data
 
-    /**
-     * ý tưởng: chia ra thành 2 danh sách:  Old là bị bỏ chọn, new là được chọn mới
-     * step1: Tìm những phần tử cùng tồn tại ở cả 2 ds thì bỏ ra.
-     * Bởi vì các ptu này không thay đổi(là không bị bỏ tích ở front-end)
-     * step2: Còn lại ta sẽ xóa hết all ptu của danh sách staff load từ DB.
-     * Bởi vì những ptu trong ds này không có trong ds mà front-end gửi về,
-     * có nghĩa là user đã bỏ tích những đối tượng này
-     * step3: Thêm all phần tử của ds staff lấy từ request(front-end).
-     * Vì những ptu trong ds này không có trong ds load từ DB thì có nghĩa là nó mới
-     * được tích vào
-     *
-     * @param request
-     */
     @Override
     @Transactional
     public void updateBuildingManagementStaffs(StaffRequest request) {

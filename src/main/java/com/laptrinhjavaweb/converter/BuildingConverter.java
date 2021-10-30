@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.constant.MessageConstant;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.BuildingRequest;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.enums.DistrictsEnum;
@@ -48,6 +49,17 @@ public class BuildingConverter extends AbstractConverter<BuildingDTO, BuildingEn
         dto.setRentTypes(convertTypeStrToTypeList(entity.getRentType()));
         return dto;
 
+    }
+
+    public BuildingResponse convertEntityToResponse(BuildingEntity entity) {
+        Optional.ofNullable(entity)
+                .orElseThrow(() -> new NullPointerException("BuildingEntity null!"));
+
+        BuildingResponse dto = modelMapper.map(entity, BuildingResponse.class);
+
+        dto.setAddress(getAddress(entity).toString());
+
+        return dto;
     }
 
     @Override

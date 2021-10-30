@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service // declare module. and said IoC container you have to create 1 only object for this module (singleton pattern)
 public class BuildingService implements IBuildingService {
@@ -91,8 +90,8 @@ public class BuildingService implements IBuildingService {
         List<BuildingEntity> entities = Optional.ofNullable(buildingRepository.findByCondition(searchBuilder))
                 .orElseThrow(() -> new NotFoundException("Buildings not found"));
 
-        List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)
-                .collect(Collectors.toList());
+        List<BuildingResponse> result = new ArrayList<>();
+        entities.forEach(item->{ result.add(buildingConverter.convertEntityToResponse(item));  });
 
         return result;
     }

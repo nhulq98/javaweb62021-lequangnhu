@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository// it understands this is a module and tells the IOC container to create a single object (singleton)
@@ -27,8 +26,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<BuildingEntity> findByCondition(Map<String, Object> requestParam) {
-        BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
+    public List<BuildingEntity> findByCondition(BuildingSearch searchBuilder) {
 
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);

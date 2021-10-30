@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.builder.BuildingSearch;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.BuildingResponse;
@@ -85,7 +86,9 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public List<BuildingResponse> findByCondition(Map<String, Object> requestParam) {
-        List<BuildingEntity> entities = Optional.ofNullable(buildingRepository.findByCondition(requestParam))
+        BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
+
+        List<BuildingEntity> entities = Optional.ofNullable(buildingRepository.findByCondition(searchBuilder))
                 .orElseThrow(() -> new NotFoundException("Buildings not found"));
 
         List<BuildingResponse> result = entities.stream().map(BuildingResponse::new)

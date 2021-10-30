@@ -45,6 +45,19 @@ public class BuildingAPI {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.findByCondition(requestParam));
     }
 
+    /**
+     * Get ALl staffs available and staffs is managing building with buildingId from request param.
+     * If staffs is managing building ==> set value "status"="checked" for those staffs
+     *
+     * @param id
+     * @return Staff List
+     */
+    @GetMapping("/assignment/{id}/staffs")
+    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
+        if(id == null) throw new NullPointerException("buildingID null");
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.findAllStaffsByBuildingId(id));
+    }
+
     //SCOPE FOR CHANGE DATA
 
     @PostMapping
@@ -66,19 +79,6 @@ public class BuildingAPI {
 
         buildingService.updateOrSave(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    /**
-     * Get ALl staffs available and staffs is managing building with buildingId from request param.
-     * If staffs is managing building ==> set value "status"="checked" for those staffs
-     *
-     * @param id
-     * @return Staff List
-     */
-    @GetMapping("/assignment/{id}/staffs")
-    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfBuilding(@PathVariable Long id) {
-        if(id == null) throw new NullPointerException("buildingID null");
-        return ResponseEntity.status(HttpStatus.OK).body(assignmentBuildingService.findAllStaffsByBuildingId(id));
     }
 
     @PutMapping("/assignment")

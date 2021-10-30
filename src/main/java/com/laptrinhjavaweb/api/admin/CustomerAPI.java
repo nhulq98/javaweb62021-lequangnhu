@@ -23,6 +23,23 @@ public class CustomerAPI {
     @Autowired// find bean is created and inject into.
     private IAssignmentCustomerService assignmentCustomerService;
 
+    //SCOPE FOR GET DATA
+
+    /**
+     * Get ALl staffs available and staffs is managing building with buildingId from request param.
+     * If staffs is managing building ==> set value "status"="checked" for those staffs
+     *
+     * @param id
+     * @return Staff List
+     */
+    @GetMapping("/{id}/staffs")
+    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
+    }
+
+    //SCOPE FOR CHANGE DATA
+
     @PostMapping
     public ResponseEntity<Void> CreateOne(@RequestBody CustomerDTO newDto){
 
@@ -42,19 +59,6 @@ public class CustomerAPI {
 
         service.createOrUpdate(newDto);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    /**
-     * Get ALl staffs available and staffs is managing building with buildingId from request param.
-     * If staffs is managing building ==> set value "status"="checked" for those staffs
-     *
-     * @param id
-     * @return Staff List
-     */
-    @GetMapping("/{id}/staffs")
-    public ResponseEntity<List<StaffBuildingResponse>> getStaffsOfCustomer(@PathVariable Long id) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(assignmentCustomerService.findAllStaffsByCusId(id));
     }
 
     @PutMapping("/assignment")

@@ -77,13 +77,13 @@ public class Utils{
                     }
                     try {
 
-                        Field field = item.getClass().getSuperclass().getDeclaredField("id");
+                        Field field = item.getClass().getSuperclass().getDeclaredField("id");// can throw NoSuchFieldException exception
                         Field field2 = item.getClass().getDeclaredField("fullName");
                         field.setAccessible(true);
                         field2.setAccessible(true);
 
                         Object id = field.get(item);
-                        Object fullName = field2.get(item);
+                        Object fullName = field2.get(item);// can throw IllegalAccessException exception
 
                         result.add(new StaffBuildingResponse(Long.parseLong(String.valueOf(id)), String.valueOf(fullName), checked));
                     } catch (NoSuchFieldException e) {

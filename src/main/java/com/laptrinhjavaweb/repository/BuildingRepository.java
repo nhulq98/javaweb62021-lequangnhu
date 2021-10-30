@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface BuildingRepository extends BuildingRepositoryCustom, JpaRepository<BuildingEntity, Long> {
     void deleteByIdIn(List<Long> ids);
+
+    int countByIdIn(List<Long> ids);
 }

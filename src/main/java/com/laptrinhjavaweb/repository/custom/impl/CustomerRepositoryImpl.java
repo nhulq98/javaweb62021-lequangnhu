@@ -48,11 +48,11 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
     }
 
     private void buildWhereSQLClause(CustomerSearch customerSearch, StringBuilder sql) {
-        sql.append(" WHERE 1=1 ");
-        sql.append(Utils.createConditionForNumber("AC.staffid", customerSearch.getStaffId()));
-        sql.append(Utils.createConditionForStringByLike("C.phone", customerSearch.getPhone()));
-        sql.append(Utils.createConditionForStringByLike("C.fullname", customerSearch.getFullName()));
-        sql.append(Utils.createConditionForStringByLike("C.email", customerSearch.getEmail()));
-        sql.append(" GROUP BY C.id ");
+        sql.append(" WHERE 1=1 ")
+        .append(Utils.createConditionForNumber("AC.staffid", customerSearch.getStaffId()))
+        .append(Utils.createConditionForStringByLike("C.phone", customerSearch.getPhone()))
+        .append(Utils.createConditionForStringByLike("C.fullname", customerSearch.getFullName()))
+        .append(Utils.createConditionForStringByLike("C.email", customerSearch.getEmail()))
+        .append(" GROUP BY C.id ");
     }
 }

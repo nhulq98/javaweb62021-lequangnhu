@@ -1,12 +1,9 @@
 package com.laptrinhjavaweb.repository.custom.impl;
 
 import com.laptrinhjavaweb.builder.BuildingSearch;
-import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
-import com.laptrinhjavaweb.dto.MyUserDetail;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
-import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import com.laptrinhjavaweb.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,7 +31,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         BuildingSearch searchBuilder = buildingConverter.convertMapToBuider(requestParam);
 
         StringBuilder sql = this.buildQueryForBuildingSearch(searchBuilder);
-
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 
         return query.getResultList();
@@ -59,9 +55,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
      */
     private StringBuilder buildQueryForBuildingSearch(BuildingSearch buildingSearch) {
         StringBuilder sql = buildFromSQLClause(buildingSearch);
-        authorization(sql, buildingSearch.getStaffId());
         this.buildWhereSQLClause(buildingSearch, sql);
-
         return sql;
     }
 
@@ -102,32 +96,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
             }
         }
         sql.append(" GROUP BY BD.id ");
-    }
-
-    /**
-     * // this code below handles authorization when users log in and use search
-     * Has 3 Case:
-     * case 1: Current user has role is staff ==> search by userID(current user). the mean show only the buildings it's managing
-     * case 2: Current user has role is manager ==> search normal(not by userID(current user)).the mean can see full building
-     * case 3: If current user has role is manager and it's searching by staffId ==> search by staffID
-     *
-     * @param sql
-     * @param staffId
-     */
-    private void authorization(StringBuilder sql, Long staffId) {
-        MyUserDetail userDetails = SecurityUtils.getMyUserDetail();
-
-        boolean temp = SecurityUtils.isRole(SystemConstant.ROLE_STAFF, userDetails);
-        if (temp == true) {
-            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-            sql.append(" WHERE 1=1 ");
-            sql.append(" AND ASB.staffid =" + userDetails.getId());
-        } else if (staffId != null) {// User Logged has role: MANAGER and exists by "staffId" search condition
-            sql.append(" JOIN assignmentbuilding ASB on  ASB.buildingid = BD.id ");
-            sql.append(" WHERE 1=1 ");
-        } else {
-            sql.append(" WHERE 1=1 ");
-        }
     }
 
     private void buildBetweenStatement(String fieldName, Integer from, Integer to, StringBuilder sql) {

@@ -63,9 +63,8 @@ public class CustomerService implements ICustomerService {
     @Override
     @Transactional
     public void deleteByListId(List<Long> ids) {
-        Optional.ofNullable(ids).orElseThrow(()-> new NullPointerException("CustomerIDs is null!"));
-
         long count = customerRepository.countByIdIn(ids);
+
         if(count != ids.size()){
             throw new NullPointerException("Customer not found!");
         }

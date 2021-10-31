@@ -91,7 +91,7 @@ public class BuildingService implements IBuildingService {
                 .orElseThrow(() -> new NotFoundException("Buildings not found"));
 
         List<BuildingResponse> result = new ArrayList<>();
-        entities.forEach(item->{ result.add(buildingConverter.convertEntityToResponse(item));  });
+        entities.forEach(item-> result.add(buildingConverter.convertEntityToResponse(item))  );
 
         return result;
     }

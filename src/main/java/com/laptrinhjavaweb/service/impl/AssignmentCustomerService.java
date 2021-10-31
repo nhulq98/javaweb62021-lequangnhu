@@ -45,10 +45,10 @@ public class AssignmentCustomerService implements IAssignmentCustomerService {
         int size = userRepository.countByIdIn(staffIds);
 
         CustomerEntity customerEntity = Optional.ofNullable(customerRepository.findOne(request.getId()))
-                .orElseThrow(() -> new NotFoundException("customer not found!"));
+                .orElseThrow(() -> new NotFoundException("Customer not found!"));
 
         if(size != staffIds.size()){
-            throw new NotFoundException("staff not found!");
+            throw new NotFoundException("Staff not found!");
         }
 
         customerEntity.setStaffs(userRepository.findByIdIn(staffIds));

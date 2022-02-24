@@ -1,9 +1,14 @@
 package com.laptrinhjavaweb.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "building")
 public class BuildingEntity extends BaseEntity {
@@ -11,22 +16,102 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "ward")
+    private String ward;
+
+    @Column(name = "structure")
+    private String structure;
+
     @Column(name = "numberofbasement")
     private Integer numberOfBasement;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name = "floorarea")
+    private Integer floorArea;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column(name = "direction")
+    private Integer direction;
 
-    public Integer getNumberOfBasement() {
-        return numberOfBasement;
-    }
+    @Column(name = "level")
+    private String level;
 
-    public void setNumberOfBasement(Integer numberOfBasement) {
-        this.numberOfBasement = numberOfBasement;
-    }
+    @Column(name = "rentprice")
+    private Integer rentPrice;
+
+    @Column(name = "rentpricedescription")
+    private String rentPriceDescription;
+
+    @Column(name = "servicefee")
+    private String serviceFee;
+
+    @Column(name = "carfee")
+    private String carFee;
+
+    @Column(name = "motofee")
+    private String motoFee;
+
+    @Column(name = "overtimefee")
+    private String overtimeFee;
+
+    @Column(name = "waterfee")
+    private String waterFee;
+
+    @Column(name = "electricityfee")
+    private String electricityFee;
+
+    @Column(name = "deposit")
+    private String deposit;
+
+    @Column(name = "payment")
+    private String payment;
+
+    @Column(name = "renttime")
+    private String rentTime;
+
+    @Column(name = "decorationtime")
+    private String decorationTime;
+
+    @Column(name = "brokeragefee")
+    private String brokerageFee;
+
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "linkofbuilding")
+    private String linkOfBuilding;
+
+    @Column(name = "map")
+    private String map;
+
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "managername")
+    private String managerName;
+
+    @Column(name = "managerphone")
+    private String managerPhone;
+
+    @Column(name = "type")
+    private String rentType;
+
+    @Column(name = "district")
+    private String district;
+
+    //==============================relationship==============================
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "staff_building",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> staffs = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true )
+//    List<AssignmentBuildingEntity> assignmentBuildings = new ArrayList<>();
+
+    //@OneToMany //readable follow: @ 1 entity(this class) To many entity(below variable)
+// @OneToMany use mappedby = object name which I declare in relationship table. this is rentarea
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<RentAreaEntity> rentAreas = new ArrayList<>();// declare relationship object
 }

@@ -1,135 +1,49 @@
 package com.laptrinhjavaweb.dto;
 
-import java.sql.Timestamp;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class AbstractDTO<T> {
-	
-	private Long id;
-	private Timestamp createdDate;
-	private Timestamp modifiedDate;
-	private String createdBy;
-	private String modifiedBy;
-	private long[] ids;
-	private List<T> listResult = new ArrayList<>();
-	private Integer page;
-	private Integer maxPageItem;
-	private Integer totalPage;
-	private Integer totalItem;
-	private String sortName;
-	private String sortBy;
-	private String alert;
-	private String message;
-	private String type;
-	private Integer limit;
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Timestamp getCreatedDate() {
-		return createdDate;
-	}
-	public void setCreatedDate(Timestamp createdDate) {
-		this.createdDate = createdDate;
-	}
-	public Timestamp getModifiedDate() {
-		return modifiedDate;
-	}
-	public void setModifiedDate(Timestamp modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-	public String getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-	public long[] getIds() {
-		return ids;
-	}
-	public void setIds(long[] ids) {
-		this.ids = ids;
-	}
-	public List<T> getListResult() {
-		return listResult;
-	}
-	public void setListResult(List<T> listResult) {
-		this.listResult = listResult;
-	}
-	public Integer getPage() {
-		return page;
-	}
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-	public Integer getMaxPageItem() {
-		return maxPageItem;
-	}
-	public void setMaxPageItem(Integer maxPageItem) {
-		this.maxPageItem = maxPageItem;
-	}
-	public Integer getTotalPage() {
-		return totalPage;
-	}
-	public void setTotalPage(Integer totalPage) {
-		this.totalPage = totalPage;
-	}
-	public Integer getTotalItem() {
-		return totalItem;
-	}
-	public void setTotalItem(Integer totalItem) {
-		this.totalItem = totalItem;
-	}
-	public String getSortName() {
-		return sortName;
-	}
-	public void setSortName(String sortName) {
-		this.sortName = sortName;
-	}
-	public String getSortBy() {
-		return sortBy;
-	}
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
+@Getter
+@Setter
+public class AbstractDTO<T> implements Serializable {
+    private Long id;
+    private Date createdDate;
+    private String createdBy;
+    private Date modifiedDate;
+    private String modifiedBy;
+    private int maxPageItems = 10;
+    private int page = 1;
+    private List<T> listResult = new ArrayList<>();
+    private int totalItems = 0;
+    private String tableId = "tableList";
+    private Integer limit;
+    private Integer totalPage;
+    private Integer totalItem;
+    private String searchValue;
 
-	public String getAlert() {
-		return alert;
-	}
 
-	public void setAlert(String alert) {
-		this.alert = alert;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	public Integer getLimit() {
-		return limit;
-	}
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
+    // finalize method is called on object once
+    // before garbage collecting it
+    @Override
+    protected void finalize() {
+        id = null;
+        createdDate = null;
+        createdBy = null;
+        modifiedDate = null;
+        modifiedBy = null;
+        maxPageItems = 0;
+        page = 0;
+        listResult = null;
+        totalItems = 0;
+        tableId = null;
+        limit = null;
+        totalPage = null;
+        totalItem = null;
+        searchValue = null;
+    }
 }

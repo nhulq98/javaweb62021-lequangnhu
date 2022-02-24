@@ -1,15 +1,26 @@
 package com.laptrinhjavaweb.service;
 
+import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.response.BuildingResponse;
+import com.laptrinhjavaweb.dto.response.DistrictResponse;
+import com.laptrinhjavaweb.dto.response.TypesResponse;
+
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.domain.Pageable;
-
-import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
-import com.laptrinhjavaweb.dto.BuildingDTO;
-
 public interface IBuildingService {
-	Map<String, String> getDistricts();
-	Map<String, String> getBuildingTypes();
-	BuildingDTO save(BuildingDTO newBuilding);
+    //get Data
+    List<DistrictResponse> getDistricts();
+
+    List<TypesResponse> getBuildingTypes();
+
+    List<TypesResponse> getBuildingTypes(List<String> rentypes);
+
+    List<BuildingResponse> findByCondition(Map<String, Object> requestParam);
+
+    BuildingDTO getOne(Long id);
+
+    void updateOrSave(BuildingDTO newBuilding);
+
+    void deleteByListId(List<Long> ids);
 }

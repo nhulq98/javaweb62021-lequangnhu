@@ -1,14 +1,33 @@
 package com.laptrinhjavaweb.constant;
 
 public class SystemConstant {
-	
-	public static final int ACTIVE_STATUS = 1;
-	public static final int INACTIVE_STATUS = 0;
-	
-	//public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 3600000;//1h
-	public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 30000;
-	public static final String SIGNING_KEY = "laptrinhjavaweb";
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
-	public static final String AUTHORITIES_KEY = "scopes";
+
+    // scope for Spring MVC
+    /*Spring security 4: ROLE_ADMIN, Spring security 3 not required*/
+    public static final String ROLE_MANAGER = "ROLE_MANAGER";
+    /*Spring security 4: ROLE_ADMIN, Spring security 3 not required*/
+    public static final String ROLE_STAFF = "ROLE_STAFF";
+
+    //Scope for model data
+    public static final String BUILDING_SEARCH_FORM_MODEL = "buildingSearchForm";
+    public static final String CUSTOMMER_SEARCH_FORM_MODEL = "customerSearchForm";
+    public static final String CUSTOMMER_MODEL = "customer";
+    public static final String CUSTOMMER_TRANSACTION = "transaction";
+    public static final String SEARCH_RESULT_MODEL = "result";
+    public static final String MODEL = "model";
+    public static final String DISTRICT = "district";
+    public static final String STAFF = "staff";
+    public static final String STAFF_BUILDING = "staffbuilding";
+    public static final String RENT_TYPE = "renttype";
+    public static final String RENT_TYPE_EDIT = "renttypeedit";
+    public static final String TRANSACTION_TYPE = "transactiontype";
+    public static final int ACTIVE_STATUS = 1;
+    public static final String EMPTY_STRING = "";
+    // Scope for Logic
+    public static final String ISNUMBER = "[0-9]+";
+    public static final String IDMODEL = "IDMODEL";
+
+
+    //scope for config
+    public static final String PASSWORD_DEFAULT = "123456";
 }
